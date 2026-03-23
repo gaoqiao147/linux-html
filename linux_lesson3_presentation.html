@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux操作系统 - 第三节课</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h3 {
+            color: #fff;
+            font-size: 1.8em;
+            margin: 20px 0;
+        }
+        
+        p, li {
+            color: white;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+        
+        ul {
+            list-style: none;
+            text-align: left;
+            max-width: 800px;
+        }
+        
+        li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+        
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 20px;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .clickable {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            border-bottom: 2px dotted rgba(255,215,0,0.5);
+            padding: 2px 4px;
+            display: inline-block;
+        }
+        
+        .clickable:hover {
+            background: rgba(255,215,0,0.2);
+            border-bottom-color: #ffd700;
+            transform: translateY(-2px);
+        }
+        
+        .clickable::after {
+            content: "ℹ️";
+            font-size: 0.8em;
+            margin-left: 4px;
+            opacity: 0.7;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        
+        .modal-content h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content p, .modal-content li {
+            color: white;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+        
+        .modal-content a {
+            color: #ffd700;
+            text-decoration: none;
+            border-bottom: 1px solid #ffd700;
+        }
+        
+        .modal-content a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+        
+        .close {
+            color: white;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close:hover {
+            color: #ffd700;
+            transform: rotate(90deg);
+        }
+        
+        .modal-content ul {
+            margin-left: 20px;
+        }
+        
+        .resource-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .command-box {
+            background: #1e1e1e;
+            color: #43e97b;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: left;
+            margin: 20px auto;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .command-box .prompt {
+            color: #43e97b;
+        }
+        
+        .command-box .output {
+            color: #e0e0e0;
+            margin-top: 10px;
+        }
+        
+        .command-box .comment {
+            color: #888;
+            font-style: italic;
+        }
+        
+        .pipeline-visual {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .pipeline-box {
+            background: rgba(255,215,0,0.2);
+            border: 2px solid #ffd700;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+        
+        .pipeline-arrow {
+            font-size: 2em;
+            color: #ffd700;
+        }
+        
+        .terminal-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .terminal-header {
+            background: #323232;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-button.red {
+            background: #ff5f56;
+        }
+        
+        .terminal-button.yellow {
+            background: #ffbd2e;
+        }
+        
+        .terminal-button.green {
+            background: #27c93f;
+        }
+        
+        .terminal-title {
+            color: #999;
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .terminal-body {
+            padding: 20px;
+            min-height: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        .terminal-line {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .terminal-prompt {
+            color: #43e97b;
+            margin-right: 8px;
+        }
+        
+        .terminal-text {
+            color: #e0e0e0;
+        }
+        
+        .terminal-input-line {
+            padding: 15px 20px;
+            background: #252525;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            outline: none;
+        }
+        
+        .terminal-input::placeholder {
+            color: #666;
+        }
+        
+        .terminal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .terminal-body::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        
+        .terminal-body::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+        
+        .comparison-item {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            flex: 1;
+            margin: 0 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .process-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- 第1页：封面 -->
+        <div class="slide active">
+            <h1>🐧 Linux 操作系统</h1>
+            <p class="subtitle">第三节课：文本处理与进程管理</p>
+            <p style="margin-top: 50px; font-size: 1.2em;">掌握 Linux 的强大工具</p>
+            <p style="margin-top: 30px; font-size: 1em; color: #ffd700;">
+                💡 提示：点击带有 ℹ️ 图标的内容可查看详细解释
+            </p>
+        </div>
+
+        <!-- 第2页：课程回顾 -->
+        <div class="slide">
+            <h2>📚 上节课回顾</h2>
+            <ul>
+                <li>Linux 文件系统结构（/, /home, /etc...）</li>
+                <li>10 个基础命令（pwd, ls, cd, mkdir...）</li>
+                <li>Tab 补全和命令历史</li>
+                <li>文件权限和 chmod 命令</li>
+            </ul>
+            <p style="margin-top: 40px; color: #ffd700;">今天学习更强大的工具！</p>
+        </div>
+
+        <!-- 第3页：今天的学习目标 -->
+        <div class="slide">
+            <h2>🎯 今天的学习目标</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">📝</div>
+                    <h3>文本处理</h3>
+                    <p>grep, sed, awk</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🔀</div>
+                    <h3>管道与重定向</h3>
+                    <p>|, >, >>, <</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">⚙️</div>
+                    <h3>进程管理</h3>
+                    <p>ps, top, kill</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🌐</div>
+                    <h3>网络命令</h3>
+                    <p>ping, curl, wget</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第4页：文本处理 - 引入 -->
+        <div class="slide">
+            <h2>📝 文本处理</h2>
+            <p class="subtitle">Linux 最强大的功能之一</p>
+            <p style="margin-top: 30px;">在 Linux 中，一切配置都是文本文件</p>
+            <p>掌握文本处理，就掌握了系统的核心</p>
+        </div>
+
+        <!-- 第5页：grep 命令 -->
+        <div class="slide">
+            <h2>1️⃣ grep - 文本搜索</h2>
+            <p><span class="highlight clickable" data-info="grep-command">grep</span> = Global Regular Expression Print</p>
+            <p style="font-size: 1.1em; color: #ffd700;">就像 Ctrl+F 搜索，但更强大！</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> grep "error" log.txt</div>
+                <div class="output">Error: Connection failed</div>
+                <div class="output">Error: File not found</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> grep -i "ERROR" log.txt</div>
+                <div class="comment"># -i 忽略大小写（error、Error、ERROR 都能找到）</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight">grep "pattern" file</span> - 在文件中找关键词</li>
+                <li><span class="highlight">grep -i</span> - 不区分大小写（更宽松）</li>
+                <li><span class="highlight">grep -r</span> - 在整个文件夹里找</li>
+                <li><span class="highlight">grep -n</span> - 告诉我在第几行</li>
+                <li><span class="highlight">grep -v</span> - 找不包含这个词的行</li>
+            </ul>
+        </div>
+
+        <!-- 第6页：grep 实用示例 -->
+        <div class="slide">
+            <h2>grep 实用示例</h2>
+            <div class="command-box">
+                <div><span class="prompt">$</span> grep -r "TODO" .</div>
+                <div class="comment"># 在当前目录递归搜索 TODO</div>
+                <div style="margin-top: 10px;"><span class="prompt">$</span> grep -n "function" script.js</div>
+                <div class="comment"># 显示包含 function 的行号</div>
+                <div style="margin-top: 10px;"><span class="prompt">$</span> grep -v "^#" config.txt</div>
+                <div class="comment"># 过滤掉注释行（以 # 开头）</div>
+                <div style="margin-top: 10px;"><span class="prompt">$</span> grep -c "error" log.txt</div>
+                <div class="comment"># 统计匹配的行数</div>
+            </div>
+        </div>
+
+        <!-- 第7页：管道和重定向 - 引入 -->
+        <div class="slide">
+            <h2>🔀 管道与重定向</h2>
+            <p class="subtitle">连接命令，组合威力</p>
+            <p style="margin-top: 30px;">管道（|）让命令的输出成为另一个命令的输入</p>
+            <p style="font-size: 1.2em; color: #ffd700; margin-top: 20px;">
+                💡 类比：就像工厂流水线，上一道工序的产品<br>
+                直接传给下一道工序，不用中间存储
+            </p>
+            <p style="margin-top: 20px;">这是 Unix 哲学的核心：小工具组合完成大任务</p>
+        </div>
+
+        <!-- 第8页：管道符 | -->
+        <div class="slide">
+            <h2>管道符 |</h2>
+            <p><span class="highlight clickable" data-info="pipe">管道</span>将一个命令的输出传递给另一个命令</p>
+            <p style="font-size: 1.1em; color: #ffd700;">想象成：命令 A 的结果 → 直接喂给 → 命令 B</p>
+            <div class="pipeline-visual">
+                <div class="pipeline-box">ls -l</div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-box">grep ".txt"</div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-box">wc -l</div>
+            </div>
+            <div class="command-box">
+                <div><span class="prompt">$</span> ls -l | grep ".txt" | wc -l</div>
+                <div class="output">15</div>
+                <div class="comment"># 统计当前目录有多少个 .txt 文件</div>
+                <div class="comment"># 第一步：列出所有文件</div>
+                <div class="comment"># 第二步：只保留 .txt 的</div>
+                <div class="comment"># 第三步：数有多少行</div>
+            </div>
+        </div>
+
+        <!-- 第9页：重定向符号 -->
+        <div class="slide">
+            <h2>重定向符号</h2>
+            <p style="font-size: 1.1em; color: #ffd700;">把命令的输出保存到文件，而不是显示在屏幕上</p>
+            <ul>
+                <li><span class="highlight clickable" data-info="redirect-output">></span> - 输出重定向（覆盖）<span style="color: #ffd700;">← 小心！会覆盖原文件</span></li>
+                <li><span class="highlight">>></span> - 输出重定向（追加）<span style="color: #43e97b;">← 安全，追加到末尾</span></li>
+                <li><span class="highlight clickable" data-info="redirect-input"><</span> - 输入重定向（从文件读取）</li>
+                <li><span class="highlight">2></span> - 错误输出重定向（只保存错误信息）</li>
+                <li><span class="highlight">&></span> - 所有输出重定向（正常+错误都保存）</li>
+            </ul>
+            <div class="command-box" style="margin-top: 30px;">
+                <div><span class="prompt">$</span> echo "Hello" > file.txt</div>
+                <div class="comment"># 写入文件（如果文件存在会被清空！）</div>
+                <div style="margin-top: 10px;"><span class="prompt">$</span> echo "World" >> file.txt</div>
+                <div class="comment"># 追加到文件末尾（不会删除原内容）</div>
+                <div style="margin-top: 10px;"><span class="prompt">$</span> command 2> error.log</div>
+                <div class="comment"># 只把错误信息保存到日志</div>
+            </div>
+        </div>
+
+        <!-- 第10页：管道和重定向组合 -->
+        <div class="slide">
+            <h2>强大的组合</h2>
+            <div class="command-box">
+                <div><span class="prompt">$</span> cat access.log | grep "404" | wc -l > 404_count.txt</div>
+                <div class="comment"># 统计 404 错误数量并保存</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> ps aux | grep "python" | grep -v "grep"</div>
+                <div class="comment"># 查找 python 进程（排除 grep 自己）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> ls -l | sort -k5 -n | tail -10</div>
+                <div class="comment"># 找出最大的 10 个文件</div>
+            </div>
+        </div>
+
+        <!-- 第11页：常用文本工具 -->
+        <div class="slide">
+            <h2>📊 常用文本工具</h2>
+            <div class="grid">
+                <div class="card clickable" data-info="wc-command">
+                    <h3>wc</h3>
+                    <p>统计行数、单词数、字符数</p>
+                </div>
+                <div class="card clickable" data-info="sort-command">
+                    <h3>sort</h3>
+                    <p>排序文本行</p>
+                </div>
+                <div class="card clickable" data-info="uniq-command">
+                    <h3>uniq</h3>
+                    <p>去除重复行</p>
+                </div>
+                <div class="card clickable" data-info="cut-command">
+                    <h3>cut</h3>
+                    <p>提取列</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第12页：文本工具示例 -->
+        <div class="slide">
+            <h2>文本工具实战</h2>
+            <div class="command-box">
+                <div><span class="prompt">$</span> wc -l file.txt</div>
+                <div class="output">100 file.txt</div>
+                <div class="comment"># 统计行数</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> sort names.txt | uniq</div>
+                <div class="comment"># 排序并去重</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> cut -d',' -f1,3 data.csv</div>
+                <div class="comment"># 提取 CSV 的第 1 和第 3 列</div>
+            </div>
+        </div>
+
+        <!-- 第13页：进程管理 - 引入 -->
+        <div class="slide">
+            <h2>⚙️ 进程管理</h2>
+            <p class="subtitle">掌控系统运行</p>
+            <p style="margin-top: 30px;">进程是运行中的程序</p>
+            <p>学会管理进程，就能控制系统资源</p>
+        </div>
+
+        <!-- 第14页：什么是进程 -->
+        <div class="slide">
+            <h2>🔄 什么是进程？</h2>
+            <p style="font-size: 1.2em; color: #ffd700; margin-bottom: 30px;">
+                💡 简单理解：程序是菜谱，进程是正在做的菜
+            </p>
+            <ul>
+                <li>进程是<span class="highlight">运行中的程序实例</span></li>
+                <li>每个进程有唯一的 <span class="highlight clickable" data-info="pid">PID</span>（进程 ID）<br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">就像每个人的身份证号</span></li>
+                <li>进程有父子关系<br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">父进程启动子进程，就像家族树</span></li>
+                <li>进程占用 CPU、内存等资源<br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">运行程序需要消耗系统资源</span></li>
+            </ul>
+            <div class="process-box" style="margin-top: 30px;">
+                <div>程序（硬盘上的文件）→ 双击运行 → 进程（内存中运行）</div>
+                <div style="margin-top: 10px; color: #ffd700;">例如：chrome.exe（程序）→ 打开浏览器 → Chrome 进程</div>
+            </div>
+        </div>
+
+        <!-- 第15页：ps 命令 -->
+        <div class="slide">
+            <h2>ps - 查看进程</h2>
+            <p><span class="highlight clickable" data-info="ps-command">ps</span> = Process Status（进程状态）</p>
+            <p style="font-size: 1.1em; color: #ffd700;">就像 Windows 的任务管理器！</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> ps</div>
+                <div class="output">  PID TTY          TIME CMD</div>
+                <div class="output"> 1234 pts/0    00:00:00 bash</div>
+                <div class="comment"># 只显示当前终端的进程</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> ps aux</div>
+                <div class="comment"># 显示所有进程的详细信息（最常用！）</div>
+                <div class="comment"># a = 所有用户  u = 详细信息  x = 包括后台进程</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight">ps</span> - 当前终端的进程（很少用）</li>
+                <li><span class="highlight">ps aux</span> - 所有进程（推荐！）</li>
+                <li><span class="highlight">ps -ef</span> - 完整格式显示（另一种风格）</li>
+            </ul>
+        </div>
+
+        <!-- 第16页：top 命令 -->
+        <div class="slide">
+            <h2>top - 实时监控</h2>
+            <p><span class="highlight clickable" data-info="top-command">top</span> 实时显示系统资源使用情况</p>
+            <p style="font-size: 1.1em; color: #ffd700;">就像汽车仪表盘，实时显示系统状态！</p>
+            <div class="command-box">
+                <div>top - 10:30:15 up 5 days, 2:15, 3 users</div>
+                <div class="comment"># 当前时间  运行了5天  3个用户登录</div>
+                <div>Tasks: 245 total, 1 running, 244 sleeping</div>
+                <div class="comment"># 总共245个进程，1个在运行，244个在睡眠</div>
+                <div>%Cpu(s): 12.5 us, 3.2 sy, 0.0 ni, 84.3 id</div>
+                <div class="comment"># CPU使用率：12.5%用户程序，84.3%空闲</div>
+                <div>MiB Mem: 16384 total, 8192 free, 6144 used</div>
+                <div class="comment"># 内存：总共16G，空闲8G，使用6G</div>
+                <div style="margin-top: 10px;">PID  USER  %CPU %MEM  COMMAND</div>
+                <div>1234 user  25.0  5.2  python app.py</div>
+                <div class="comment"># 这个进程占用25%的CPU，5.2%的内存</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li>按 <span class="highlight">q</span> 退出</li>
+                <li>按 <span class="highlight">M</span> 按内存排序（找内存大户）</li>
+                <li>按 <span class="highlight">P</span> 按 CPU 排序（找CPU大户）</li>
+            </ul>
+        </div>
+
+        <!-- 第17页：kill 命令 -->
+        <div class="slide">
+            <h2>kill - 终止进程</h2>
+            <p><span class="highlight clickable" data-info="kill-command">kill</span> 发送信号给进程</p>
+            <p style="font-size: 1.1em; color: #ffd700;">就像关闭程序，但更强大！</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> kill 1234</div>
+                <div class="comment"># 礼貌地请求进程退出（进程可以拒绝）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> kill -9 1234</div>
+                <div class="comment"># 强制杀死进程（进程无法拒绝，立即终止）</div>
+                <div class="comment"># ⚠️ 类似"强制关机"，可能丢失数据</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> killall firefox</div>
+                <div class="comment"># 杀死所有名为 firefox 的进程</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight">kill PID</span> - 正常终止（推荐）</li>
+                <li><span class="highlight">kill -9 PID</span> - 强制终止（最后手段）</li>
+                <li><span class="highlight">killall name</span> - 按名称终止所有</li>
+            </ul>
+            <p style="margin-top: 20px; color: #ff6b6b;">
+                ⚠️ 使用 kill -9 前先试试普通 kill，给程序保存数据的机会
+            </p>
+        </div>
+
+        <!-- 第18页：后台运行 -->
+        <div class="slide">
+            <h2>后台运行进程</h2>
+            <p style="font-size: 1.1em; color: #ffd700;">让程序在后台运行，你可以继续做其他事</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> command &</div>
+                <div class="comment"># 在后台运行命令（加个 & 符号）</div>
+                <div class="comment"># 就像把程序最小化，它还在运行但不占用终端</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> jobs</div>
+                <div class="output">[1]+ Running    python script.py &</div>
+                <div class="comment"># 查看后台任务列表</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> fg %1</div>
+                <div class="comment"># 将后台任务调到前台（fg = foreground）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> Ctrl+Z  <span class="comment"># 暂停当前任务</span></div>
+                <div><span class="prompt">$</span> bg</div>
+                <div class="comment"># 让暂停的任务在后台继续运行（bg = background）</div>
+            </div>
+            <p style="margin-top: 20px; font-size: 1em;">
+                💡 实用场景：运行一个需要很长时间的程序，同时你还想用终端做其他事
+            </p>
+        </div>
+
+        <!-- 第19页：网络命令 - 引入 -->
+        <div class="slide">
+            <h2>🌐 网络命令</h2>
+            <p class="subtitle">连接世界</p>
+        </div>
+
+        <!-- 第20页：ping 命令 -->
+        <div class="slide">
+            <h2>ping - 测试连接</h2>
+            <p><span class="highlight clickable" data-info="ping-command">ping</span> 测试网络连通性</p>
+            <p style="font-size: 1.1em; color: #ffd700;">就像喊一声"喂！"，看对方能不能听到并回应</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> ping google.com</div>
+                <div class="output">PING google.com (142.250.185.46): 56 data bytes</div>
+                <div class="output">64 bytes from 142.250.185.46: icmp_seq=0 time=15.2 ms</div>
+                <div class="comment"># time=15.2ms 表示往返时间，越小越好</div>
+                <div class="output">64 bytes from 142.250.185.46: icmp_seq=1 time=14.8 ms</div>
+                <div class="comment"># 会一直 ping，按 Ctrl+C 停止</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> ping -c 4 google.com</div>
+                <div class="comment"># 只 ping 4 次就停止（-c = count）</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li>测试网络是否连通（能不能访问）</li>
+                <li>查看网络延迟（速度快不快）</li>
+                <li>time < 50ms 很快，> 200ms 就慢了</li>
+            </ul>
+        </div>
+
+        <!-- 第21页：curl 命令 -->
+        <div class="slide">
+            <h2>curl - 网络请求</h2>
+            <p><span class="highlight clickable" data-info="curl-command">curl</span> 发送 HTTP 请求</p>
+            <p style="font-size: 1.1em; color: #ffd700;">就像用浏览器访问网页，但在命令行里！</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> curl https://api.github.com</div>
+                <div class="comment"># 获取网页内容（会显示在屏幕上）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> curl -o page.html https://example.com</div>
+                <div class="comment"># 保存到文件 page.html（-o = output）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> curl -I https://google.com</div>
+                <div class="comment"># 只看响应头，不下载内容（-I = head）</div>
+                <div class="comment"># 可以看到服务器类型、内容大小等信息</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li>测试 API 接口（程序员常用）</li>
+                <li>下载文件</li>
+                <li>调试网络问题</li>
+            </ul>
+            <p style="margin-top: 15px; font-size: 1em;">
+                💡 curl 很强大，可以模拟浏览器做各种操作
+            </p>
+        </div>
+
+        <!-- 第22页：wget 命令 -->
+        <div class="slide">
+            <h2>wget - 下载文件</h2>
+            <p><span class="highlight clickable" data-info="wget-command">wget</span> 下载网络文件</p>
+            <p style="font-size: 1.1em; color: #ffd700;">专业的下载工具，支持断点续传！</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> wget https://example.com/file.zip</div>
+                <div class="comment"># 下载文件（会显示进度条）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> wget -c https://example.com/large.iso</div>
+                <div class="comment"># 断点续传（-c = continue）</div>
+                <div class="comment"># 如果下载中断，再次运行会从断点继续</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> wget -r -np https://example.com/docs/</div>
+                <div class="comment"># 递归下载整个目录（-r = recursive）</div>
+                <div class="comment"># 可以下载整个网站！</div>
+            </div>
+            <p style="margin-top: 20px; font-size: 1em;">
+                💡 wget vs curl：wget 专注下载，curl 更灵活<br>
+                下载大文件用 wget，测试 API 用 curl
+            </p>
+        </div>
+
+        <!-- 第23页：其他网络工具 -->
+        <div class="slide">
+            <h2>🔧 其他网络工具</h2>
+            <ul>
+                <li><span class="highlight clickable" data-info="netstat-command">netstat</span> - 查看网络连接和端口</li>
+                <li><span class="highlight clickable" data-info="ss-command">ss</span> - 更快的 netstat 替代品</li>
+                <li><span class="highlight">ifconfig</span> / <span class="highlight">ip</span> - 查看网络接口</li>
+                <li><span class="highlight">traceroute</span> - 追踪网络路径</li>
+                <li><span class="highlight">nslookup</span> / <span class="highlight">dig</span> - DNS 查询</li>
+            </ul>
+        </div>
+
+        <!-- 第24页：实用技巧 - 引入 -->
+        <div class="slide">
+            <h2>💡 实用技巧</h2>
+            <p class="subtitle">提升效率的小窍门</p>
+        </div>
+
+        <!-- 第25页：查找文件 -->
+        <div class="slide">
+            <h2>🔍 find - 查找文件</h2>
+            <p><span class="highlight clickable" data-info="find-command">find</span> 强大的文件搜索工具</p>
+            <p style="font-size: 1.1em; color: #ffd700;">就像 Windows 的搜索，但功能强大 100 倍！</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> find . -name "*.txt"</div>
+                <div class="comment"># 在当前目录（.）查找所有 .txt 文件</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> find /home -user student</div>
+                <div class="comment"># 查找 student 用户的所有文件</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> find . -type f -size +100M</div>
+                <div class="comment"># 查找大于 100MB 的文件（找出占空间的大文件）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> find . -mtime -7</div>
+                <div class="comment"># 查找 7 天内修改的文件（找最近改过的）</div>
+            </div>
+            <p style="margin-top: 20px; font-size: 1em;">
+                💡 find 可以按名称、大小、时间、权限等各种条件查找
+            </p>
+        </div>
+
+        <!-- 第26页：压缩和解压 -->
+        <div class="slide">
+            <h2>📦 压缩和解压</h2>
+            <div class="command-box">
+                <div><span class="prompt">$</span> tar -czf archive.tar.gz folder/</div>
+                <div class="comment"># 压缩目录</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> tar -xzf archive.tar.gz</div>
+                <div class="comment"># 解压</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> zip -r archive.zip folder/</div>
+                <div class="comment"># 创建 zip 文件</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> unzip archive.zip</div>
+                <div class="comment"># 解压 zip</div>
+            </div>
+        </div>
+
+        <!-- 第27页：磁盘使用 -->
+        <div class="slide">
+            <h2>💾 磁盘使用情况</h2>
+            <p style="font-size: 1.1em; color: #ffd700;">查看硬盘还有多少空间</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> df -h</div>
+                <div class="comment"># df = disk free（磁盘空闲），-h = 人类可读</div>
+                <div class="output">Filesystem      Size  Used Avail Use% Mounted on</div>
+                <div class="output">/dev/sda1       100G   45G   50G  48% /</div>
+                <div class="comment"># 100G 硬盘，用了 45G，还剩 50G，使用率 48%</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> du -sh *</div>
+                <div class="comment"># du = disk usage（磁盘使用），查看每个文件夹大小</div>
+                <div class="output">2.5G    Documents  <span class="comment"># 文档占 2.5G</span></div>
+                <div class="output">1.2G    Downloads  <span class="comment"># 下载占 1.2G</span></div>
+                <div class="output">500M    Pictures   <span class="comment"># 图片占 500M</span></div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="df-command">df -h</span> - 查看整个磁盘空间</li>
+                <li><span class="highlight clickable" data-info="du-command">du -sh</span> - 查看文件夹大小</li>
+            </ul>
+            <p style="margin-top: 15px; font-size: 1em;">
+                💡 磁盘快满了？用 du -sh * 找出哪个文件夹最大
+            </p>
+        </div>
+
+        <!-- 第28页：系统信息 -->
+        <div class="slide">
+            <h2>ℹ️ 系统信息</h2>
+            <ul>
+                <li><span class="highlight">uname -a</span> - 系统信息</li>
+                <li><span class="highlight">hostname</span> - 主机名</li>
+                <li><span class="highlight">uptime</span> - 运行时间</li>
+                <li><span class="highlight">free -h</span> - 内存使用情况</li>
+                <li><span class="highlight">lscpu</span> - CPU 信息</li>
+                <li><span class="highlight">date</span> - 当前日期时间</li>
+            </ul>
+        </div>
+
+        <!-- 第29页：课后作业 - grep -->
+        <div class="slide">
+            <h2>📝 作业 1：grep 文本搜索</h2>
+            <div class="card" style="max-width: 800px; text-align: left;">
+                <h3 style="color: #ffd700;">任务：</h3>
+                <p>假设有一个日志文件 app.log，请完成以下操作：</p>
+                <ul style="list-style: decimal; margin-left: 40px;">
+                    <li>搜索包含 "ERROR" 的所有行（忽略大小写）</li>
+                    <li>统计有多少行包含 "ERROR"</li>
+                    <li>找出不包含 "#" 的行（过滤注释）</li>
+                </ul>
+                
+                <h3 style="color: #ffd700; margin-top: 30px;">答案：</h3>
+                <div class="command-box">
+                    <div># 1. 搜索 ERROR（忽略大小写）</div>
+                    <div><span class="prompt">$</span> grep -i "ERROR" app.log</div>
+                    <div style="margin-top: 10px;"># 2. 统计包含 ERROR 的行数</div>
+                    <div><span class="prompt">$</span> grep -c "ERROR" app.log</div>
+                    <div class="comment"># 或者</div>
+                    <div><span class="prompt">$</span> grep "ERROR" app.log | wc -l</div>
+                    <div style="margin-top: 10px;"># 3. 过滤掉注释行</div>
+                    <div><span class="prompt">$</span> grep -v "^#" app.log</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第30页：课后作业 - 管道 -->
+        <div class="slide">
+            <h2>📝 作业 2：管道组合</h2>
+            <div class="card" style="max-width: 800px; text-align: left;">
+                <h3 style="color: #ffd700;">任务：</h3>
+                <p>使用管道完成以下操作：</p>
+                <ul style="list-style: decimal; margin-left: 40px;">
+                    <li>列出当前目录所有文件，只显示 .txt 文件</li>
+                    <li>查看所有进程，找出包含 "python" 的进程</li>
+                    <li>统计当前目录有多少个文件</li>
+                </ul>
+                
+                <h3 style="color: #ffd700; margin-top: 30px;">答案：</h3>
+                <div class="command-box">
+                    <div># 1. 只显示 .txt 文件</div>
+                    <div><span class="prompt">$</span> ls | grep ".txt"</div>
+                    <div style="margin-top: 10px;"># 2. 找出 python 进程</div>
+                    <div><span class="prompt">$</span> ps aux | grep python</div>
+                    <div style="margin-top: 10px;"># 3. 统计文件数量</div>
+                    <div><span class="prompt">$</span> ls -1 | wc -l</div>
+                    <div class="comment"># ls -1 表示每行显示一个文件</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第31页：课后作业 - 重定向 -->
+        <div class="slide">
+            <h2>📝 作业 3：重定向</h2>
+            <div class="card" style="max-width: 800px; text-align: left;">
+                <h3 style="color: #ffd700;">任务：</h3>
+                <ul style="list-style: decimal; margin-left: 40px;">
+                    <li>将 "Hello Linux" 写入文件 greeting.txt</li>
+                    <li>将 "Welcome" 追加到 greeting.txt</li>
+                    <li>将当前目录的文件列表保存到 filelist.txt</li>
+                    <li>将命令的错误输出保存到 error.log</li>
+                </ul>
+                
+                <h3 style="color: #ffd700; margin-top: 30px;">答案：</h3>
+                <div class="command-box">
+                    <div># 1. 写入文件（覆盖）</div>
+                    <div><span class="prompt">$</span> echo "Hello Linux" > greeting.txt</div>
+                    <div style="margin-top: 10px;"># 2. 追加到文件</div>
+                    <div><span class="prompt">$</span> echo "Welcome" >> greeting.txt</div>
+                    <div style="margin-top: 10px;"># 3. 保存文件列表</div>
+                    <div><span class="prompt">$</span> ls -l > filelist.txt</div>
+                    <div style="margin-top: 10px;"># 4. 保存错误输出</div>
+                    <div><span class="prompt">$</span> find / -name "test" 2> error.log</div>
+                    <div class="comment"># 2> 表示只重定向错误输出</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第32页：课后作业 - 进程管理 -->
+        <div class="slide">
+            <h2>📝 作业 4：进程管理</h2>
+            <div class="card" style="max-width: 800px; text-align: left;">
+                <h3 style="color: #ffd700;">任务：</h3>
+                <ul style="list-style: decimal; margin-left: 40px;">
+                    <li>查看所有正在运行的进程</li>
+                    <li>找出占用内存最多的前 5 个进程</li>
+                    <li>查找 firefox 进程的 PID</li>
+                    <li>（模拟）终止 PID 为 1234 的进程</li>
+                </ul>
+                
+                <h3 style="color: #ffd700; margin-top: 30px;">答案：</h3>
+                <div class="command-box">
+                    <div># 1. 查看所有进程</div>
+                    <div><span class="prompt">$</span> ps aux</div>
+                    <div style="margin-top: 10px;"># 2. 找出内存占用最多的前 5 个</div>
+                    <div><span class="prompt">$</span> ps aux --sort=-%mem | head -6</div>
+                    <div class="comment"># head -6 因为第一行是标题</div>
+                    <div style="margin-top: 10px;"># 3. 查找 firefox 的 PID</div>
+                    <div><span class="prompt">$</span> ps aux | grep firefox</div>
+                    <div class="comment"># 或者</div>
+                    <div><span class="prompt">$</span> pgrep firefox</div>
+                    <div style="margin-top: 10px;"># 4. 终止进程</div>
+                    <div><span class="prompt">$</span> kill 1234</div>
+                    <div class="comment"># 如果不响应，使用 kill -9 1234</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第33页：课后作业 - 网络命令 -->
+        <div class="slide">
+            <h2>📝 作业 5：网络命令</h2>
+            <div class="card" style="max-width: 800px; text-align: left;">
+                <h3 style="color: #ffd700;">任务：</h3>
+                <ul style="list-style: decimal; margin-left: 40px;">
+                    <li>测试到 baidu.com 的网络连接（只 ping 3 次）</li>
+                    <li>获取 https://api.github.com 的内容</li>
+                    <li>下载文件并保存为 myfile.html</li>
+                    <li>查看本机监听的所有端口</li>
+                </ul>
+                
+                <h3 style="color: #ffd700; margin-top: 30px;">答案：</h3>
+                <div class="command-box">
+                    <div># 1. ping 3 次</div>
+                    <div><span class="prompt">$</span> ping -c 3 baidu.com</div>
+                    <div style="margin-top: 10px;"># 2. 获取 API 内容</div>
+                    <div><span class="prompt">$</span> curl https://api.github.com</div>
+                    <div style="margin-top: 10px;"># 3. 下载并保存</div>
+                    <div><span class="prompt">$</span> curl -o myfile.html https://example.com</div>
+                    <div class="comment"># 或者</div>
+                    <div><span class="prompt">$</span> wget -O myfile.html https://example.com</div>
+                    <div style="margin-top: 10px;"># 4. 查看监听端口</div>
+                    <div><span class="prompt">$</span> netstat -tuln</div>
+                    <div class="comment"># 或者使用更快的 ss</div>
+                    <div><span class="prompt">$</span> ss -tuln</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第34页：课后作业 - 文件查找 -->
+        <div class="slide">
+            <h2>📝 作业 6：文件查找与磁盘</h2>
+            <div class="card" style="max-width: 800px; text-align: left;">
+                <h3 style="color: #ffd700;">任务：</h3>
+                <ul style="list-style: decimal; margin-left: 40px;">
+                    <li>在当前目录查找所有 .log 文件</li>
+                    <li>查找大于 50MB 的文件</li>
+                    <li>查看磁盘空间使用情况</li>
+                    <li>查看当前目录各子目录的大小</li>
+                </ul>
+                
+                <h3 style="color: #ffd700; margin-top: 30px;">答案：</h3>
+                <div class="command-box">
+                    <div># 1. 查找 .log 文件</div>
+                    <div><span class="prompt">$</span> find . -name "*.log"</div>
+                    <div style="margin-top: 10px;"># 2. 查找大于 50MB 的文件</div>
+                    <div><span class="prompt">$</span> find . -type f -size +50M</div>
+                    <div style="margin-top: 10px;"># 3. 查看磁盘空间</div>
+                    <div><span class="prompt">$</span> df -h</div>
+                    <div style="margin-top: 10px;"># 4. 查看子目录大小</div>
+                    <div><span class="prompt">$</span> du -sh *</div>
+                    <div class="comment"># 或者按大小排序</div>
+                    <div><span class="prompt">$</span> du -sh * | sort -h</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第35页：综合练习 -->
+        <div class="slide">
+            <h2>📝 综合练习</h2>
+            <div class="card" style="max-width: 800px; text-align: left;">
+                <h3 style="color: #ffd700;">挑战任务：</h3>
+                <p>组合使用多个命令完成以下任务：</p>
+                <ul style="list-style: decimal; margin-left: 40px;">
+                    <li>找出当前目录最大的 5 个文件</li>
+                    <li>统计日志文件中 ERROR 出现的次数并保存</li>
+                    <li>找出占用 CPU 最多的进程并显示详细信息</li>
+                </ul>
+                
+                <h3 style="color: #ffd700; margin-top: 30px;">答案：</h3>
+                <div class="command-box">
+                    <div># 1. 最大的 5 个文件</div>
+                    <div><span class="prompt">$</span> ls -lh | sort -k5 -h | tail -5</div>
+                    <div class="comment"># 或者使用 du</div>
+                    <div><span class="prompt">$</span> du -ah . | sort -h | tail -5</div>
+                    <div style="margin-top: 10px;"># 2. 统计 ERROR 并保存</div>
+                    <div><span class="prompt">$</span> grep -c "ERROR" app.log > error_count.txt</div>
+                    <div class="comment"># 或者</div>
+                    <div><span class="prompt">$</span> grep "ERROR" app.log | wc -l > error_count.txt</div>
+                    <div style="margin-top: 10px;"># 3. CPU 占用最高的进程</div>
+                    <div><span class="prompt">$</span> ps aux --sort=-%cpu | head -2</div>
+                    <div class="comment"># head -2 显示标题和第一个进程</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第36页：实战练习 -->
+        <div class="slide">
+            <h2>💻 实战练习</h2>
+            <p style="margin-bottom: 20px;">在终端中尝试刚才学到的命令</p>
+            <ul>
+                <li>1. 使用 grep 搜索文本</li>
+                <li>2. 使用管道组合命令</li>
+                <li>3. 使用重定向保存输出</li>
+                <li>4. 查看和管理进程</li>
+                <li>5. 测试网络连接</li>
+                <li>6. 查找文件和查看磁盘</li>
+            </ul>
+            <p style="margin-top: 30px; color: #ffd700;">试着在下一页的终端中完成！</p>
+        </div>
+
+        <!-- 第37页：互动终端 -->
+        <div class="slide">
+            <h2>💻 互动终端</h2>
+            <p style="margin-bottom: 20px;">练习今天学习的命令</p>
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-button red"></div>
+                    <div class="terminal-button yellow"></div>
+                    <div class="terminal-button green"></div>
+                    <div class="terminal-title">student@linux: ~</div>
+                </div>
+                <div class="terminal-body" id="terminal-output">
+                    <div class="terminal-line">
+                        <span class="terminal-text">欢迎使用 Linux 终端！</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text">输入 'help' 查看可用命令</span>
+                    </div>
+                </div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">student@linux:~$</span>
+                    <input type="text" class="terminal-input" id="terminal-input" placeholder="输入命令..." autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <!-- 第38页：命令组合示例 -->
+        <div class="slide">
+            <h2>🎯 命令组合示例</h2>
+            <div class="command-box">
+                <div><span class="prompt">$</span> ps aux | grep python | awk '{print $2}' | xargs kill</div>
+                <div class="comment"># 杀死所有 python 进程</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> find . -name "*.log" -exec grep -l "error" {} \;</div>
+                <div class="comment"># 找出包含 error 的日志文件</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> cat access.log | cut -d' ' -f1 | sort | uniq -c | sort -rn | head -10</div>
+                <div class="comment"># 统计访问最多的 10 个 IP</div>
+            </div>
+        </div>
+
+        <!-- 第39页：常见问题 -->
+        <div class="slide">
+            <h2>❓ 常见问题</h2>
+            <ul>
+                <li><span class="highlight">进程卡死怎么办？</span><br>用 ps 找到 PID，然后 kill -9 强制终止</li>
+                <li><span class="highlight">如何查看端口占用？</span><br>netstat -tulpn 或 ss -tulpn</li>
+                <li><span class="highlight">命令输出太多怎么办？</span><br>使用 | less 分页查看</li>
+                <li><span class="highlight">如何在文件中批量替换？</span><br>使用 sed 命令</li>
+            </ul>
+        </div>
+
+        <!-- 第40页：学习建议 -->
+        <div class="slide">
+            <h2>📚 学习建议</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">🔗</div>
+                    <h3>多用管道</h3>
+                    <p>组合简单命令完成复杂任务</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">📖</div>
+                    <h3>查手册</h3>
+                    <p>man grep, man ps 是最好的老师</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">💪</div>
+                    <h3>多练习</h3>
+                    <p>在实际工作中应用这些命令</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎯</div>
+                    <h3>解决问题</h3>
+                    <p>遇到问题先想想用什么命令</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第41页：下节课预告 -->
+        <div class="slide">
+            <h2>🔜 下节课预告</h2>
+            <ul>
+                <li><span class="highlight">Shell 脚本编程</span> - 自动化任务</li>
+                <li><span class="highlight">变量和条件判断</span> - if, case</li>
+                <li><span class="highlight">循环</span> - for, while</li>
+                <li><span class="highlight">函数</span> - 代码复用</li>
+                <li><span class="highlight">实战项目</span> - 编写实用脚本</li>
+            </ul>
+        </div>
+
+        <!-- 第42页：课程总结 -->
+        <div class="slide">
+            <h2>📌 今天学到了什么</h2>
+            <ul>
+                <li>grep 搜索文本，管道组合命令</li>
+                <li>重定向输入输出到文件</li>
+                <li>ps, top, kill 管理进程</li>
+                <li>ping, curl, wget 网络命令</li>
+                <li>find 查找文件，tar 压缩解压</li>
+                <li>df, du 查看磁盘使用</li>
+            </ul>
+            <p style="margin-top: 40px; color: #ffd700;">这些是 Linux 最强大的工具！</p>
+            <p style="margin-top: 20px;">记得完成课后作业巩固学习！</p>
+        </div>
+
+        <!-- 第43页：结束页 -->
+        <div class="slide">
+            <h1>🎉 感谢学习</h1>
+            <p class="subtitle">你已经掌握了 Linux 的核心工具</p>
+            <div style="margin-top: 50px;">
+                <p style="font-size: 1.2em;">💡 多练习管道和重定向</p>
+                <p style="font-size: 1.2em;">📝 完成课后作业巩固知识</p>
+                <p style="font-size: 1.2em;">🤔 思考如何组合命令解决问题</p>
+                <p style="font-size: 1.2em;">🚀 下节课学习 Shell 脚本！</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 控制按钮 -->
+    <div class="controls">
+        <button onclick="previousSlide()">上一页</button>
+        <button onclick="nextSlide()">下一页</button>
+    </div>
+
+    <!-- 页码显示 -->
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">43</span>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="info_database_lesson3.js"></script>
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+        
+        // 点击事件处理
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('clickable')) {
+                const infoKey = e.target.getAttribute('data-info');
+                showInfo(infoKey);
+            }
+        });
+        
+        function showInfo(key) {
+            const info = infoDatabase[key];
+            if (info) {
+                document.getElementById('modal-title').textContent = info.title;
+                document.getElementById('modal-body').innerHTML = info.content;
+                document.getElementById('info-modal').style.display = 'block';
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('info-modal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('info-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // 终端模拟器
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalOutput = document.getElementById('terminal-output');
+
+        
+        const commands = {
+            grep: (args) => {
+                if (!args) return 'grep: missing pattern';
+                return 'Error: Connection failed\nError: File not found\nWarning: Low memory';
+            },
+            ps: () => {
+                return `  PID TTY          TIME CMD
+ 1234 pts/0    00:00:00 bash
+ 5678 pts/0    00:00:01 python
+ 9012 pts/0    00:00:00 node`;
+            },
+            'ps aux': () => {
+                return `USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+student   1234  0.5  2.1  12345  6789 pts/0    S    10:30   0:00 bash
+student   5678  5.2  8.3  45678 12345 pts/0    R    10:31   0:01 python app.py
+student   9012  1.2  3.4  23456  7890 pts/0    S    10:32   0:00 node server.js`;
+            },
+            top: () => {
+                return `top - 10:30:15 up 5 days, 2:15, 3 users
+Tasks: 245 total, 1 running, 244 sleeping
+%Cpu(s): 12.5 us, 3.2 sy, 0.0 ni, 84.3 id
+MiB Mem: 16384 total, 8192 free, 6144 used
+
+PID  USER  %CPU %MEM  COMMAND
+1234 user  25.0  5.2  python app.py
+5678 user  12.3  3.1  node server.js
+
+按 q 退出 top（这是模拟）`;
+            },
+            ping: (args) => {
+                const host = args || 'google.com';
+                return `PING ${host} (142.250.185.46): 56 data bytes
+64 bytes from 142.250.185.46: icmp_seq=0 time=15.2 ms
+64 bytes from 142.250.185.46: icmp_seq=1 time=14.8 ms
+64 bytes from 142.250.185.46: icmp_seq=2 time=15.5 ms
+
+--- ${host} ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss`;
+            },
+            curl: (args) => {
+                if (!args) return 'curl: no URL specified';
+                return `<!DOCTYPE html>
+<html>
+<head><title>Example</title></head>
+<body><h1>Example Domain</h1></body>
+</html>`;
+            },
+            wget: (args) => {
+                if (!args) return 'wget: missing URL';
+                return `--2024-01-15 10:30:00--  ${args}
+Resolving example.com... 93.184.216.34
+Connecting to example.com|93.184.216.34|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1256 (1.2K) [text/html]
+Saving to: 'index.html'
+
+index.html          100%[===================>]   1.23K  --.-KB/s    in 0s
+
+2024-01-15 10:30:01 (45.2 MB/s) - 'index.html' saved [1256/1256]`;
+            },
+            find: (args) => {
+                return `./documents/report.txt
+./downloads/data.txt
+./projects/readme.txt
+./notes/todo.txt`;
+            },
+            'df -h': () => {
+                return `Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       100G   45G   50G  48% /
+/dev/sda2       200G  120G   75G  62% /home
+tmpfs           8.0G  1.2G  6.8G  15% /tmp`;
+            },
+            'du -sh': () => {
+                return `2.5G    Documents
+1.2G    Downloads
+500M    Pictures
+300M    Videos
+100M    Music`;
+            },
+            uptime: () => {
+                return '10:30:15 up 5 days, 2:15, 3 users, load average: 0.52, 0.48, 0.45';
+            },
+            'free -h': () => {
+                return `              total        used        free      shared  buff/cache   available
+Mem:           16Gi       6.1Gi       8.2Gi       256Mi       1.7Gi       9.5Gi
+Swap:         2.0Gi          0B       2.0Gi`;
+            },
+            clear: () => {
+                terminalOutput.innerHTML = '';
+                return null;
+            },
+            help: () => {
+                return `可用命令：
+grep [pattern]  - 搜索文本
+ps              - 查看进程
+ps aux          - 查看所有进程
+top             - 实时监控
+ping [host]     - 测试网络
+curl [url]      - HTTP 请求
+wget [url]      - 下载文件
+find            - 查找文件
+df -h           - 磁盘空间
+du -sh          - 目录大小
+uptime          - 运行时间
+free -h         - 内存使用
+clear           - 清屏
+help            - 显示此帮助`;
+            }
+        };
+
+        
+        terminalInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim();
+                if (command) {
+                    executeCommand(command);
+                    terminalInput.value = '';
+                }
+            }
+        });
+        
+        function executeCommand(input) {
+            // 显示输入的命令
+            addTerminalLine(`<span class="terminal-prompt">student@linux:~$</span> ${input}`);
+            
+            let output;
+            if (commands[input]) {
+                output = commands[input]();
+            } else {
+                const parts = input.split(' ');
+                const cmd = parts[0];
+                const args = parts.slice(1).join(' ');
+                
+                if (commands[cmd]) {
+                    output = commands[cmd](args);
+                } else {
+                    output = `bash: ${cmd}: command not found`;
+                }
+            }
+            
+            if (output !== null && output !== '') {
+                addTerminalLine(`<span class="terminal-text">${output}</span>`);
+            }
+            
+            // 滚动到底部
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+        
+        function addTerminalLine(html) {
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = html;
+            terminalOutput.appendChild(line);
+        }
+    </script>
+</body>
+</html>

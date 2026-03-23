@@ -74,7 +74,7 @@
         ul {
             list-style: none;
             text-align: left;
-            max-width: 900px;
+            max-width: 800px;
         }
         
         li {
@@ -142,283 +142,16 @@
             margin-top: 30px;
         }
         
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 25px;
-            max-width: 1200px;
-            margin-top: 30px;
-        }
-        
         .card {
             background: rgba(255,255,255,0.15);
             padding: 25px;
             border-radius: 15px;
             backdrop-filter: blur(10px);
-            transition: all 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.2);
         }
         
         .emoji {
             font-size: 3em;
             margin-bottom: 15px;
-        }
-        
-        .comparison {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 30px;
-        }
-        
-        .comparison-item {
-            background: rgba(255,255,255,0.15);
-            padding: 30px;
-            border-radius: 15px;
-            flex: 1;
-            margin: 0 15px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .code-block {
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            text-align: left;
-            margin: 20px 0;
-            border-left: 4px solid #ffd700;
-        }
-        
-        .code-block code {
-            color: #43e97b;
-            font-size: 1.1em;
-        }
-        
-        .tree-container {
-            background: rgba(0,0,0,0.3);
-            padding: 30px;
-            border-radius: 15px;
-            font-family: 'Courier New', monospace;
-            text-align: left;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        
-        .tree-item {
-            color: white;
-            padding: 5px 0;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .tree-item:hover {
-            color: #ffd700;
-            transform: translateX(5px);
-        }
-        
-        .tree-item .folder {
-            color: #4facfe;
-        }
-        
-        .tree-item .file {
-            color: #43e97b;
-        }
-        
-        .command-demo {
-            background: rgba(0,0,0,0.4);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px auto;
-            max-width: 800px;
-        }
-        
-        .command-title {
-            color: #ffd700;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .command-desc {
-            color: #e0e0e0;
-            font-size: 1.1em;
-            margin-bottom: 20px;
-        }
-        
-        .command-example {
-            background: #1e1e1e;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .command-example .prompt {
-            color: #43e97b;
-        }
-        
-        .command-example .command {
-            color: #4facfe;
-        }
-        
-        .command-example .output {
-            color: #e0e0e0;
-            margin-top: 5px;
-        }
-        
-        .vm-diagram {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 20px auto;
-            max-width: 900px;
-        }
-        
-        .vm-layer {
-            background: rgba(255,255,255,0.15);
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border-left: 5px solid #ffd700;
-        }
-        
-        .terminal-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #1e1e1e;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        
-        .terminal-header {
-            background: #323232;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .terminal-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .terminal-button.red {
-            background: #ff5f56;
-        }
-        
-        .terminal-button.yellow {
-            background: #ffbd2e;
-        }
-        
-        .terminal-button.green {
-            background: #27c93f;
-        }
-        
-        .terminal-title {
-            color: #999;
-            font-size: 0.9em;
-            margin-left: 10px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .terminal-body {
-            padding: 20px;
-            min-height: 350px;
-            max-height: 350px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-        }
-        
-        .terminal-line {
-            margin: 5px 0;
-            line-height: 1.6;
-        }
-        
-        .terminal-prompt {
-            color: #43e97b;
-            margin-right: 8px;
-        }
-        
-        .terminal-text {
-            color: #e0e0e0;
-        }
-        
-        .terminal-input-line {
-            padding: 15px 20px;
-            background: #252525;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .terminal-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            outline: none;
-        }
-        
-        .terminal-input::placeholder {
-            color: #666;
-        }
-        
-        .terminal-body::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .terminal-body::-webkit-scrollbar-track {
-            background: #1e1e1e;
-        }
-        
-        .terminal-body::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 4px;
-        }
-        
-        .terminal-body::-webkit-scrollbar-thumb:hover {
-            background: #777;
-        }
-        
-        .path-demo {
-            background: rgba(0,0,0,0.3);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px auto;
-            max-width: 800px;
-        }
-        
-        .path-example {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border-left: 4px solid #4facfe;
-        }
-        
-        .path-type {
-            color: #ffd700;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .path-value {
-            font-family: 'Courier New', monospace;
-            color: #43e97b;
-            font-size: 1.2em;
         }
         
         .clickable {
@@ -518,6 +251,169 @@
             margin: 15px 0;
             border-left: 4px solid #ffd700;
         }
+        
+        .command-box {
+            background: #1e1e1e;
+            color: #43e97b;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: left;
+            margin: 20px auto;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .command-box .prompt {
+            color: #43e97b;
+        }
+        
+        .command-box .output {
+            color: #e0e0e0;
+            margin-top: 10px;
+        }
+        
+        .terminal-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .terminal-header {
+            background: #323232;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-button.red {
+            background: #ff5f56;
+        }
+        
+        .terminal-button.yellow {
+            background: #ffbd2e;
+        }
+        
+        .terminal-button.green {
+            background: #27c93f;
+        }
+        
+        .terminal-title {
+            color: #999;
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .terminal-body {
+            padding: 20px;
+            min-height: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        .terminal-line {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .terminal-prompt {
+            color: #43e97b;
+            margin-right: 8px;
+        }
+        
+        .terminal-text {
+            color: #e0e0e0;
+        }
+        
+        .terminal-input-line {
+            padding: 15px 20px;
+            background: #252525;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            outline: none;
+        }
+        
+        .terminal-input::placeholder {
+            color: #666;
+        }
+        
+        .terminal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .terminal-body::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        
+        .terminal-body::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+        
+        .file-tree {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .file-tree-item {
+            padding: 5px 0;
+            color: white;
+            font-size: 1.1em;
+        }
+        
+        .file-tree-item.folder {
+            color: #ffd700;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+        
+        .comparison-item {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            flex: 1;
+            margin: 0 15px;
+            backdrop-filter: blur(10px);
+        }
     </style>
 </head>
 <body>
@@ -525,8 +421,11 @@
         <!-- 第1页：封面 -->
         <div class="slide active">
             <h1>🐧 Linux 操作系统</h1>
-            <p class="subtitle">第二节课：虚拟化技术与文件系统</p>
-            <p style="margin-top: 50px; font-size: 1.2em;">从理论到实践</p>
+            <p class="subtitle">第二节课：Linux 基础操作入门</p>
+            <p style="margin-top: 50px; font-size: 1.2em;">从零开始，动手实践</p>
+            <p style="margin-top: 30px; font-size: 1em; color: #ffd700;">
+                💡 提示：点击带有 ℹ️ 图标的内容可查看详细解释
+            </p>
         </div>
 
         <!-- 第2页：课程回顾 -->
@@ -534,949 +433,586 @@
             <h2>📚 上节课回顾</h2>
             <ul>
                 <li>Linux 是开源、免费的操作系统</li>
-                <li>Linux 无处不在：服务器、手机、云计算</li>
-                <li>命令行是 Linux 的核心优势</li>
+                <li>Linux 无处不在：服务器、手机、汽车...</li>
                 <li>学习 Linux 对职业发展很有帮助</li>
+                <li>门槛不高，关键是坚持实践</li>
             </ul>
-            <p style="margin-top: 40px; color: #ffd700;">💡 上周你们用 <span class="clickable" data-info="hyperv">Hyper-V</span> 安装了 <span class="clickable" data-info="ubuntu">Ubuntu</span>，遇到问题了吗？</p>
+            <p style="margin-top: 40px; color: #ffd700;">今天我们开始真正动手操作！</p>
         </div>
 
         <!-- 第3页：今天的学习目标 -->
         <div class="slide">
-            <h2>🎯 今天我们将学习</h2>
+            <h2>🎯 今天的学习目标</h2>
             <div class="grid">
-                <div class="card">
-                    <div class="emoji">🖥️</div>
-                    <h3>虚拟化技术</h3>
-                    <p>理解虚拟机的工作原理</p>
-                </div>
                 <div class="card">
                     <div class="emoji">📁</div>
                     <h3>文件系统</h3>
-                    <p>掌握 Linux 目录结构</p>
+                    <p>理解 Linux 目录结构</p>
                 </div>
                 <div class="card">
                     <div class="emoji">⌨️</div>
                     <h3>基础命令</h3>
-                    <p>学会文件和目录操作</p>
+                    <p>掌握 10 个常用命令</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🗂️</div>
+                    <h3>文件操作</h3>
+                    <p>创建、查看、删除文件</p>
                 </div>
                 <div class="card">
                     <div class="emoji">💻</div>
-                    <h3>实践操作</h3>
-                    <p>在终端中动手练习</p>
+                    <h3>实战练习</h3>
+                    <p>在终端中实际操作</p>
                 </div>
             </div>
         </div>
 
-        <!-- 第4页：虚拟化技术引入 -->
+        <!-- 第4页：Linux 文件系统 - 引入 -->
         <div class="slide">
-            <h2>🤔 什么是虚拟化？</h2>
-            <p class="subtitle">让一台电脑变成多台电脑</p>
+            <h2>📁 Linux 文件系统</h2>
+            <p class="subtitle">一切从根开始</p>
         </div>
 
-        <!-- 第5页：虚拟化原理 -->
-        <div class="slide">
-            <h2>虚拟化的工作原理</h2>
-            <div class="vm-diagram">
-                <div class="vm-layer" style="border-color: #ff5f56;">
-                    <h3>🖥️ 虚拟机 1 (Ubuntu)</h3>
-                    <p>运行 Linux 应用程序</p>
-                </div>
-                <div class="vm-layer" style="border-color: #ffbd2e;">
-                    <h3>🖥️ 虚拟机 2 (Windows)</h3>
-                    <p>运行 Windows 应用程序</p>
-                </div>
-                <div class="vm-layer" style="border-color: #4facfe;">
-                    <h3>⚙️ <span class="clickable" data-info="hypervisor">Hypervisor</span>（虚拟化层）</h3>
-                    <p>管理和分配资源：CPU、内存、硬盘、网络</p>
-                </div>
-                <div class="vm-layer" style="border-color: #43e97b;">
-                    <h3>💻 物理硬件</h3>
-                    <p>真实的计算机硬件</p>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- 第6页：虚拟机类型对比 -->
-        <div class="slide">
-            <h2>🔍 虚拟机的两种类型</h2>
-            <div class="comparison">
-                <div class="comparison-item">
-                    <h3>Type 1 - 裸机虚拟化</h3>
-                    <div class="emoji">🏗️</div>
-                    <ul style="text-align: left;">
-                        <li><span class="highlight clickable" data-info="hyperv">Hyper-V</span></li>
-                        <li>VMware ESXi</li>
-                        <li>KVM</li>
-                        <li>直接运行在硬件上</li>
-                        <li>性能更好</li>
-                        <li>企业级应用</li>
-                    </ul>
-                </div>
-                <div class="comparison-item">
-                    <h3>Type 2 - 托管虚拟化</h3>
-                    <div class="emoji">📦</div>
-                    <ul style="text-align: left;">
-                        <li><span class="highlight clickable" data-info="virtualbox">VirtualBox</span></li>
-                        <li><span class="clickable" data-info="vmware">VMware Workstation</span></li>
-                        <li>Parallels Desktop</li>
-                        <li>运行在操作系统上</li>
-                        <li>易于安装使用</li>
-                        <li>个人学习首选</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- 第7页：Hyper-V 详解 -->
-        <div class="slide">
-            <h2>💎 <span class="clickable" data-info="hyperv">Hyper-V</span> 深入了解</h2>
-            <ul>
-                <li><span class="highlight">Windows 内置</span>的虚拟化平台（Pro/Enterprise 版本）</li>
-                <li>Type 1 虚拟化，<span class="highlight">性能接近原生</span></li>
-                <li>与 Windows 系统<span class="highlight">深度集成</span></li>
-                <li>支持<span class="highlight">动态内存</span>分配</li>
-                <li>完全<span class="highlight">免费</span>使用</li>
-                <li>缺点：仅限 Windows 系统，不支持 Home 版</li>
-            </ul>
-        </div>
-
-        <!-- 第8页：其他虚拟化方案 -->
-        <div class="slide">
-            <h2>🛠️ 其他虚拟化方案</h2>
-            <div class="grid">
-                <div class="card clickable" data-info="virtualbox">
-                    <div class="emoji">📦</div>
-                    <h3>VirtualBox</h3>
-                    <p>跨平台、开源、免费</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">适合：所有用户</p>
-                </div>
-                <div class="card clickable" data-info="vmware">
-                    <div class="emoji">🔷</div>
-                    <h3>VMware</h3>
-                    <p>功能强大、商业软件</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">适合：专业用户</p>
-                </div>
-                <div class="card clickable" data-info="wsl2">
-                    <div class="emoji">🐧</div>
-                    <h3>WSL2</h3>
-                    <p>Windows 子系统</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">适合：开发者</p>
-                </div>
-                <div class="card">
-                    <div class="emoji">☁️</div>
-                    <h3>云虚拟机</h3>
-                    <p>AWS、阿里云</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">适合：生产环境</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 第9页：虚拟机资源分配 -->
-        <div class="slide">
-            <h2>⚙️ 虚拟机资源分配</h2>
-            <ul>
-                <li><span class="highlight clickable" data-info="cpu">CPU</span>：分配处理器核心数（建议 2-4 核）</li>
-                <li><span class="highlight clickable" data-info="memory">内存</span>：分配 RAM 大小（建议 4-8 GB）</li>
-                <li><span class="highlight clickable" data-info="disk">硬盘</span>：虚拟磁盘空间（建议 40-60 GB）</li>
-                <li><span class="highlight clickable" data-info="network">网络</span>：NAT、桥接、仅主机模式</li>
-                <li>💡 原则：不要分配超过物理机 <span class="highlight">50%</span> 的资源</li>
-            </ul>
-        </div>
-
-        <!-- 第10页：虚拟机实用功能 -->
-        <div class="slide">
-            <h2>✨ 虚拟机的实用功能</h2>
-            <div class="grid">
-                <div class="card clickable" data-info="snapshot">
-                    <div class="emoji">📸</div>
-                    <h3>快照（Snapshot）</h3>
-                    <p>保存虚拟机状态</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">像游戏存档一样，随时恢复</p>
-                </div>
-                <div class="card">
-                    <div class="emoji">📂</div>
-                    <h3>共享文件夹</h3>
-                    <p>主机与虚拟机交换文件</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">无需 U 盘或网络传输</p>
-                </div>
-                <div class="card">
-                    <div class="emoji">📋</div>
-                    <h3>剪贴板共享</h3>
-                    <p>复制粘贴跨系统</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">提高工作效率</p>
-                </div>
-                <div class="card">
-                    <div class="emoji">🔄</div>
-                    <h3>克隆虚拟机</h3>
-                    <p>快速复制环境</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">测试不同配置</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 第11页：虚拟机网络模式 -->
-        <div class="slide">
-            <h2>🌐 虚拟机网络模式</h2>
-            <div class="grid-3">
-                <div class="card clickable" data-info="nat">
-                    <h3>NAT 模式</h3>
-                    <p>虚拟机可以上网</p>
-                    <p>外部无法访问虚拟机</p>
-                    <p style="color: #ffd700; margin-top: 10px;">✅ 推荐新手使用</p>
-                </div>
-                <div class="card clickable" data-info="bridge">
-                    <h3>桥接模式</h3>
-                    <p>虚拟机获得独立 IP</p>
-                    <p>像局域网中的真实电脑</p>
-                    <p style="color: #ffd700; margin-top: 10px;">✅ 适合服务器</p>
-                </div>
-                <div class="card">
-                    <h3>仅主机模式</h3>
-                    <p>只能与主机通信</p>
-                    <p>完全隔离外部网络</p>
-                    <p style="color: #ffd700; margin-top: 10px;">✅ 适合安全测试</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 第12页：容器技术简介 -->
-        <div class="slide">
-            <h2>🐳 容器 vs 虚拟机</h2>
-            <div class="comparison">
-                <div class="comparison-item">
-                    <h3>虚拟机</h3>
-                    <ul style="text-align: left;">
-                        <li>完整的操作系统</li>
-                        <li>资源占用大（GB 级别）</li>
-                        <li>启动慢（分钟级）</li>
-                        <li>隔离性强</li>
-                        <li>适合运行不同系统</li>
-                    </ul>
-                </div>
-                <div class="comparison-item">
-                    <h3>容器（<span class="clickable" data-info="docker">Docker</span>）</h3>
-                    <ul style="text-align: left;">
-                        <li>共享主机内核</li>
-                        <li>资源占用小（MB 级别）</li>
-                        <li>启动快（秒级）</li>
-                        <li>轻量级隔离</li>
-                        <li>适合微服务架构</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- 第13页：Linux 文件系统引入 -->
-        <div class="slide">
-            <h2>📁 <span class="clickable" data-info="filesystem">Linux 文件系统</span></h2>
-            <p class="subtitle">一切皆文件的哲学</p>
-            <p style="margin-top: 30px;">💡 Linux <span class="clickable" data-info="kernel">内核</span>统一管理所有文件</p>
-        </div>
-
-        <!-- 第14页：一切皆文件 -->
-        <div class="slide">
-            <h2>🌟 一切皆文件</h2>
-            <ul>
-                <li>普通文件：文档、图片、程序</li>
-                <li><span class="highlight">目录</span>也是文件（特殊的文件）</li>
-                <li><span class="highlight">硬件设备</span>也是文件（/dev/sda 是<span class="clickable" data-info="disk">硬盘</span>）</li>
-                <li><span class="highlight clickable" data-info="process">进程信息</span>也是文件（/proc 目录）</li>
-                <li><span class="highlight clickable" data-info="network">网络连接</span>也是文件（/proc/net）</li>
-                <li>这种设计让一切都可以用<span class="highlight">统一的方式</span>操作</li>
-            </ul>
-        </div>
-
-        <!-- 第15页：目录树结构 -->
+        <!-- 第5页：目录树结构 -->
         <div class="slide">
             <h2>🌳 Linux 目录树</h2>
-            <div class="tree-container">
-                <div class="tree-item"><span class="folder">/ </span>(根目录 - 一切的起点)</div>
-                <div class="tree-item">├── <span class="folder">home/</span> (用户主目录)</div>
-                <div class="tree-item">│   └── <span class="folder">student/</span> (你的个人空间)</div>
-                <div class="tree-item">├── <span class="folder">etc/</span> (配置文件)</div>
-                <div class="tree-item">├── <span class="folder">usr/</span> (程序和库)</div>
-                <div class="tree-item">├── <span class="folder">var/</span> (变化的数据)</div>
-                <div class="tree-item">├── <span class="folder">tmp/</span> (临时文件)</div>
-                <div class="tree-item">├── <span class="folder">dev/</span> (设备文件)</div>
-                <div class="tree-item">├── <span class="folder">bin/</span> (基本命令)</div>
-                <div class="tree-item">└── <span class="folder">sbin/</span> (系统命令)</div>
+            <p>Linux 的文件系统是一个<span class="highlight">倒置的树状结构</span></p>
+            <div class="file-tree">
+                <div class="file-tree-item folder">/ (根目录)</div>
+                <div class="file-tree-item folder" style="padding-left: 20px;">├── home (用户主目录)</div>
+                <div class="file-tree-item" style="padding-left: 40px;">│   └── student (你的目录)</div>
+                <div class="file-tree-item folder" style="padding-left: 20px;">├── etc (配置文件)</div>
+                <div class="file-tree-item folder" style="padding-left: 20px;">├── bin (可执行程序)</div>
+                <div class="file-tree-item folder" style="padding-left: 20px;">├── usr (用户程序)</div>
+                <div class="file-tree-item folder" style="padding-left: 20px;">├── var (变量数据)</div>
+                <div class="file-tree-item folder" style="padding-left: 20px;">└── tmp (临时文件)</div>
             </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 所有路径都从 / 开始，没有 C:、D: 盘符</p>
+            <p style="margin-top: 20px;">所有文件和目录都从 <span class="highlight">/</span> 开始</p>
         </div>
 
-        <!-- 第16页：根目录详解 -->
+        <!-- 第6页：重要目录详解 -->
         <div class="slide">
-            <h2><span class="clickable" data-info="root">/ - 根目录</span></h2>
+            <h2>📂 重要目录说明</h2>
             <ul>
-                <li>Linux 文件系统的<span class="highlight">最顶层</span></li>
-                <li>所有文件和目录都在根目录下</li>
-                <li>类似 Windows 的"我的电脑"，但更统一</li>
-                <li>Windows：C:\、D:\、E:\ (多个根)</li>
-                <li>Linux：只有一个根 <span class="highlight">/</span></li>
-                <li>其他磁盘通过<span class="highlight">挂载</span>到某个目录</li>
+                <li><span class="highlight clickable" data-info="root-dir">/</span> - 根目录，所有文件的起点</li>
+                <li><span class="highlight clickable" data-info="home-dir">/home</span> - 用户的家目录，存放个人文件</li>
+                <li><span class="highlight clickable" data-info="etc-dir">/etc</span> - 系统配置文件</li>
+                <li><span class="highlight clickable" data-info="bin-dir">/bin</span> - 基本命令程序</li>
+                <li><span class="highlight clickable" data-info="usr-dir">/usr</span> - 用户安装的程序</li>
+                <li><span class="highlight clickable" data-info="var-dir">/var</span> - 日志和变化的数据</li>
+                <li><span class="highlight clickable" data-info="tmp-dir">/tmp</span> - 临时文件，重启后清空</li>
             </ul>
         </div>
 
-        <!-- 第17页：/home 目录 -->
-        <div class="slide">
-            <h2>🏠 <span class="clickable" data-info="home">/home - 用户的家</span></h2>
-            <ul>
-                <li>每个用户都有自己的主目录</li>
-                <li>路径：<code class="highlight">/home/用户名</code></li>
-                <li>类似 Windows 的 <code>C:\Users\用户名</code></li>
-                <li>用户的<span class="highlight">个人文件</span>都存放在这里</li>
-                <li>用 <span class="highlight">~</span> 符号代表当前用户的主目录</li>
-                <li>例如：<code>~/Documents</code> = <code>/home/student/Documents</code></li>
-            </ul>
-            <div class="code-block">
-                <code>$ cd ~          # 回到主目录<br>
-                $ cd ~/Desktop  # 进入桌面目录</code>
-            </div>
-        </div>
-
-        <!-- 第18页：/etc 目录 -->
-        <div class="slide">
-            <h2>⚙️ <span class="clickable" data-info="etc">/etc - 配置文件的宝库</span></h2>
-            <ul>
-                <li>存放<span class="highlight">系统配置文件</span></li>
-                <li>网络配置、用户信息、服务设置</li>
-                <li>重要文件：
-                    <ul style="margin-left: 30px; margin-top: 10px;">
-                        <li><code>/etc/passwd</code> - 用户账户信息</li>
-                        <li><code>/etc/hosts</code> - 主机名映射</li>
-                        <li><code>/etc/fstab</code> - 文件系统挂载</li>
-                    </ul>
-                </li>
-                <li>修改这些文件通常需要<span class="highlight">管理员权限</span></li>
-            </ul>
-        </div>
-
-        <!-- 第19页：/usr 目录 -->
-        <div class="slide">
-            <h2>📦 /usr - 程序的居所</h2>
-            <ul>
-                <li>Unix System Resources 的缩写</li>
-                <li>存放<span class="highlight">用户程序和数据</span></li>
-                <li>类似 Windows 的 <code>C:\Program Files</code></li>
-                <li>子目录：
-                    <ul style="margin-left: 30px; margin-top: 10px;">
-                        <li><code>/usr/bin</code> - 用户命令</li>
-                        <li><code>/usr/lib</code> - 程序库</li>
-                        <li><code>/usr/share</code> - 共享数据</li>
-                        <li><code>/usr/local</code> - 本地安装的<span class="clickable" data-info="package">软件</span></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-        <!-- 第20页：/var 目录 -->
-        <div class="slide">
-            <h2>📊 <span class="clickable" data-info="var">/var - 变化的数据</span></h2>
-            <ul>
-                <li>Variable 的缩写，存放<span class="highlight">经常变化</span>的数据</li>
-                <li>重要子目录：
-                    <ul style="margin-left: 30px; margin-top: 10px;">
-                        <li><code>/var/log</code> - <span class="highlight">系统日志</span>（排查问题必看）</li>
-                        <li><code>/var/cache</code> - 应用缓存</li>
-                        <li><code>/var/tmp</code> - 临时文件（不会自动清理）</li>
-                        <li><code>/var/www</code> - 网站文件（Web 服务器）</li>
-                    </ul>
-                </li>
-                <li>💡 系统出问题？先看 <code>/var/log</code></li>
-            </ul>
-        </div>
-
-        <!-- 第21页：其他重要目录 -->
-        <div class="slide">
-            <h2>📂 其他重要目录</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>/tmp</h3>
-                    <p>临时文件</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">重启后会被清空</p>
-                </div>
-                <div class="card">
-                    <h3>/dev</h3>
-                    <p>设备文件</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;"><span class="clickable" data-info="disk">硬盘</span>、USB、终端</p>
-                </div>
-                <div class="card">
-                    <h3>/bin</h3>
-                    <p>基本命令</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">ls、cp、mv 等</p>
-                </div>
-                <div class="card">
-                    <h3>/sbin</h3>
-                    <p>系统命令</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">需要<span class="clickable" data-info="sudo">管理员权限</span></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 第22页：路径概念 -->
+        <!-- 第7页：路径的概念 -->
         <div class="slide">
             <h2>🛤️ 路径的概念</h2>
-            <p class="subtitle">如何描述文件的位置</p>
-        </div>
-
-        <!-- 第23页：绝对路径 vs 相对路径 -->
-        <div class="slide">
-            <h2>📍 <span class="clickable" data-info="absolute">绝对路径</span> vs <span class="clickable" data-info="relative">相对路径</span></h2>
-            <div class="path-demo">
-                <div class="path-example">
-                    <div class="path-type">绝对路径（从根目录开始）</div>
-                    <div class="path-value">/home/student/Documents/report.txt</div>
-                    <p style="margin-top: 10px; font-size: 0.95em;">✅ 无论在哪里，路径都一样</p>
-                </div>
-                <div class="path-example">
-                    <div class="path-type">相对路径（从当前位置开始）</div>
-                    <div class="path-value">Documents/report.txt</div>
-                    <p style="margin-top: 10px; font-size: 0.95em;">✅ 更简洁，但取决于当前位置</p>
-                </div>
-            </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 绝对路径以 / 开头，相对路径不以 / 开头</p>
-        </div>
-
-        <!-- 第24页：特殊路径符号 -->
-        <div class="slide">
-            <h2>🔣 特殊路径符号</h2>
-            <ul>
-                <li><span class="highlight">.</span> (点) - 当前目录</li>
-                <li><span class="highlight">..</span> (两个点) - 上级目录</li>
-                <li><span class="highlight">~</span> (波浪号) - 当前用户主目录</li>
-                <li><span class="highlight">/</span> (斜杠) - 根目录</li>
-                <li><span class="highlight">-</span> (减号) - 上一个工作目录</li>
-            </ul>
-            <div class="code-block" style="margin-top: 30px;">
-                <code>$ cd ..        # 返回上级目录<br>
-                $ cd ~         # 回到主目录<br>
-                $ cd -         # 回到上一个目录<br>
-                $ cd ../..     # 返回上两级目录</code>
-            </div>
-        </div>
-
-        <!-- 第25页：Windows vs Linux 文件系统 -->
-        <div class="slide">
-            <h2>🔄 Windows vs Linux 文件系统</h2>
             <div class="comparison">
                 <div class="comparison-item">
-                    <h3>Windows</h3>
-                    <ul style="text-align: left;">
-                        <li>多个根：C:\、D:\、E:\</li>
-                        <li>路径分隔符：<code>\</code></li>
-                        <li>不区分大小写</li>
-                        <li>隐藏文件：属性设置</li>
-                        <li>示例：<code>C:\Users\Name\file.txt</code></li>
-                    </ul>
+                    <h3>绝对路径</h3>
+                    <p>从根目录 / 开始</p>
+                    <div class="command-box">
+                        <div>/home/student/documents/file.txt</div>
+                    </div>
+                    <p style="font-size: 1em;">完整的地址，不会混淆</p>
                 </div>
                 <div class="comparison-item">
-                    <h3>Linux</h3>
-                    <ul style="text-align: left;">
-                        <li>单一根：<code>/</code></li>
-                        <li>路径分隔符：<code>/</code></li>
-                        <li><span class="highlight">区分大小写</span></li>
-                        <li>隐藏文件：以 <code>.</code> 开头</li>
-                        <li>示例：<code>/home/name/file.txt</code></li>
-                    </ul>
+                    <h3>相对路径</h3>
+                    <p>从当前位置开始</p>
+                    <div class="command-box">
+                        <div>./documents/file.txt</div>
+                        <div>../other/file.txt</div>
+                    </div>
+                    <p style="font-size: 1em;">. 表示当前目录<br>.. 表示上级目录</p>
                 </div>
             </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 Linux 中 File.txt 和 file.txt 是两个不同的文件！</p>
         </div>
 
-        <!-- 第26页：基础命令引入 -->
+        <!-- 第8页：基础命令 - 引入 -->
         <div class="slide">
             <h2>⌨️ Linux 基础命令</h2>
-            <p class="subtitle">开始动手操作</p>
-            <p style="margin-top: 30px;">💡 所有命令都在 <span class="clickable" data-info="shell">Shell</span> 中执行</p>
+            <p class="subtitle">掌握这 10 个命令，你就入门了</p>
         </div>
 
-        <!-- 第27页：导航命令 - pwd -->
+        <!-- 第9页：pwd 命令 -->
         <div class="slide">
-            <h2>📍 <span class="clickable" data-info="pwd">pwd - 我在哪里？</span></h2>
-            <div class="command-demo">
-                <div class="command-title">pwd (Print Working Directory)</div>
-                <div class="command-desc">显示当前工作目录的完整路径</div>
-                <div class="command-example">
-                    <div class="prompt">student@ubuntu:~$</div>
-                    <div class="command">pwd</div>
-                    <div class="output">/home/student</div>
-                </div>
-                <div class="command-example">
-                    <div class="prompt">student@ubuntu:~$</div>
-                    <div class="command">cd /etc</div>
-                    <div class="prompt">student@ubuntu:/etc$</div>
-                    <div class="command">pwd</div>
-                    <div class="output">/etc</div>
-                </div>
-            </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 迷路了？用 pwd 看看自己在哪</p>
-        </div>
-
-        <!-- 第28页：导航命令 - cd -->
-        <div class="slide">
-            <h2>🚶 <span class="clickable" data-info="cd">cd - 切换目录</span></h2>
-            <div class="command-demo">
-                <div class="command-title">cd (Change Directory)</div>
-                <div class="command-desc">在目录之间移动</div>
-                <div class="command-example">
-                    <div class="command">cd /home/student    # 绝对路径</div>
-                    <div class="command">cd Documents        # 相对路径</div>
-                    <div class="command">cd ..               # 返回上级</div>
-                    <div class="command">cd ~                # 回到主目录</div>
-                    <div class="command">cd -                # 回到上一个目录</div>
-                    <div class="command">cd                  # 回到主目录（无参数）</div>
-                </div>
-            </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 cd 是最常用的命令之一</p>
-        </div>
-
-
-        <!-- 第29页：ls 命令详解 -->
-        <div class="slide">
-            <h2>👀 <span class="clickable" data-info="ls">ls - 查看文件列表</span></h2>
-            <div class="command-demo">
-                <div class="command-title">ls (List)</div>
-                <div class="command-desc">列出目录中的文件和子目录</div>
-                <div class="command-example">
-                    <div class="command">ls              # 基本列表</div>
-                    <div class="command">ls -l           # 详细信息（权限、大小、时间）</div>
-                    <div class="command">ls -a           # 显示隐藏文件（以 . 开头）</div>
-                    <div class="command">ls -lh          # 人类可读的文件大小（KB、MB）</div>
-                    <div class="command">ls -R           # 递归显示子目录</div>
-                    <div class="command">ls -lt          # 按修改时间排序</div>
-                    <div class="command">ls -lah         # 组合使用多个参数</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 第30页：ls -l 输出解读 -->
-        <div class="slide">
-            <h2>🔍 理解 ls -l 的输出</h2>
-            <div class="code-block">
-                <code style="color: #e0e0e0;">drwxr-xr-x  2  student  student  4096  Mar 9 10:30  Documents<br>
--rw-r--r--  1  student  student  1024  Mar 8 15:20  file.txt</code>
+            <h2>1️⃣ pwd - 我在哪里？</h2>
+            <p><span class="highlight">pwd</span> = Print Working Directory（打印当前目录）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> pwd</div>
+                <div class="output">/home/student</div>
             </div>
             <ul style="margin-top: 30px;">
-                <li><span class="highlight">d</span> = 目录，<span class="highlight">-</span> = 普通文件</li>
-                <li><span class="highlight clickable" data-info="permission">rwxr-xr-x</span> = 权限（读、写、执行）</li>
-                <li><span class="highlight">2</span> = 链接数</li>
-                <li><span class="highlight">student student</span> = 所有者和组</li>
-                <li><span class="highlight">4096</span> = 文件大小（字节）</li>
-                <li><span class="highlight">Mar 9 10:30</span> = 修改时间</li>
-                <li><span class="highlight">Documents</span> = 文件名</li>
+                <li>显示当前所在的目录</li>
+                <li>最简单的命令，没有参数</li>
+                <li>随时知道自己在哪里</li>
             </ul>
         </div>
 
-        <!-- 第31页：创建文件 - touch -->
+        <!-- 第10页：ls 命令 -->
         <div class="slide">
-            <h2>✨ <span class="clickable" data-info="touch">touch - 创建文件</span></h2>
-            <div class="command-demo">
-                <div class="command-title">touch</div>
-                <div class="command-desc">创建空文件或更新文件时间戳</div>
-                <div class="command-example">
-                    <div class="command">touch file.txt           # 创建单个文件</div>
-                    <div class="command">touch file1 file2 file3  # 创建多个文件</div>
-                    <div class="command">touch report.{txt,pdf}   # 创建 report.txt 和 report.pdf</div>
-                </div>
+            <h2>2️⃣ ls - 看看有什么</h2>
+            <p><span class="highlight">ls</span> = List（列出文件）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> ls</div>
+                <div class="output">Desktop  Documents  Downloads  Pictures</div>
+                <div style="margin-top: 15px;"><span class="prompt">student@linux:~$</span> ls -l</div>
+                <div class="output">drwxr-xr-x 2 student student 4096 Jan 15 10:30 Desktop</div>
             </div>
-            <p style="margin-top: 20px;">💡 如果文件已存在，touch 会更新其修改时间</p>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="ls-command">ls</span> - 列出文件和目录</li>
+                <li><span class="highlight">ls -l</span> - 详细信息（权限、大小、时间）</li>
+                <li><span class="highlight">ls -a</span> - 显示隐藏文件（以 . 开头）</li>
+                <li><span class="highlight">ls -lh</span> - 人类可读的文件大小</li>
+            </ul>
         </div>
 
-        <!-- 第32页：创建目录 - mkdir -->
+        <!-- 第11页：cd 命令 -->
         <div class="slide">
-            <h2>📁 <span class="clickable" data-info="mkdir">mkdir - 创建目录</span></h2>
-            <div class="command-demo">
-                <div class="command-title">mkdir (Make Directory)</div>
-                <div class="command-desc">创建新目录</div>
-                <div class="command-example">
-                    <div class="command">mkdir mydir              # 创建单个目录</div>
-                    <div class="command">mkdir dir1 dir2 dir3     # 创建多个目录</div>
-                    <div class="command">mkdir -p project/src/main  # 创建多级目录</div>
-                </div>
+            <h2>3️⃣ cd - 移动位置</h2>
+            <p><span class="highlight">cd</span> = Change Directory（切换目录）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> cd Documents</div>
+                <div><span class="prompt">student@linux:~/Documents$</span> cd ..</div>
+                <div><span class="prompt">student@linux:~$</span> cd /etc</div>
+                <div><span class="prompt">student@linux:/etc$</span> cd ~</div>
+                <div><span class="prompt">student@linux:~$</span></div>
             </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 -p 参数很重要：自动创建父目录</p>
-            <div class="code-block" style="margin-top: 15px;">
-                <code># 没有 -p 会报错（如果 project 不存在）<br>
-$ mkdir project/src/main<br>
-mkdir: cannot create directory 'project/src/main': No such file or directory<br><br>
-# 使用 -p 自动创建所有层级<br>
-$ mkdir -p project/src/main  # ✅ 成功</code>
-            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="cd-command">cd 目录名</span> - 进入某个目录</li>
+                <li><span class="highlight">cd ..</span> - 返回上一级</li>
+                <li><span class="highlight">cd ~</span> 或 <span class="highlight">cd</span> - 回到家目录</li>
+                <li><span class="highlight">cd -</span> - 回到上次的目录</li>
+            </ul>
         </div>
 
-        <!-- 第33页：复制文件 - cp -->
+        <!-- 第12页：mkdir 命令 -->
         <div class="slide">
-            <h2>📋 <span class="clickable" data-info="cp">cp - 复制文件</span></h2>
-            <div class="command-demo">
-                <div class="command-title">cp (Copy)</div>
-                <div class="command-desc">复制文件或目录</div>
-                <div class="command-example">
-                    <div class="command">cp file1.txt file2.txt      # 复制文件</div>
-                    <div class="command">cp file.txt /home/student/  # 复制到指定目录</div>
-                    <div class="command">cp -r dir1 dir2             # 复制目录（递归）</div>
-                    <div class="command">cp -i file1 file2           # 交互式（覆盖前询问）</div>
-                    <div class="command">cp -p file1 file2           # 保留属性（时间、权限）</div>
-                </div>
+            <h2>4️⃣ mkdir - 创建目录</h2>
+            <p><span class="highlight">mkdir</span> = Make Directory（创建目录）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> mkdir my_project</div>
+                <div><span class="prompt">student@linux:~$</span> mkdir -p work/2024/january</div>
+                <div><span class="prompt">student@linux:~$</span> ls</div>
+                <div class="output">my_project  work</div>
             </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 复制目录必须加 -r 参数</p>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="mkdir-command">mkdir 目录名</span> - 创建新目录</li>
+                <li><span class="highlight">mkdir -p</span> - 创建多级目录</li>
+                <li>目录名不要有空格，用下划线代替</li>
+            </ul>
         </div>
 
-        <!-- 第34页：移动和重命名 - mv -->
+        <!-- 第13页：touch 命令 -->
         <div class="slide">
-            <h2>🚚 <span class="clickable" data-info="mv">mv - 移动和重命名</span></h2>
-            <div class="command-demo">
-                <div class="command-title">mv (Move)</div>
-                <div class="command-desc">移动文件或重命名</div>
-                <div class="command-example">
-                    <div class="command">mv old.txt new.txt         # 重命名文件</div>
-                    <div class="command">mv file.txt /tmp/          # 移动文件</div>
-                    <div class="command">mv file.txt /tmp/new.txt   # 移动并重命名</div>
-                    <div class="command">mv dir1 dir2               # 重命名目录</div>
-                    <div class="command">mv -i file1 file2          # 交互式（覆盖前询问）</div>
-                </div>
+            <h2>5️⃣ touch - 创建文件</h2>
+            <p><span class="highlight">touch</span> - 创建空文件或更新时间戳</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> touch readme.txt</div>
+                <div><span class="prompt">student@linux:~$</span> touch file1.txt file2.txt file3.txt</div>
+                <div><span class="prompt">student@linux:~$</span> ls</div>
+                <div class="output">file1.txt  file2.txt  file3.txt  readme.txt</div>
             </div>
-            <p style="margin-top: 20px;">💡 mv 不需要 -r 参数，可以直接移动目录</p>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="touch-command">touch 文件名</span> - 创建空文件</li>
+                <li>可以一次创建多个文件</li>
+                <li>如果文件已存在，更新修改时间</li>
+            </ul>
         </div>
 
-        <!-- 第35页：删除文件 - rm -->
+        <!-- 第14页：cat 命令 -->
         <div class="slide">
-            <h2>🗑️ <span class="clickable" data-info="rm">rm - 删除文件</span></h2>
-            <div class="command-demo">
-                <div class="command-title">rm (Remove)</div>
-                <div class="command-desc">删除文件或目录</div>
-                <div class="command-example">
-                    <div class="command">rm file.txt              # 删除文件</div>
-                    <div class="command">rm file1 file2 file3     # 删除多个文件</div>
-                    <div class="command">rm -r dir                # 删除目录（递归）</div>
-                    <div class="command">rm -i file.txt           # 交互式（删除前询问）</div>
-                    <div class="command">rm -f file.txt           # 强制删除（不询问）</div>
-                    <div class="command">rm -rf dir               # 强制递归删除</div>
-                </div>
+            <h2>6️⃣ cat - 查看文件内容</h2>
+            <p><span class="highlight">cat</span> = Concatenate（连接并显示）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> cat readme.txt</div>
+                <div class="output">Hello, Linux!</div>
+                <div class="output">This is my first file.</div>
             </div>
-            <p style="margin-top: 20px; color: #ff5f56;">⚠️ 警告：Linux 没有回收站，删除即永久！</p>
-            <p style="color: #ff5f56;">⚠️ 永远不要运行：rm -rf /（会删除整个系统）</p>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="cat-command">cat 文件名</span> - 显示文件全部内容</li>
+                <li>适合查看小文件</li>
+                <li>大文件用 <span class="highlight">less</span> 或 <span class="highlight">more</span></li>
+            </ul>
         </div>
 
-        <!-- 第36页：查看文件内容 - cat -->
+        <!-- 第15页：cp 命令 -->
         <div class="slide">
-            <h2>📄 <span class="clickable" data-info="cat">cat - 查看文件内容</span></h2>
-            <div class="command-demo">
-                <div class="command-title">cat (Concatenate)</div>
-                <div class="command-desc">显示文件内容</div>
-                <div class="command-example">
-                    <div class="command">cat file.txt             # 显示文件内容</div>
-                    <div class="command">cat file1 file2          # 显示多个文件</div>
-                    <div class="command">cat -n file.txt          # 显示行号</div>
-                </div>
+            <h2>7️⃣ cp - 复制文件</h2>
+            <p><span class="highlight">cp</span> = Copy（复制）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> cp file1.txt file1_backup.txt</div>
+                <div><span class="prompt">student@linux:~$</span> cp -r my_project my_project_backup</div>
             </div>
-            <p style="margin-top: 20px;">💡 适合查看小文件，大文件用 less</p>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="cp-command">cp 源文件 目标文件</span> - 复制文件</li>
+                <li><span class="highlight">cp -r</span> - 复制目录（递归）</li>
+                <li><span class="highlight">cp -i</span> - 覆盖前询问</li>
+            </ul>
         </div>
 
-        <!-- 第37页：分页查看 - less -->
+        <!-- 第16页：mv 命令 -->
         <div class="slide">
-            <h2>📖 <span class="clickable" data-info="less">less - 分页查看</span></h2>
-            <div class="command-demo">
-                <div class="command-title">less</div>
-                <div class="command-desc">分页显示文件内容，适合大文件</div>
-                <div class="command-example">
-                    <div class="command">less file.txt</div>
-                </div>
-                <div style="margin-top: 20px; text-align: left;">
-                    <p style="font-size: 1.1em;">常用操作：</p>
-                    <ul style="margin-left: 30px;">
-                        <li><span class="highlight">空格</span> - 下一页</li>
-                        <li><span class="highlight">b</span> - 上一页</li>
-                        <li><span class="highlight">/关键词</span> - 搜索</li>
-                        <li><span class="highlight">n</span> - 下一个搜索结果</li>
-                        <li><span class="highlight">q</span> - 退出</li>
-                    </ul>
-                </div>
+            <h2>8️⃣ mv - 移动/重命名</h2>
+            <p><span class="highlight">mv</span> = Move（移动）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> mv file1.txt Documents/</div>
+                <div><span class="prompt">student@linux:~$</span> mv old_name.txt new_name.txt</div>
             </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="mv-command">mv 源 目标</span> - 移动文件或目录</li>
+                <li>也用于重命名文件</li>
+                <li><span class="highlight">mv -i</span> - 覆盖前询问</li>
+                <li>不需要 -r 参数，可以直接移动目录</li>
+            </ul>
         </div>
 
-        <!-- 第38页：head 和 tail -->
+        <!-- 第17页：rm 命令 -->
         <div class="slide">
-            <h2>🔝🔚 <span class="clickable" data-info="head">head</span> 和 <span class="clickable" data-info="tail">tail</span></h2>
+            <h2>9️⃣ rm - 删除文件</h2>
+            <p><span class="highlight">rm</span> = Remove（删除）⚠️ 危险命令</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> rm file1.txt</div>
+                <div><span class="prompt">student@linux:~$</span> rm -r my_folder</div>
+                <div><span class="prompt">student@linux:~$</span> rm -i file2.txt</div>
+                <div class="output">rm: remove regular file 'file2.txt'? y</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="rm-command">rm 文件名</span> - 删除文件</li>
+                <li><span class="highlight">rm -r</span> - 删除目录（递归）</li>
+                <li><span class="highlight">rm -i</span> - 删除前确认（推荐）</li>
+                <li>⚠️ <span class="highlight" style="color: #ff6b6b;">永远不要执行 rm -rf /</span></li>
+            </ul>
+        </div>
+
+        <!-- 第18页：man 命令 -->
+        <div class="slide">
+            <h2>🔟 man - 查看帮助</h2>
+            <p><span class="highlight">man</span> = Manual（手册）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> man ls</div>
+                <div class="output">LS(1)                    User Commands                   LS(1)</div>
+                <div class="output">NAME</div>
+                <div class="output">       ls - list directory contents</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="man-command">man 命令名</span> - 查看命令的详细说明</li>
+                <li>按 <span class="highlight">q</span> 退出</li>
+                <li>按 <span class="highlight">空格</span> 翻页</li>
+                <li>最好的学习资源就在系统里</li>
+            </ul>
+        </div>
+
+        <!-- 第19页：命令总结 -->
+        <div class="slide">
+            <h2>📝 10 个基础命令总结</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>head - 查看开头</h3>
-                    <div class="code-block" style="margin-top: 15px;">
-                        <code>head file.txt       # 前 10 行<br>
-head -n 20 file.txt  # 前 20 行<br>
-head -n 5 file.txt   # 前 5 行</code>
-                    </div>
+                    <h3>导航</h3>
+                    <p>pwd, ls, cd</p>
                 </div>
                 <div class="card">
-                    <h3>tail - 查看结尾</h3>
-                    <div class="code-block" style="margin-top: 15px;">
-                        <code>tail file.txt       # 后 10 行<br>
-tail -n 20 file.txt  # 后 20 行<br>
-tail -f log.txt      # 实时查看日志</code>
-                    </div>
+                    <h3>创建</h3>
+                    <p>mkdir, touch</p>
+                </div>
+                <div class="card">
+                    <h3>查看</h3>
+                    <p>cat, man</p>
+                </div>
+                <div class="card">
+                    <h3>操作</h3>
+                    <p>cp, mv, rm</p>
                 </div>
             </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 tail -f 非常适合查看实时日志</p>
+            <p style="margin-top: 30px; color: #ffd700;">记住这 10 个，你就能完成 80% 的日常操作</p>
         </div>
 
-        <!-- 第39页：获取帮助 -->
+        <!-- 第20页：实用技巧 - 引入 -->
         <div class="slide">
-            <h2>❓ 获取帮助</h2>
+            <h2>💡 实用技巧</h2>
+            <p class="subtitle">让你的操作更高效</p>
+        </div>
+
+        <!-- 第21页：Tab 自动补全 -->
+        <div class="slide">
+            <h2>⌨️ Tab 键自动补全</h2>
+            <p>最重要的快捷键！</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> cd Doc<span style="color: #ffd700;">[按 Tab]</span></div>
+                <div><span class="prompt">student@linux:~$</span> cd Documents/</div>
+            </div>
+            <ul style="margin-top: 30px;">
+                <li><span class="highlight clickable" data-info="tab-complete">Tab 键</span>可以自动补全命令和文件名</li>
+                <li>按两次 Tab 显示所有可能的选项</li>
+                <li>大大提高输入速度，减少错误</li>
+                <li>养成习惯，随时按 Tab</li>
+            </ul>
+        </div>
+
+        <!-- 第22页：命令历史 -->
+        <div class="slide">
+            <h2>🔄 命令历史</h2>
+            <p>不用重复输入相同的命令</p>
             <ul>
-                <li><span class="highlight clickable" data-info="man">man 命令</span> - 查看命令手册（最详细）</li>
-                <li><span class="highlight">命令 --help</span> - 快速查看用法</li>
-                <li><span class="highlight">info 命令</span> - 查看详细文档</li>
-                <li><span class="highlight">whatis 命令</span> - 简短描述</li>
+                <li>按<span class="highlight">上箭头 ↑</span>查看上一条命令</li>
+                <li>按<span class="highlight">下箭头 ↓</span>查看下一条命令</li>
+                <li><span class="highlight clickable" data-info="history-command">history</span> 命令查看所有历史</li>
+                <li><span class="highlight">Ctrl + R</span> 搜索历史命令</li>
             </ul>
-            <div class="code-block" style="margin-top: 30px;">
-                <code>$ man ls          # 查看 ls 的完整手册<br>
-$ ls --help       # 快速查看 ls 的用法<br>
-$ whatis ls       # ls 的简短描述</code>
+            <div class="command-box" style="margin-top: 30px;">
+                <div><span class="prompt">student@linux:~$</span> history</div>
+                <div class="output">1  pwd</div>
+                <div class="output">2  ls -la</div>
+                <div class="output">3  cd Documents</div>
             </div>
-            <p style="margin-top: 20px; color: #ffd700;">💡 man 是 manual（手册）的缩写</p>
         </div>
 
-        <!-- 第40页：AI 辅助学习 -->
+        <!-- 第23页：通配符 -->
         <div class="slide">
-            <h2>🤖 用 AI 学习命令</h2>
+            <h2>🃏 通配符</h2>
+            <p>批量操作文件的利器</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> ls *.txt</div>
+                <div class="output">file1.txt  file2.txt  readme.txt</div>
+                <div style="margin-top: 10px;"><span class="prompt">student@linux:~$</span> rm file?.txt</div>
+                <div class="output">(删除 file1.txt, file2.txt)</div>
+            </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="wildcard">*</span> - 匹配任意多个字符</li>
+                <li><span class="highlight">?</span> - 匹配单个字符</li>
+                <li><span class="highlight">[abc]</span> - 匹配括号中的任意一个字符</li>
+            </ul>
+        </div>
+
+        <!-- 第24页：快捷键 -->
+        <div class="slide">
+            <h2>⚡ 常用快捷键</h2>
+            <ul>
+                <li><span class="highlight">Ctrl + C</span> - 终止当前命令</li>
+                <li><span class="highlight">Ctrl + D</span> - 退出终端（或 exit 命令）</li>
+                <li><span class="highlight">Ctrl + L</span> - 清屏（或 clear 命令）</li>
+                <li><span class="highlight">Ctrl + A</span> - 光标移到行首</li>
+                <li><span class="highlight">Ctrl + E</span> - 光标移到行尾</li>
+                <li><span class="highlight">Ctrl + U</span> - 删除光标前的内容</li>
+                <li><span class="highlight">Ctrl + K</span> - 删除光标后的内容</li>
+            </ul>
+        </div>
+
+        <!-- 第25页：文件权限 - 引入 -->
+        <div class="slide">
+            <h2>🔐 文件权限基础</h2>
+            <p class="subtitle">Linux 的安全机制</p>
+        </div>
+
+        <!-- 第26页：权限说明 -->
+        <div class="slide">
+            <h2>📋 理解文件权限</h2>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> ls -l readme.txt</div>
+                <div class="output">-rw-r--r-- 1 student student 1024 Jan 15 10:30 readme.txt</div>
+            </div>
+            <div style="margin-top: 30px; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <p><span class="highlight">-rw-r--r--</span> 权限说明：</p>
+                <ul style="font-size: 1.1em;">
+                    <li><span class="highlight">-</span> 文件类型（- 文件，d 目录）</li>
+                    <li><span class="highlight">rw-</span> 所有者权限（读、写）</li>
+                    <li><span class="highlight">r--</span> 组权限（只读）</li>
+                    <li><span class="highlight">r--</span> 其他人权限（只读）</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 第27页：权限字母 -->
+        <div class="slide">
+            <h2>🔤 权限字母含义</h2>
             <div class="grid">
                 <div class="card">
-                    <div class="emoji">💬</div>
-                    <h3>问 ChatGPT</h3>
-                    <p>"ls -lah 每个参数是什么意思？"</p>
+                    <div class="emoji">📖</div>
+                    <h3>r (read)</h3>
+                    <p>读权限 - 可以查看文件内容</p>
                 </div>
                 <div class="card">
-                    <div class="emoji">🔍</div>
-                    <h3>解释命令</h3>
-                    <p>"这个命令做什么：find / -name '*.log'"</p>
+                    <div class="emoji">✏️</div>
+                    <h3>w (write)</h3>
+                    <p>写权限 - 可以修改文件</p>
                 </div>
                 <div class="card">
-                    <div class="emoji">🐛</div>
-                    <h3>调试错误</h3>
-                    <p>粘贴错误信息，AI 给出解决方案</p>
+                    <div class="emoji">▶️</div>
+                    <h3>x (execute)</h3>
+                    <p>执行权限 - 可以运行程序</p>
                 </div>
                 <div class="card">
-                    <div class="emoji">✍️</div>
-                    <h3>生成脚本</h3>
-                    <p>"写一个脚本备份 /home 目录"</p>
+                    <div class="emoji">🚫</div>
+                    <h3>- (none)</h3>
+                    <p>无权限</p>
                 </div>
             </div>
         </div>
 
-        <!-- 第41页：实践环节 -->
+        <!-- 第28页：chmod 命令 -->
         <div class="slide">
-            <h2>💻 实践时间</h2>
-            <p class="subtitle">在你的虚拟机中试试这些命令</p>
-        </div>
-
-        <!-- 第42页：综合练习 -->
-        <div class="slide">
-            <h2>🎯 综合练习任务</h2>
-            <div class="code-block">
-                <code># 1. 创建项目目录结构<br>
-mkdir -p ~/myproject/{src,docs,tests}<br>
-<br>
-# 2. 进入项目目录<br>
-cd ~/myproject<br>
-<br>
-# 3. 创建一些文件<br>
-touch src/main.py<br>
-touch docs/README.md<br>
-touch tests/test_main.py<br>
-<br>
-# 4. 查看目录结构<br>
-ls -R<br>
-<br>
-# 5. 复制文件<br>
-cp src/main.py src/main_backup.py<br>
-<br>
-# 6. 查看当前位置<br>
-pwd</code>
+            <h2>🔧 chmod - 修改权限</h2>
+            <p><span class="highlight">chmod</span> = Change Mode（修改模式）</p>
+            <div class="command-box">
+                <div><span class="prompt">student@linux:~$</span> chmod +x script.sh</div>
+                <div class="output">(给文件添加执行权限)</div>
+                <div style="margin-top: 10px;"><span class="prompt">student@linux:~$</span> chmod 755 script.sh</div>
+                <div class="output">(rwxr-xr-x)</div>
             </div>
+            <ul style="margin-top: 20px;">
+                <li><span class="highlight clickable" data-info="chmod-command">chmod +x 文件</span> - 添加执行权限</li>
+                <li><span class="highlight">chmod 755</span> - 数字方式设置权限</li>
+                <li>常用：644（文件）、755（可执行文件）</li>
+            </ul>
         </div>
 
-        <!-- 第43页：互动终端 -->
+        <!-- 第29页：实战练习 - 引入 -->
         <div class="slide">
-            <h2>💻 互动终端练习</h2>
-            <p class="subtitle" style="margin-bottom: 20px;">试试你刚学的命令</p>
-            
+            <h2>💻 实战练习</h2>
+            <p class="subtitle">动手试试刚学的命令</p>
+        </div>
+
+        <!-- 第30页：练习任务 -->
+        <div class="slide">
+            <h2>📝 练习任务</h2>
+            <ul>
+                <li>1. 查看当前目录位置（pwd）</li>
+                <li>2. 创建一个名为 linux_practice 的目录</li>
+                <li>3. 进入这个目录</li>
+                <li>4. 创建三个文件：note1.txt, note2.txt, note3.txt</li>
+                <li>5. 列出所有文件</li>
+                <li>6. 复制 note1.txt 为 note1_backup.txt</li>
+                <li>7. 删除 note3.txt</li>
+                <li>8. 返回上级目录</li>
+            </ul>
+            <p style="margin-top: 30px; color: #ffd700;">试着在下一页的终端中完成这些任务！</p>
+        </div>
+
+        <!-- 第31页：互动终端 -->
+        <div class="slide">
+            <h2>💻 互动终端</h2>
+            <p style="margin-bottom: 20px;">在这里练习刚学的命令</p>
             <div class="terminal-container">
                 <div class="terminal-header">
-                    <span class="terminal-button red"></span>
-                    <span class="terminal-button yellow"></span>
-                    <span class="terminal-button green"></span>
-                    <span class="terminal-title">student@ubuntu:~$</span>
+                    <div class="terminal-button red"></div>
+                    <div class="terminal-button yellow"></div>
+                    <div class="terminal-button green"></div>
+                    <div class="terminal-title">student@linux: ~</div>
                 </div>
                 <div class="terminal-body" id="terminal-output">
                     <div class="terminal-line">
-                        <span class="terminal-prompt">student@ubuntu:~$</span>
-                        <span class="terminal-text">欢迎来到 Linux 终端！</span>
+                        <span class="terminal-text">欢迎使用 Linux 终端模拟器！</span>
                     </div>
                     <div class="terminal-line">
-                        <span class="terminal-text">试试这些命令：pwd, ls, cd, mkdir, touch, cat</span>
+                        <span class="terminal-text">输入 'help' 查看可用命令</span>
                     </div>
                 </div>
                 <div class="terminal-input-line">
-                    <span class="terminal-prompt">student@ubuntu:~$</span>
-                    <input type="text" id="terminal-input" class="terminal-input" placeholder="输入命令..." autocomplete="off">
+                    <span class="terminal-prompt">student@linux:~$</span>
+                    <input type="text" class="terminal-input" id="terminal-input" placeholder="输入命令..." autocomplete="off">
                 </div>
             </div>
-            
-            <p style="margin-top: 20px; font-size: 0.9em; color: #e0e0e0;">
-                💡 按 Enter 执行命令，输入 help 查看可用命令
-            </p>
         </div>
 
-        <!-- 第44页：常见问题 -->
+        <!-- 第32页：常见错误 -->
         <div class="slide">
-            <h2>❗ 常见问题和解决</h2>
+            <h2>⚠️ 新手常见错误</h2>
             <ul>
-                <li><span class="highlight">权限被拒绝</span>：使用 <span class="clickable" data-info="sudo">sudo</span> 命令（管理员权限）</li>
-                <li><span class="highlight">命令未找到</span>：检查拼写，或软件未安装</li>
-                <li><span class="highlight">目录不存在</span>：检查路径是否正确</li>
-                <li><span class="highlight">文件已存在</span>：使用 -i 参数交互式操作</li>
-                <li><span class="highlight">终端卡住</span>：按 Ctrl+C 中断当前命令</li>
-                <li><span class="highlight">误删文件</span>：Linux 无回收站，养成备份习惯</li>
+                <li><span class="highlight">大小写敏感</span> - file.txt 和 File.txt 是不同的文件</li>
+                <li><span class="highlight">空格问题</span> - 文件名有空格要用引号或转义</li>
+                <li><span class="highlight">路径错误</span> - 注意当前目录位置</li>
+                <li><span class="highlight">权限不足</span> - 某些操作需要 sudo</li>
+                <li><span class="highlight">删除谨慎</span> - rm 删除的文件无法恢复</li>
             </ul>
+            <div class="command-box" style="margin-top: 30px;">
+                <div><span class="prompt">student@linux:~$</span> cd my folder</div>
+                <div class="output" style="color: #ff6b6b;">bash: cd: my: No such file or directory</div>
+                <div style="margin-top: 10px;"><span class="prompt">student@linux:~$</span> cd "my folder"</div>
+                <div class="output" style="color: #43e97b;">✓ 正确</div>
+            </div>
         </div>
 
-        <!-- 第45页：虚拟机快照 -->
+        <!-- 第33页：学习建议 -->
         <div class="slide">
-            <h2">📸 虚拟机快照实践</h2>
-            <ul>
-                <li>快照是虚拟机的<span class="highlight">"存档点"</span></li>
-                <li>可以随时恢复到快照时的状态</li>
-                <li>建议在重要操作前创建快照</li>
-                <li>Hyper-V 中创建快照：
-                    <ul style="margin-left: 30px; margin-top: 10px;">
-                        <li>右键虚拟机 → 检查点</li>
-                        <li>输入快照名称</li>
-                        <li>恢复：右键快照 → 应用</li>
-                    </ul>
-                </li>
-            </ul>
-            <p style="margin-top: 20px; color: #ffd700;">💡 现在就创建一个快照，保存你的学习成果！</p>
-        </div>
-
-        <!-- 第46页：课程总结 -->
-        <div class="slide">
-            <h2>📌 今天我们学到了</h2>
-            <ul>
-                <li>虚拟化技术：Hyper-V、VirtualBox、容器</li>
-                <li>虚拟机的资源分配和网络模式</li>
-                <li>Linux 文件系统：目录树结构</li>
-                <li>重要目录：/home、/etc、/usr、/var</li>
-                <li>路径概念：绝对路径和相对路径</li>
-                <li>基础命令：pwd、cd、ls、mkdir、touch、cp、mv、rm</li>
-                <li>查看文件：cat、less、head、tail</li>
-                <li>获取帮助：man、--help</li>
-            </ul>
-        </div>
-
-        <!-- 第47页：学习建议 -->
-        <div class="slide">
-            <h2>💡 学习建议</h2>
-            <ul>
-                <li><span class="highlight">每天练习</span>：在虚拟机中练习 30 分钟</li>
-                <li><span class="highlight">不要怕犯错</span>：虚拟机可以随时恢复<span class="clickable" data-info="snapshot">快照</span></li>
-                <li><span class="highlight">多用 Tab 键</span>：自动补全命令和路径</li>
-                <li><span class="highlight">记录笔记</span>：把常用命令记下来</li>
-                <li><span class="highlight">善用 AI</span>：遇到问题问 ChatGPT</li>
-                <li><span class="highlight">循序渐进</span>：先掌握基础，再学高级</li>
-            </ul>
-        </div>
-
-        <!-- 第48页：课后作业 -->
-        <div class="slide">
-            <h2>📝 课后作业</h2>
+            <h2>📚 学习建议</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>任务 1</h3>
-                    <p>创建一个完整的项目目录结构</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">包含 src、docs、tests 等目录</p>
+                    <div class="emoji">💪</div>
+                    <h3>多练习</h3>
+                    <p>每天至少 30 分钟命令行操作</p>
                 </div>
                 <div class="card">
-                    <h3>任务 2</h3>
-                    <p>练习所有学过的命令</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">每个命令至少用 5 次</p>
+                    <div class="emoji">📖</div>
+                    <h3>查手册</h3>
+                    <p>遇到问题先 man 命令</p>
                 </div>
                 <div class="card">
-                    <h3>任务 3</h3>
-                    <p>探索 <span class="clickable" data-info="etc">/etc</span> 目录</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">看看有哪些配置文件</p>
+                    <div class="emoji">🔍</div>
+                    <h3>善用搜索</h3>
+                    <p>Google、Stack Overflow</p>
                 </div>
                 <div class="card">
-                    <h3>任务 4</h3>
-                    <p>创建虚拟机<span class="clickable" data-info="snapshot">快照</span></p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">保存当前系统状态</p>
+                    <div class="emoji">🎯</div>
+                    <h3>做项目</h3>
+                    <p>在实际项目中应用</p>
                 </div>
             </div>
         </div>
 
-        <!-- 第49页：下节课预告 -->
+        <!-- 第34页：下节课预告 -->
         <div class="slide">
             <h2>🔜 下节课预告</h2>
-            <div class="grid">
-                <div class="card">
-                    <div class="emoji">📝</div>
-                    <h3>文本处理</h3>
-                    <p><span class="clickable" data-info="grep">grep</span>、sed、awk</p>
-                </div>
-                <div class="card">
-                    <div class="emoji">🔀</div>
-                    <h3>管道与重定向</h3>
-                    <p>组合<span class="clickable" data-info="pipe">命令</span>的威力</p>
-                </div>
-                <div class="card">
-                    <div class="emoji">🔐</div>
-                    <h3>文件权限</h3>
-                    <p>chmod、chown</p>
-                </div>
-                <div class="card">
-                    <div class="emoji">📜</div>
-                    <h3>Shell 脚本</h3>
-                    <p>自动化你的工作</p>
-                </div>
-            </div>
+            <ul>
+                <li><span class="highlight">文本处理</span> - grep, sed, awk</li>
+                <li><span class="highlight">管道和重定向</span> - |, >, >></li>
+                <li><span class="highlight">进程管理</span> - ps, top, kill</li>
+                <li><span class="highlight">网络命令</span> - ping, curl, wget</li>
+                <li><span class="highlight">Shell 脚本入门</span> - 自动化任务</li>
+            </ul>
         </div>
 
-        <!-- 第50页：互动问答 -->
+        <!-- 第35页：课程总结 -->
         <div class="slide">
-            <h2>💬 互动时间</h2>
-            <p class="subtitle">有什么问题吗？</p>
-            <div style="margin-top: 50px;">
-                <p>🙋 <span class="clickable" data-info="hyperv">Hyper-V</span> 安装过程中遇到了什么问题？</p>
-                <p>🤔 哪个命令最难理解？</p>
-                <p>💭 你觉得虚拟机和真实系统有什么区别？</p>
-                <p>🎯 你想用 Linux 做什么项目？</p>
-            </div>
+            <h2>📌 今天学到了什么</h2>
+            <ul>
+                <li>Linux 文件系统是树状结构，从 / 开始</li>
+                <li>掌握了 10 个基础命令</li>
+                <li>学会了 Tab 补全、命令历史等技巧</li>
+                <li>了解了文件权限的基本概念</li>
+                <li>在终端中实际操作了命令</li>
+            </ul>
+            <p style="margin-top: 40px; color: #ffd700;">记住：熟能生巧，多练习才是王道！</p>
         </div>
 
-        <!-- 第51页：结束页 -->
+        <!-- 第36页：结束页 -->
         <div class="slide">
-            <h1>🎉 感谢聆听</h1>
+            <h1>🎉 感谢学习</h1>
             <p class="subtitle">继续探索 Linux 的世界</p>
-            <p style="margin-top: 50px; font-size: 1.2em;">记住：实践是最好的老师</p>
-            <p style="margin-top: 30px;">📧 有问题随时交流</p>
-            <p style="margin-top: 20px; color: #ffd700;">💻 现在就打开你的虚拟机，开始练习吧！</p>
+            <div style="margin-top: 50px;">
+                <p style="font-size: 1.2em;">💡 记得完成课后练习</p>
+                <p style="font-size: 1.2em;">🤔 有问题随时提问</p>
+                <p style="font-size: 1.2em;">🚀 下节课见！</p>
+            </div>
         </div>
     </div>
 
-    <div class="slide-number">
-        <span id="current-slide">1</span> / <span id="total-slides">51</span>
+    <!-- 控制按钮 -->
+    <div class="controls">
+        <button onclick="previousSlide()">上一页</button>
+        <button onclick="nextSlide()">下一页</button>
     </div>
 
-    <div class="controls">
-        <button onclick="previousSlide()">← 上一页</button>
-        <button onclick="nextSlide()">下一页 →</button>
+    <!-- 页码显示 -->
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">36</span>
     </div>
 
     <!-- 模态框 -->
-    <div id="infoModal" class="modal">
+    <div id="info-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modalBody"></div>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body"></div>
         </div>
     </div>
 
@@ -1485,243 +1021,9 @@ pwd</code>
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
-        const modal = document.getElementById('infoModal');
-        const modalBody = document.getElementById('modalBody');
         
         document.getElementById('total-slides').textContent = totalSlides;
         
-        // 为所有可点击元素添加事件监听
-        document.addEventListener('DOMContentLoaded', function() {
-            const clickables = document.querySelectorAll('.clickable');
-            clickables.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const infoKey = this.getAttribute('data-info');
-                    showInfo(infoKey);
-                });
-            });
-        });
-        
-        // 显示详细信息
-        function showInfo(key) {
-            if (infoDatabase[key]) {
-                const info = infoDatabase[key];
-                modalBody.innerHTML = `
-                    <h2>${info.title}</h2>
-                    ${info.content}
-                `;
-                modal.style.display = 'block';
-            }
-        }
-        
-        // 关闭模态框
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-        
-        // 点击模态框外部关闭
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-        
-        // 模拟文件系统
-        const fileSystem = {
-            '/': {
-                type: 'dir',
-                children: {
-                    'home': {
-                        type: 'dir',
-                        children: {
-                            'student': {
-                                type: 'dir',
-                                children: {
-                                    'Documents': { type: 'dir', children: {} },
-                                    'Downloads': { type: 'dir', children: {} },
-                                    'Desktop': { type: 'dir', children: {} },
-                                    'hello.txt': { type: 'file', content: 'Hello Linux!' }
-                                }
-                            }
-                        }
-                    },
-                    'etc': { type: 'dir', children: {} },
-                    'usr': { type: 'dir', children: {} },
-                    'var': { type: 'dir', children: {} },
-                    'tmp': { type: 'dir', children: {} }
-                }
-            }
-        };
-        
-        let currentPath = '/home/student';
-        let commandHistory = [];
-        let historyIndex = -1;
-        
-        // 终端命令实现
-        const commands = {
-            pwd: () => currentPath,
-            
-            whoami: () => 'student',
-            
-            date: () => new Date().toLocaleString('zh-CN'),
-            
-            ls: (args) => {
-                const parts = currentPath.split('/').filter(p => p);
-                let current = fileSystem['/'];
-                
-                for (const part of parts) {
-                    if (current.children && current.children[part]) {
-                        current = current.children[part];
-                    }
-                }
-                
-                if (current.children) {
-                    const items = Object.keys(current.children);
-                    if (args && args.includes('-a')) {
-                        return '.  ..  ' + items.join('  ');
-                    }
-                    return items.join('  ');
-                }
-                return '';
-            },
-            
-            cd: (args) => {
-                if (!args || args === '~') {
-                    currentPath = '/home/student';
-                    return '';
-                }
-                
-                if (args === '..') {
-                    const parts = currentPath.split('/').filter(p => p);
-                    parts.pop();
-                    currentPath = '/' + parts.join('/');
-                    if (currentPath === '/') currentPath = '/';
-                    return '';
-                }
-                
-                if (args === '/') {
-                    currentPath = '/';
-                    return '';
-                }
-                
-                if (args.startsWith('/')) {
-                    currentPath = args;
-                } else {
-                    currentPath = currentPath + '/' + args;
-                }
-                currentPath = currentPath.replace(/\/+/g, '/');
-                return '';
-            },
-            
-            mkdir: (args) => {
-                if (!args) return 'mkdir: missing operand';
-                return `Created directory: ${args}`;
-            },
-            
-            touch: (args) => {
-                if (!args) return 'touch: missing file operand';
-                return `Created file: ${args}`;
-            },
-            
-            cat: (args) => {
-                if (!args) return 'cat: missing file operand';
-                if (args === 'hello.txt') {
-                    return 'Hello Linux!\nWelcome to the command line!';
-                }
-                return `cat: ${args}: No such file or directory`;
-            },
-            
-            clear: () => {
-                document.getElementById('terminal-output').innerHTML = '';
-                return '';
-            },
-            
-            help: () => `可用命令：
-• pwd - 显示当前目录
-• ls [-a] - 列出文件
-• cd [目录] - 切换目录
-• mkdir [目录名] - 创建目录
-• touch [文件名] - 创建文件
-• cat [文件名] - 查看文件内容
-• whoami - 显示当前用户
-• date - 显示日期时间
-• clear - 清屏
-• help - 显示此帮助`,
-            
-            echo: (args) => args || ''
-        };
-        
-        // 初始化终端
-        document.addEventListener('DOMContentLoaded', function() {
-            const terminalInput = document.getElementById('terminal-input');
-            const terminalOutput = document.getElementById('terminal-output');
-            
-            if (terminalInput) {
-                terminalInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') {
-                        const command = this.value.trim();
-                        if (command) {
-                            executeCommand(command);
-                            commandHistory.push(command);
-                            historyIndex = commandHistory.length;
-                            this.value = '';
-                        }
-                    } else if (e.key === 'ArrowUp') {
-                        e.preventDefault();
-                        if (historyIndex > 0) {
-                            historyIndex--;
-                            this.value = commandHistory[historyIndex];
-                        }
-                    } else if (e.key === 'ArrowDown') {
-                        e.preventDefault();
-                        if (historyIndex < commandHistory.length - 1) {
-                            historyIndex++;
-                            this.value = commandHistory[historyIndex];
-                        } else {
-                            historyIndex = commandHistory.length;
-                            this.value = '';
-                        }
-                    }
-                });
-            }
-            
-            function executeCommand(input) {
-                const parts = input.split(' ');
-                const cmd = parts[0].toLowerCase();
-                const args = parts.slice(1).join(' ');
-                
-                // 显示输入的命令
-                const promptPath = currentPath === '/' ? '/' : currentPath.split('/').pop() || '/';
-                addTerminalLine(`<span class="terminal-prompt">student@ubuntu:${promptPath}$</span> <span style="color: white;">${input}</span>`);
-                
-                // 执行命令
-                if (commands[cmd]) {
-                    const output = commands[cmd](args);
-                    if (output) {
-                        addTerminalLine(`<span class="terminal-text">${output}</span>`);
-                    }
-                } else {
-                    addTerminalLine(`<span class="terminal-text" style="color: #ff5f56;">bash: ${cmd}: command not found</span>`);
-                    addTerminalLine(`<span class="terminal-text">输入 'help' 查看可用命令</span>`);
-                }
-                
-                // 滚动到底部
-                if (terminalOutput) {
-                    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-                }
-            }
-            
-            function addTerminalLine(html) {
-                if (terminalOutput) {
-                    const line = document.createElement('div');
-                    line.className = 'terminal-line';
-                    line.innerHTML = html;
-                    terminalOutput.appendChild(line);
-                }
-            }
-        });
-        
-        // 幻灯片控制
         function showSlide(n) {
             slides[currentSlide].classList.remove('active');
             currentSlide = (n + totalSlides) % totalSlides;
@@ -1738,12 +1040,7 @@ pwd</code>
         }
         
         // 键盘控制
-        document.addEventListener('keydown', function(e) {
-            // 如果焦点在输入框，不处理翻页
-            if (document.activeElement.tagName === 'INPUT') {
-                return;
-            }
-            
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ') {
                 e.preventDefault();
                 nextSlide();
@@ -1752,27 +1049,185 @@ pwd</code>
                 previousSlide();
             }
         });
+
         
         // 触摸滑动支持
         let touchStartX = 0;
         let touchEndX = 0;
         
-        document.addEventListener('touchstart', function(e) {
+        document.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
         });
         
-        document.addEventListener('touchend', function(e) {
+        document.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
             handleSwipe();
         });
         
         function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                nextSlide();
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+        
+        // 点击事件处理
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('clickable')) {
+                const infoKey = e.target.getAttribute('data-info');
+                showInfo(infoKey);
             }
-            if (touchEndX > touchStartX + 50) {
-                previousSlide();
+        });
+        
+        function showInfo(key) {
+            const info = infoDatabase[key];
+            if (info) {
+                document.getElementById('modal-title').textContent = info.title;
+                document.getElementById('modal-body').innerHTML = info.content;
+                document.getElementById('info-modal').style.display = 'block';
             }
+        }
+        
+        function closeModal() {
+            document.getElementById('info-modal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('info-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // 终端模拟器
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalOutput = document.getElementById('terminal-output');
+        let currentPath = '/home/student';
+        let fileSystem = {
+            '/home/student': ['Desktop', 'Documents', 'Downloads', 'Pictures']
+        };
+
+        
+        const commands = {
+            pwd: () => currentPath,
+            ls: () => {
+                const files = fileSystem[currentPath] || [];
+                return files.join('  ');
+            },
+            'ls -l': () => {
+                const files = fileSystem[currentPath] || [];
+                return files.map(f => {
+                    const isDir = fileSystem[currentPath + '/' + f];
+                    const type = isDir ? 'd' : '-';
+                    return `${type}rwxr-xr-x 1 student student 4096 Jan 15 10:30 ${f}`;
+                }).join('\n');
+            },
+            'ls -la': () => {
+                const files = ['.', '..', ...(fileSystem[currentPath] || [])];
+                return files.map(f => {
+                    const isDir = f === '.' || f === '..' || fileSystem[currentPath + '/' + f];
+                    const type = isDir ? 'd' : '-';
+                    return `${type}rwxr-xr-x 1 student student 4096 Jan 15 10:30 ${f}`;
+                }).join('\n');
+            },
+            mkdir: (args) => {
+                if (!args) return 'mkdir: missing operand';
+                const dirName = args.trim();
+                if (!fileSystem[currentPath]) fileSystem[currentPath] = [];
+                if (fileSystem[currentPath].includes(dirName)) {
+                    return `mkdir: cannot create directory '${dirName}': File exists`;
+                }
+                fileSystem[currentPath].push(dirName);
+                fileSystem[currentPath + '/' + dirName] = [];
+                return '';
+            },
+            touch: (args) => {
+                if (!args) return 'touch: missing file operand';
+                const files = args.trim().split(/\s+/);
+                if (!fileSystem[currentPath]) fileSystem[currentPath] = [];
+                files.forEach(file => {
+                    if (!fileSystem[currentPath].includes(file)) {
+                        fileSystem[currentPath].push(file);
+                    }
+                });
+                return '';
+            },
+            cat: (args) => {
+                if (!args) return 'cat: missing file operand';
+                const fileName = args.trim();
+                if (!fileSystem[currentPath] || !fileSystem[currentPath].includes(fileName)) {
+                    return `cat: ${fileName}: No such file or directory`;
+                }
+                return `This is the content of ${fileName}\nHello, Linux!`;
+            },
+            rm: (args) => {
+                if (!args) return 'rm: missing operand';
+                const fileName = args.trim();
+                if (!fileSystem[currentPath] || !fileSystem[currentPath].includes(fileName)) {
+                    return `rm: cannot remove '${fileName}': No such file or directory`;
+                }
+                fileSystem[currentPath] = fileSystem[currentPath].filter(f => f !== fileName);
+                return '';
+            },
+            clear: () => {
+                terminalOutput.innerHTML = '';
+                return null;
+            },
+            help: () => {
+                return `可用命令：
+pwd       - 显示当前目录
+ls        - 列出文件
+ls -l     - 详细列表
+ls -la    - 包含隐藏文件
+mkdir     - 创建目录
+touch     - 创建文件
+cat       - 查看文件内容
+rm        - 删除文件
+clear     - 清屏
+help      - 显示此帮助`;
+            }
+        };
+
+        
+        terminalInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim();
+                if (command) {
+                    executeCommand(command);
+                    terminalInput.value = '';
+                }
+            }
+        });
+        
+        function executeCommand(input) {
+            // 显示输入的命令
+            addTerminalLine(`<span class="terminal-prompt">student@linux:~$</span> ${input}`);
+            
+            const parts = input.split(' ');
+            const cmd = parts[0];
+            const args = parts.slice(1).join(' ');
+            
+            let output;
+            if (commands[input]) {
+                output = commands[input]();
+            } else if (commands[cmd]) {
+                output = commands[cmd](args);
+            } else {
+                output = `bash: ${cmd}: command not found`;
+            }
+            
+            if (output !== null && output !== '') {
+                addTerminalLine(`<span class="terminal-text">${output}</span>`);
+            }
+            
+            // 滚动到底部
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+        
+        function addTerminalLine(html) {
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = html;
+            terminalOutput.appendChild(line);
         }
     </script>
 </body>
