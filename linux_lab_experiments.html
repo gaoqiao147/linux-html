@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux操作系统 - 实验课</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h3 {
+            color: #fff;
+            font-size: 1.8em;
+            margin: 20px 0;
+        }
+        
+        p, li {
+            color: white;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+        
+        ul {
+            list-style: none;
+            text-align: left;
+            max-width: 900px;
+        }
+        
+        li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+        
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 20px;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin-top: 30px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .lab-card {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            max-width: 900px;
+            text-align: left;
+        }
+        
+        .lab-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+        }
+        
+        .lab-number {
+            background: #ffd700;
+            color: #764ba2;
+            font-size: 2em;
+            font-weight: bold;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lab-title {
+            flex: 1;
+        }
+        
+        .lab-title h3 {
+            margin: 0;
+            color: #ffd700;
+        }
+        
+        .lab-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #e0e0e0;
+        }
+        
+        .task-box {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #43e97b;
+        }
+        
+        .task-title {
+            color: #43e97b;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: rgba(0,0,0,0.4);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            margin: 15px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .code-block code {
+            color: #43e97b;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .warning-box {
+            background: rgba(255,95,86,0.2);
+            border: 2px solid #ff5f56;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .warning-box .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .tip-box {
+            background: rgba(255,215,0,0.2);
+            border: 2px solid #ffd700;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .tip-box .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .success-box {
+            background: rgba(67,233,123,0.2);
+            border: 2px solid #43e97b;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 10px 0;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-size: 1.5em;
+        }
+        
+        .step-container {
+            counter-reset: step-counter;
+        }
+        
+        .step-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        .step-item:before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: #4facfe;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .deliverable-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 800px;
+            margin-top: 30px;
+        }
+        
+        .timeline-item {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffd700;
+            backdrop-filter: blur(10px);
+        }
+        
+        .progress-bar {
+            background: rgba(0,0,0,0.3);
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.3s;
+        }
+        
+        .command-demo {
+            background: rgba(0,0,0,0.4);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        
+        .command-title {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .command-example {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .command-example .prompt {
+            color: #43e97b;
+        }
+        
+        .command-example .command {
+            color: #4facfe;
+        }
+        
+        .command-example .output {
+            color: #e0e0e0;
+            margin-top: 5px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+        
+        .comparison-item {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            flex: 1;
+            margin: 0 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .resource-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #4facfe;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .difficulty-easy {
+            background: #43e97b;
+            color: white;
+        }
+        
+        .difficulty-medium {
+            background: #ffbd2e;
+            color: white;
+        }
+        
+        .difficulty-hard {
+            background: #ff5f56;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- 第1页：封面 -->
+        <div class="slide active">
+            <h1>🔬 Linux 实验课</h1>
+            <p class="subtitle">从理论到实践，动手构建你的 Linux 技能</p>
+            <p style="margin-top: 50px; font-size: 1.2em;">两个核心实验 × 90分钟 × 真实环境</p>
+            <p style="margin-top: 30px; color: #ffd700;">💡 准备好你的虚拟机，让我们开始吧！</p>
+        </div>
+
+
+        <!-- 第2页：实验课程概览 -->
+        <div class="slide">
+            <h2>📋 实验课程概览</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">🏗️</div>
+                    <h3>实验一</h3>
+                    <p>构建你的第一个 Linux 基地</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">虚拟化 + 系统安装 + AI 辅助</p>
+                    <span class="difficulty-badge difficulty-easy">入门</span>
+                </div>
+                <div class="card">
+                    <div class="emoji">🗺️</div>
+                    <h3>实验二</h3>
+                    <p>Linux 目录探险与文件生存游戏</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">文件系统 + 基础命令实战</p>
+                    <span class="difficulty-badge difficulty-medium">进阶</span>
+                </div>
+            </div>
+            <p style="margin-top: 40px; font-size: 1.1em;">每个实验约 <span class="highlight">90 分钟</span>，包含理论回顾、动手实践、AI 辅助和成果验收</p>
+        </div>
+
+        <!-- 第3页：实验前的准备 -->
+        <div class="slide">
+            <h2>🎒 实验前的准备</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">💻</div>
+                    <h3>硬件要求</h3>
+                    <ul style="text-align: left;">
+                        <li>CPU：支持虚拟化（Intel VT-x / AMD-V）</li>
+                        <li>内存：至少 8GB（推荐 16GB）</li>
+                        <li>硬盘：至少 50GB 可用空间</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">🛠️</div>
+                    <h3>软件准备</h3>
+                    <ul style="text-align: left;">
+                        <li>Hyper-V / VirtualBox / VMware</li>
+                        <li>Ubuntu ISO 镜像文件</li>
+                        <li>ChatGPT 或其他 AI 工具账号</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tip-box" style="margin-top: 30px; max-width: 800px;">
+                <div class="emoji">💡</div>
+                <p><span class="highlight">重要提示</span>：确保在 BIOS 中启用了虚拟化技术（Virtualization Technology）</p>
+            </div>
+        </div>
+
+        <!-- 第4页：实验安全须知 -->
+        <div class="slide">
+            <h2>⚠️ 实验安全须知</h2>
+            <div class="warning-box" style="max-width: 800px;">
+                <div class="emoji">🛡️</div>
+                <h3>虚拟机是你的安全沙盒</h3>
+                <ul style="text-align: left;">
+                    <li>所有实验都在虚拟机中进行，<span class="highlight">不会影响你的主机系统</span></li>
+                    <li>养成<span class="highlight">定期创建快照</span>的习惯</li>
+                    <li>重要操作前先快照，出错了可以随时恢复</li>
+                    <li>不要在虚拟机中存储重要数据</li>
+                </ul>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p><span class="highlight">黄金法则</span>：实验前快照，实验后验证，出错就恢复</p>
+            </div>
+        </div>
+
+        <!-- 第5页：实验一 - 封面 -->
+        <div class="slide">
+            <h1>🔬 实验一</h1>
+            <h2>构建你的第一个 Linux 基地</h2>
+            <p class="subtitle">对应理论课：第一节课（Linux 基础认知）+ 第二节课（虚拟化技术）</p>
+            <div style="margin-top: 50px;">
+                <p style="font-size: 1.2em;">⏱️ 预计用时：<span class="highlight">90 分钟</span></p>
+                <p style="font-size: 1.2em; margin-top: 20px;">🎯 实验目标：理解虚拟化概念，亲手搭建 Linux 运行环境，并完成首次终端交互</p>
+            </div>
+        </div>
+
+
+        <!-- 第6页：实验一 - 学习目标 -->
+        <div class="slide">
+            <h2>🎯 实验一：学习目标</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">🧠</div>
+                    <h3>理论理解</h3>
+                    <ul style="text-align: left;">
+                        <li>Type 1 vs Type 2 虚拟化</li>
+                        <li>虚拟机资源分配原理</li>
+                        <li>网络模式的实际差异</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">🛠️</div>
+                    <h3>实践技能</h3>
+                    <ul style="text-align: left;">
+                        <li>独立安装 Linux 系统</li>
+                        <li>配置虚拟机网络</li>
+                        <li>创建和恢复快照</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">🤖</div>
+                    <h3>AI 协作</h3>
+                    <ul style="text-align: left;">
+                        <li>学会向 AI 提问</li>
+                        <li>验证 AI 给出的命令</li>
+                        <li>建立学习闭环</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">💪</div>
+                    <h3>心理建设</h3>
+                    <ul style="text-align: left;">
+                        <li>克服对命令行的恐惧</li>
+                        <li>建立"可以犯错"的安全感</li>
+                        <li>培养探索精神</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第7页：实验一 - 任务概览 -->
+        <div class="slide">
+            <h2>📝 实验一：任务概览</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>任务 1：化身架构师（40分钟）</h3>
+                    <p>开启虚拟化 → 创建虚拟机 → 安装 Ubuntu → 配置网络</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>任务 2：时间旅行者（15分钟）</h3>
+                    <p>创建快照 → 破坏系统 → 恢复快照 → 体验"后悔药"</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>任务 3：AI 结对编程（25分钟）</h3>
+                    <p>向 AI 提问 → 获取命令 → 在终端执行 → 理解原理</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>成果验收（10分钟）</h3>
+                    <p>截图提交 → 自我检查 → 完成实验报告</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第8页：任务1 - 化身架构师 -->
+        <div class="slide">
+            <h2>🏗️ 任务 1：化身架构师</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">1</div>
+                    <div class="lab-title">
+                        <h3>开启虚拟化与安装系统</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 40 分钟</span>
+                            <span class="difficulty-badge difficulty-easy">入门</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">你将扮演一名系统架构师，从零开始构建一个 Linux 运行环境</p>
+                
+                <div class="task-box">
+                    <div class="task-title">🎯 任务目标</div>
+                    <ul>
+                        <li>理解虚拟化技术的实际应用</li>
+                        <li>掌握虚拟机资源分配的原则</li>
+                        <li>完成 Ubuntu 系统的完整安装</li>
+                        <li>理解不同网络模式的区别</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第9页：任务1 - 步骤详解 -->
+        <div class="slide">
+            <h2>📋 任务 1：详细步骤</h2>
+            <div class="step-container" style="max-width: 900px; margin: 0 auto;">
+                <div class="step-item">
+                    <h3>启用虚拟化技术</h3>
+                    <p><span class="highlight">Hyper-V 用户</span>：控制面板 → 程序 → 启用或关闭 Windows 功能 → 勾选 Hyper-V</p>
+                    <p><span class="highlight">VirtualBox 用户</span>：下载并安装 VirtualBox（已安装可跳过）</p>
+                </div>
+                
+                <div class="step-item">
+                    <h3>创建新虚拟机</h3>
+                    <p>打开虚拟化软件，点击"新建"或"创建虚拟机"</p>
+                    <p>命名：<code>Ubuntu-Lab</code></p>
+                    <p>类型：Linux，版本：Ubuntu (64-bit)</p>
+                </div>
+                
+                <div class="step-item">
+                    <h3>分配资源（重要！）</h3>
+                    <ul style="margin-left: 20px;">
+                        <li><span class="highlight">CPU</span>：2-4 核心（不超过物理核心的 50%）</li>
+                        <li><span class="highlight">内存</span>：4GB（4096 MB）</li>
+                        <li><span class="highlight">硬盘</span>：40GB（动态分配）</li>
+                    </ul>
+                </div>
+                
+                <div class="step-item">
+                    <h3>挂载 ISO 镜像</h3>
+                    <p>在虚拟机设置中，找到"存储"或"光驱"选项</p>
+                    <p>选择你下载的 Ubuntu ISO 文件</p>
+                </div>
+                
+                <div class="step-item">
+                    <h3>启动并安装系统</h3>
+                    <p>启动虚拟机，按照安装向导完成 Ubuntu 安装</p>
+                    <p>语言选择：中文（简体）或 English</p>
+                    <p>安装类型：清除整个磁盘并安装 Ubuntu</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第10页：任务1 - 资源分配原则 -->
+        <div class="slide">
+            <h2>⚙️ 虚拟机资源分配原则</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>❌ 错误做法</h3>
+                    <ul style="text-align: left;">
+                        <li>分配所有 CPU 核心</li>
+                        <li>分配 90% 的内存</li>
+                        <li>固定分配硬盘空间</li>
+                        <li>不考虑主机性能</li>
+                    </ul>
+                    <p style="margin-top: 20px; color: #ff5f56;">结果：主机卡顿，虚拟机也慢</p>
+                </div>
+                <div class="comparison-item">
+                    <h3>✅ 正确做法</h3>
+                    <ul style="text-align: left;">
+                        <li>CPU：不超过物理核心的 50%</li>
+                        <li>内存：不超过物理内存的 50%</li>
+                        <li>硬盘：使用动态分配</li>
+                        <li>根据实际需求调整</li>
+                    </ul>
+                    <p style="margin-top: 20px; color: #43e97b;">结果：主机和虚拟机都流畅</p>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 30px;">
+                <div class="emoji">💡</div>
+                <p><span class="highlight">经验法则</span>：8GB 物理内存的电脑，给虚拟机分配 4GB；16GB 的分配 6-8GB</p>
+            </div>
+        </div>
+
+        <!-- 第11页：任务1 - 网络配置实验 -->
+        <div class="slide">
+            <h2>🌐 网络模式实验</h2>
+            <div class="lab-card">
+                <div class="task-box">
+                    <div class="task-title">🔬 实验：观察网络模式的差异</div>
+                    <p>安装完成后，我们来做一个有趣的实验</p>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-item">
+                        <h3>NAT 模式测试</h3>
+                        <div class="code-block">
+                            <code>ip a                    # 查看 IP 地址<br>
+ping baidu.com          # 测试外网连接<br>
+ip route                # 查看路由表</code>
+                        </div>
+                        <p>记录下 IP 地址（通常是 10.0.x.x 或 192.168.x.x）</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3>切换到桥接模式</h3>
+                        <p>关闭虚拟机 → 虚拟机设置 → 网络 → 选择"桥接模式"</p>
+                        <p>重新启动虚拟机</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3>桥接模式测试</h3>
+                        <div class="code-block">
+                            <code>ip a                    # 再次查看 IP<br>
+ping baidu.com          # 测试连接</code>
+                        </div>
+                        <p>观察：IP 地址变了吗？和你的主机在同一网段吗？</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第12页：网络模式对比 -->
+        <div class="slide">
+            <h2>🔍 网络模式深度对比</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>NAT 模式</h3>
+                    <div class="emoji">🏠</div>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>虚拟机可以上网</li>
+                        <li>主机可以访问虚拟机</li>
+                        <li>外部网络<span class="highlight">无法</span>访问虚拟机</li>
+                        <li>IP：10.0.x.x 或 192.168.x.x</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #43e97b;">✅ 推荐日常使用</p>
+                </div>
+                <div class="card">
+                    <h3>桥接模式</h3>
+                    <div class="emoji">🌉</div>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>虚拟机获得独立 IP</li>
+                        <li>像局域网中的真实电脑</li>
+                        <li>外部可以直接访问</li>
+                        <li>IP：与主机同网段</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #43e97b;">✅ 适合搭建服务器</p>
+                </div>
+                <div class="card">
+                    <h3>仅主机模式</h3>
+                    <div class="emoji">🔒</div>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>只能与主机通信</li>
+                        <li>完全隔离外部网络</li>
+                        <li>无法上网</li>
+                        <li>IP：192.168.56.x</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #43e97b;">✅ 适合安全测试</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第13页：任务2 - 时间旅行者 -->
+        <div class="slide">
+            <h2>⏰ 任务 2：时间旅行者</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">2</div>
+                    <div class="lab-title">
+                        <h3>掌握"后悔药"快照功能</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 15 分钟</span>
+                            <span class="difficulty-badge difficulty-easy">入门</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">快照是虚拟机最强大的功能之一，让你可以随时回到过去</p>
+                
+                <div class="task-box">
+                    <div class="task-title">🎯 任务目标</div>
+                    <ul>
+                        <li>理解快照的工作原理</li>
+                        <li>学会在关键时刻创建快照</li>
+                        <li>体验快照恢复的"魔法"</li>
+                        <li>建立"可以犯错"的安全感</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第14页：任务2 - 步骤详解 -->
+        <div class="slide">
+            <h2>📸 任务 2：快照实验步骤</h2>
+            <div class="step-container" style="max-width: 900px; margin: 0 auto;">
+                <div class="step-item">
+                    <h3>创建"纯净系统"快照</h3>
+                    <p><span class="highlight">Hyper-V</span>：右键虚拟机 → 检查点 → 输入名称 "Fresh_Install"</p>
+                    <p><span class="highlight">VirtualBox</span>：菜单 → 管理 → 生成备份 → 命名 "Fresh_Install"</p>
+                    <p>💡 这是你的"存档点"，可以随时回来</p>
+                </div>
+                
+                <div class="step-item">
+                    <h3>破坏系统（故意的！）</h3>
+                    <div class="code-block">
+                        <code># 在终端中执行以下命令<br>
+cd ~<br>
+mkdir chaos<br>
+cd chaos<br>
+touch file{1..100}.txt    # 创建 100 个文件<br>
+echo "乱码内容" > *.txt    # 写入乱码<br>
+ls                         # 查看混乱的结果</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>恢复快照</h3>
+                    <p>关闭虚拟机</p>
+                    <p>右键快照 "Fresh_Install" → 应用/恢复</p>
+                    <p>重新启动虚拟机</p>
+                </div>
+                
+                <div class="step-item">
+                    <h3>验证恢复结果</h3>
+                    <div class="code-block">
+                        <code>cd ~<br>
+ls                         # chaos 目录消失了！<br>
+echo "系统恢复成功！"</code>
+                    </div>
+                    <p>🎉 你刚刚体验了"时间旅行"！</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第15页：快照最佳实践 -->
+        <div class="slide">
+            <h2>📸 快照最佳实践</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">✅</div>
+                    <h3>何时创建快照</h3>
+                    <ul style="text-align: left;">
+                        <li>系统刚安装完成</li>
+                        <li>重要软件安装前</li>
+                        <li>修改系统配置前</li>
+                        <li>学习新命令前</li>
+                        <li>实验危险操作前</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">📝</div>
+                    <h3>快照命名规范</h3>
+                    <ul style="text-align: left;">
+                        <li>Fresh_Install（纯净系统）</li>
+                        <li>After_Updates（更新后）</li>
+                        <li>Before_Experiment（实验前）</li>
+                        <li>Working_State（工作状态）</li>
+                        <li>加上日期：2024-03-12</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="warning-box" style="max-width: 800px; margin-top: 30px;">
+                <div class="emoji">⚠️</div>
+                <p><span class="highlight">注意</span>：快照会占用硬盘空间，定期清理不需要的旧快照</p>
+            </div>
+        </div>
+
+        <!-- 第16页：任务3 - AI结对编程 -->
+        <div class="slide">
+            <h2>🤖 任务 3：AI 结对编程</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">3</div>
+                    <div class="lab-title">
+                        <h3>验证 AI 辅助学习</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 25 分钟</span>
+                            <span class="difficulty-badge difficulty-medium">进阶</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">学会与 AI 协作，建立"探索-求助-执行-理解"的学习闭环</p>
+                
+                <div class="task-box">
+                    <div class="task-title">🎯 任务目标</div>
+                    <ul>
+                        <li>学会向 AI 提出高质量的问题</li>
+                        <li>验证 AI 给出的命令是否正确</li>
+                        <li>理解命令背后的原理</li>
+                        <li>建立独立解决问题的能力</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第17页：任务3 - AI提问技巧 -->
+        <div class="slide">
+            <h2>💬 如何向 AI 提问</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>❌ 低质量提问</h3>
+                    <div class="code-block" style="margin-top: 15px;">
+                        <code>"Linux 怎么用？"<br><br>
+"帮我写个命令"<br><br>
+"为什么报错？"</code>
+                    </div>
+                    <p style="margin-top: 15px; color: #ff5f56;">问题：太模糊，AI 无法给出有用的答案</p>
+                </div>
+                <div class="comparison-item">
+                    <h3>✅ 高质量提问</h3>
+                    <div class="code-block" style="margin-top: 15px;">
+                        <code>"我刚安装了 Ubuntu，作为新手应该首先做哪三件事？请给我具体命令。"<br><br>
+"如何查看 Linux 系统版本？请解释命令的含义。"<br><br>
+"执行 apt update 时报错：Permission denied，如何解决？"</code>
+                    </div>
+                    <p style="margin-top: 15px; color: #43e97b;">优点：具体、清晰、包含上下文</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第18页：任务3 - 实践练习 -->
+        <div class="slide">
+            <h2>🎯 任务 3：实践练习</h2>
+            <div class="step-container" style="max-width: 900px; margin: 0 auto;">
+                <div class="step-item">
+                    <h3>向 AI 提问</h3>
+                    <p>打开 ChatGPT 或其他 AI 工具，输入以下 Prompt：</p>
+                    <div class="code-block">
+                        <code>"我刚刚在虚拟机里安装了 Ubuntu，作为 Linux 新手，我应该首先做哪三件事？请给我具体的命令，并解释每个命令的作用。"</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>分析 AI 的回答</h3>
+                    <p>AI 通常会建议：</p>
+                    <ul style="margin-left: 20px;">
+                        <li><code>sudo apt update</code> - 更新软件包列表</li>
+                        <li><code>sudo apt upgrade</code> - 升级已安装的软件</li>
+                        <li><code>sudo apt install build-essential</code> - 安装开发工具</li>
+                    </ul>
+                    <p>💡 不要盲目复制，先理解每个命令的作用</p>
+                </div>
+                
+                <div class="step-item">
+                    <h3>在终端中执行</h3>
+                    <div class="code-block">
+                        <code>sudo apt update<br>
+# 输入密码（输入时不显示，这是正常的）<br>
+# 观察输出，看到 "Reading package lists... Done" 表示成功</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>继续向 AI 学习</h3>
+                    <p>如果遇到不理解的地方，继续提问：</p>
+                    <div class="code-block">
+                        <code>"sudo 是什么意思？为什么需要它？"<br>
+"apt 和 apt-get 有什么区别？"</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第19页：AI辅助学习的黄金法则 -->
+        <div class="slide">
+            <h2>🌟 AI 辅助学习的黄金法则</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">1️⃣</div>
+                    <h3>先思考，再提问</h3>
+                    <p>不要一遇到问题就问 AI，先自己尝试 5 分钟</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">2️⃣</div>
+                    <h3>验证，不盲从</h3>
+                    <p>AI 也会犯错，执行前先理解命令的作用</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">3️⃣</div>
+                    <h3>追问原理</h3>
+                    <p>不只要"怎么做"，更要问"为什么"</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">4️⃣</div>
+                    <h3>记录笔记</h3>
+                    <p>把有用的命令和解释记录下来</p>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 30px;">
+                <div class="emoji">💡</div>
+                <p><span class="highlight">记住</span>：AI 是你的助手，不是替代品。真正的学习发生在你动手实践的时候。</p>
+            </div>
+        </div>
+
+        <!-- 第20页：实验一 - 成果验收 -->
+        <div class="slide">
+            <h2>📦 实验一：成果验收</h2>
+            <div class="deliverable-box">
+                <h3 style="color: white; margin-bottom: 20px;">📸 提交要求</h3>
+                <p style="font-size: 1.1em; margin-bottom: 20px;">提交一张截图，包含以下内容：</p>
+                <ul style="text-align: left;">
+                    <li>运行中的 Linux 终端窗口</li>
+                    <li>执行 <code>ip a</code> 或 <code>ifconfig</code> 显示的网络配置</li>
+                    <li>执行 <code>uname -a</code> 显示的系统信息</li>
+                    <li>执行 <code>whoami</code> 显示的用户名</li>
+                </ul>
+            </div>
+            
+            <div class="checklist" style="max-width: 800px; margin-top: 30px;">
+                <h3 style="text-align: left; margin-bottom: 15px;">✅ 自检清单</h3>
+                <li>虚拟机可以正常启动</li>
+                <li>可以登录到 Ubuntu 系统</li>
+                <li>网络连接正常（可以 ping 通 baidu.com）</li>
+                <li>创建了至少一个快照</li>
+                <li>成功执行了 AI 建议的命令</li>
+                <li>理解了 NAT 和桥接模式的区别</li>
+            </div>
+        </div>
+
+        <!-- 第21页：实验一 - 常见问题 -->
+        <div class="slide">
+            <h2>❓ 实验一：常见问题</h2>
+            <div class="resource-card">
+                <h3>Q1: 虚拟机启动很慢怎么办？</h3>
+                <p><span class="highlight">A:</span> 检查是否分配了过多资源，或者主机内存不足。建议关闭其他占用资源的程序。</p>
+            </div>
+            <div class="resource-card">
+                <h3>Q2: 无法启用 Hyper-V？</h3>
+                <p><span class="highlight">A:</span> 确保你的 Windows 是 Pro 或 Enterprise 版本，Home 版不支持。或者使用 VirtualBox 替代。</p>
+            </div>
+            <div class="resource-card">
+                <h3>Q3: 虚拟机无法上网？</h3>
+                <p><span class="highlight">A:</span> 检查网络模式是否设置为 NAT，或者尝试重启虚拟机的网络服务：<code>sudo systemctl restart NetworkManager</code></p>
+            </div>
+            <div class="resource-card">
+                <h3>Q4: 忘记了 Ubuntu 的密码？</h3>
+                <p><span class="highlight">A:</span> 恢复到安装后的快照，或者通过 GRUB 引导进入单用户模式重置密码（可以问 AI 具体步骤）。</p>
+            </div>
+        </div>
+
+        <!-- 第22页：实验二 - 封面 -->
+        <div class="slide">
+            <h1>🔬 实验二</h1>
+            <h2>Linux 目录探险与文件生存游戏</h2>
+            <p class="subtitle">对应理论课：第二节课（Linux 文件系统与基础命令实战）</p>
+            <div style="margin-top: 50px;">
+                <p style="font-size: 1.2em;">⏱️ 预计用时：<span class="highlight">90 分钟</span></p>
+                <p style="font-size: 1.2em; margin-top: 20px;">🎯 实验目标：打破 Windows 的"盘符"思维，建立"一切皆文件"认知，熟练掌握基础命令</p>
+            </div>
+        </div>
+
+
+        <!-- 第23页：实验二 - 学习目标 -->
+        <div class="slide">
+            <h2>🎯 实验二：学习目标</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">🧠</div>
+                    <h3>思维转变</h3>
+                    <ul style="text-align: left;">
+                        <li>从"盘符"到"单一根目录"</li>
+                        <li>理解"一切皆文件"</li>
+                        <li>建立路径思维</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">⌨️</div>
+                    <h3>命令掌握</h3>
+                    <ul style="text-align: left;">
+                        <li>导航：pwd、cd</li>
+                        <li>查看：ls、cat、less</li>
+                        <li>操作：mkdir、touch、cp、mv、rm</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">🗺️</div>
+                    <h3>系统认知</h3>
+                    <ul style="text-align: left;">
+                        <li>熟悉重要目录</li>
+                        <li>理解权限概念</li>
+                        <li>掌握日志查看</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">🛡️</div>
+                    <h3>安全意识</h3>
+                    <ul style="text-align: left;">
+                        <li>理解 rm 的危险性</li>
+                        <li>养成备份习惯</li>
+                        <li>学会使用 -i 参数</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第24页：实验二 - 任务概览 -->
+        <div class="slide">
+            <h2>📝 实验二：任务概览</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>任务 1：黑客帝国漫游（20分钟）</h3>
+                    <p>探索系统目录树 → 理解绝对路径和相对路径 → 观察文件属性</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>任务 2：基建狂魔（15分钟）</h3>
+                    <p>创建项目目录结构 → 批量创建文件 → 理解 -p 参数</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>任务 3：乾坤大挪移（15分钟）</h3>
+                    <p>复制文件 → 移动文件 → 重命名文件 → 理解参数差异</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>任务 4：偷窥系统隐私（20分钟）</h3>
+                    <p>查看系统信息 → 分页阅读文件 → 实时监控日志</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>任务 5：毁灭与求生（15分钟）</h3>
+                    <p>安全删除练习 → 理解 rm 危险性 → 学会使用 man 手册</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>成果验收（5分钟）</h3>
+                    <p>提交实验报告 → 完成自检清单</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第25页：任务1 - 黑客帝国漫游 -->
+        <div class="slide">
+            <h2>🗺️ 任务 1：黑客帝国漫游</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">1</div>
+                    <div class="lab-title">
+                        <h3>探索系统目录树</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 20 分钟</span>
+                            <span class="difficulty-badge difficulty-easy">入门</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">像黑客帝国中的 Neo 一样，探索 Linux 文件系统的每个角落</p>
+                
+                <div class="task-box">
+                    <div class="task-title">🎯 任务目标</div>
+                    <ul>
+                        <li>理解绝对路径和相对路径的区别</li>
+                        <li>熟悉 pwd、cd、ls 命令</li>
+                        <li>学会解读 ls -la 的输出</li>
+                        <li>发现隐藏文件</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第26页：任务1 - 绝对路径实验 -->
+        <div class="slide">
+            <h2>📍 绝对路径探索</h2>
+            <div class="command-demo">
+                <div class="command-title">实验：使用绝对路径导航</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">pwd</div>
+                    <div class="output">/home/student</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">cd /etc</div>
+                    <div class="prompt">student@ubuntu:/etc$</div>
+                    <div class="command">pwd</div>
+                    <div class="output">/etc</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:/etc$</div>
+                    <div class="command">ls -la | head -10</div>
+                    <div class="output">total 1234<br>
+drwxr-xr-x 130 root root  12288 Mar 12 10:30 .<br>
+drwxr-xr-x  20 root root   4096 Mar 10 15:20 ..<br>
+-rw-r--r--   1 root root   3028 Mar  1 08:15 adduser.conf<br>
+drwxr-xr-x   2 root root   4096 Mar 10 15:25 apt</div>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p>绝对路径总是从 <code>/</code> 开始，无论你在哪里，路径都一样</p>
+            </div>
+        </div>
+
+
+        <!-- 第27页：任务1 - 相对路径实验 -->
+        <div class="slide">
+            <h2>🔄 相对路径探索</h2>
+            <div class="command-demo">
+                <div class="command-title">实验：使用相对路径导航</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:/etc$</div>
+                    <div class="command">cd ../var/log</div>
+                    <div class="prompt">student@ubuntu:/var/log$</div>
+                    <div class="command">pwd</div>
+                    <div class="output">/var/log</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:/var/log$</div>
+                    <div class="command">cd ../..</div>
+                    <div class="prompt">student@ubuntu:/$</div>
+                    <div class="command">pwd</div>
+                    <div class="output">/</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:/$</div>
+                    <div class="command">cd ~</div>
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">pwd</div>
+                    <div class="output">/home/student</div>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p><code>..</code> 表示上级目录，<code>~</code> 表示主目录，<code>.</code> 表示当前目录</p>
+            </div>
+        </div>
+
+        <!-- 第28页：任务1 - ls详解 -->
+        <div class="slide">
+            <h2>👀 解读 ls -la 输出</h2>
+            <div class="code-block" style="max-width: 900px; margin: 20px auto;">
+                <code style="color: #e0e0e0;">drwxr-xr-x  2  student  student  4096  Mar 12 10:30  Documents<br>
+-rw-r--r--  1  student  student  1024  Mar 11 15:20  file.txt<br>
+-rwxr-xr-x  1  student  student  8192  Mar 10 09:15  script.sh</code>
+            </div>
+            <div class="grid" style="margin-top: 30px;">
+                <div class="card">
+                    <h3>第一列：类型和权限</h3>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li><code>d</code> = 目录</li>
+                        <li><code>-</code> = 普通文件</li>
+                        <li><code>rwx</code> = 读、写、执行</li>
+                        <li>三组权限：所有者、组、其他人</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>其他信息</h3>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>链接数</li>
+                        <li>所有者和组</li>
+                        <li>文件大小（字节）</li>
+                        <li>修改时间</li>
+                        <li>文件名</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第29页：任务1 - 隐藏文件 -->
+        <div class="slide">
+            <h2>🔍 发现隐藏文件</h2>
+            <div class="command-demo">
+                <div class="command-title">实验：查看隐藏文件</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">ls</div>
+                    <div class="output">Desktop  Documents  Downloads  Music  Pictures  Videos</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">ls -a</div>
+                    <div class="output">.  ..  .bash_history  .bashrc  .profile  .cache  Desktop  Documents</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">ls -la | grep "^\."</div>
+                    <div class="output">drwxr-xr-x  5 student student 4096 Mar 12 10:30 .<br>
+drwxr-xr-x  3 root    root    4096 Mar 10 15:20 ..<br>
+-rw-------  1 student student 2048 Mar 12 09:15 .bash_history<br>
+-rw-r--r--  1 student student  220 Mar 10 15:20 .bash_logout</div>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p>Linux 中，以 <code>.</code> 开头的文件是隐藏文件，通常是配置文件</p>
+            </div>
+        </div>
+
+        <!-- 第30页：任务2 - 基建狂魔 -->
+        <div class="slide">
+            <h2>🏗️ 任务 2：基建狂魔</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">2</div>
+                    <div class="lab-title">
+                        <h3>目录与文件创建</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 15 分钟</span>
+                            <span class="difficulty-badge difficulty-easy">入门</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">像建筑师一样，快速搭建项目的目录结构</p>
+                
+                <div class="task-box">
+                    <div class="task-title">🎯 任务目标</div>
+                    <ul>
+                        <li>掌握 mkdir 和 touch 命令</li>
+                        <li>理解 -p 参数的作用</li>
+                        <li>学会批量创建文件</li>
+                        <li>建立良好的目录组织习惯</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第31页：任务2 - 创建项目结构 -->
+        <div class="slide">
+            <h2>📁 创建项目目录结构</h2>
+            <div class="step-container" style="max-width: 900px; margin: 0 auto;">
+                <div class="step-item">
+                    <h3>回到主目录</h3>
+                    <div class="code-block">
+                        <code>cd ~<br>
+pwd                    # 确认在 /home/student</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>创建多层目录（一次性）</h3>
+                    <div class="code-block">
+                        <code>mkdir -p myproject/src myproject/logs myproject/docs<br>
+# -p 参数会自动创建父目录</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>验证目录结构</h3>
+                    <div class="code-block">
+                        <code>tree myproject<br>
+# 如果没有 tree 命令，使用：<br>
+ls -R myproject</code>
+                    </div>
+                    <p>输出应该类似：</p>
+                    <div class="code-block">
+                        <code>myproject/<br>
+├── docs<br>
+├── logs<br>
+└── src</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第32页：任务2 - 批量创建文件 -->
+        <div class="slide">
+            <h2>✨ 批量创建文件</h2>
+            <div class="command-demo">
+                <div class="command-title">实验：使用 touch 批量创建</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">cd myproject/src</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">touch main.c utils.c config.h</div>
+                    <div class="command">ls -l</div>
+                    <div class="output">-rw-r--r-- 1 student student 0 Mar 12 10:35 config.h<br>
+-rw-r--r-- 1 student student 0 Mar 12 10:35 main.c<br>
+-rw-r--r-- 1 student student 0 Mar 12 10:35 utils.c</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">cd ../docs</div>
+                    <div class="command">touch README.md INSTALL.md API.md</div>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p>touch 可以一次创建多个文件，用空格分隔文件名</p>
+            </div>
+        </div>
+
+        <!-- 第33页：任务2 - 高级技巧 -->
+        <div class="slide">
+            <h2>🚀 批量创建的高级技巧</h2>
+            <div class="command-demo">
+                <div class="command-title">使用花括号展开</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">mkdir -p project/{src,bin,lib,include}</div>
+                    <div class="output"># 一次创建 4 个目录</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">touch file{1..10}.txt</div>
+                    <div class="output"># 创建 file1.txt 到 file10.txt</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">touch report.{txt,pdf,docx}</div>
+                    <div class="output"># 创建 report.txt, report.pdf, report.docx</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">mkdir -p year_{2020..2024}/month_{01..12}</div>
+                    <div class="output"># 创建 5 年 × 12 月 = 60 个目录</div>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p>花括号展开是 Shell 的强大功能，可以大大提高效率</p>
+            </div>
+        </div>
+
+        <!-- 第34页：任务3 - 乾坤大挪移 -->
+        <div class="slide">
+            <h2>🔀 任务 3：乾坤大挪移</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">3</div>
+                    <div class="lab-title">
+                        <h3>复制、移动与重命名</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 15 分钟</span>
+                            <span class="difficulty-badge difficulty-medium">进阶</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">掌握文件操作的三大神技：复制、移动、重命名</p>
+                
+                <div class="task-box">
+                    <div class="task-title">🎯 任务目标</div>
+                    <ul>
+                        <li>理解 cp 和 mv 的区别</li>
+                        <li>掌握 -r、-i、-p 等参数</li>
+                        <li>学会重命名文件和目录</li>
+                        <li>理解移动和重命名的关系</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第35页：任务3 - 复制实验 -->
+        <div class="slide">
+            <h2>📋 复制文件实验</h2>
+            <div class="command-demo">
+                <div class="command-title">cp 命令实践</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">cd myproject/src</div>
+                    <div class="command">cp main.c main_backup.c</div>
+                    <div class="command">ls -l</div>
+                    <div class="output">-rw-r--r-- 1 student student 0 Mar 12 10:40 main.c<br>
+-rw-r--r-- 1 student student 0 Mar 12 10:41 main_backup.c</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">cp -r ../docs ../docs_backup</div>
+                    <div class="output"># 复制整个目录需要 -r 参数</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">cp -i main.c main_backup.c</div>
+                    <div class="output">cp: overwrite 'main_backup.c'? y<br>
+# -i 参数会在覆盖前询问</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第36页：任务3 - 移动和重命名 -->
+        <div class="slide">
+            <h2>🚚 移动和重命名实验</h2>
+            <div class="command-demo">
+                <div class="command-title">mv 命令实践</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">mv utils.c tools.c</div>
+                    <div class="output"># 重命名文件</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">mv tools.c ~/</div>
+                    <div class="output"># 移动到主目录</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">mv ~/tools.c ~/utilities.c</div>
+                    <div class="output"># 移动并重命名</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~/myproject/src$</div>
+                    <div class="command">cd ~ && mv myproject my_awesome_project</div>
+                    <div class="output"># 重命名目录</div>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p>mv 不需要 -r 参数就可以移动目录，因为它只是改变路径，不复制内容</p>
+            </div>
+        </div>
+
+        <!-- 第37页：cp vs mv 对比 -->
+        <div class="slide">
+            <h2>⚖️ cp vs mv 对比</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>cp（复制）</h3>
+                    <ul style="text-align: left;">
+                        <li>创建文件的副本</li>
+                        <li>原文件保留</li>
+                        <li>复制目录需要 -r</li>
+                        <li>占用额外空间</li>
+                        <li>常用参数：-r、-i、-p</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 15px;">
+                        <code>cp file1 file2<br>
+cp -r dir1 dir2</code>
+                    </div>
+                </div>
+                <div class="comparison-item">
+                    <h3>mv（移动/重命名）</h3>
+                    <ul style="text-align: left;">
+                        <li>移动或重命名</li>
+                        <li>原文件消失</li>
+                        <li>不需要 -r 参数</li>
+                        <li>不占用额外空间</li>
+                        <li>常用参数：-i</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 15px;">
+                        <code>mv file1 file2<br>
+mv dir1 dir2</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第38页：任务4 - 偷窥系统隐私 -->
+        <div class="slide">
+            <h2>🔍 任务 4：偷窥系统隐私</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">4</div>
+                    <div class="lab-title">
+                        <h3>文件查看与日志实时监控</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 20 分钟</span>
+                            <span class="difficulty-badge difficulty-medium">进阶</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">学会查看系统信息和实时监控日志，成为系统的"侦探"</p>
+                
+                <div class="task-box">
+                    <div class="task-title">🎯 任务目标</div>
+                    <ul>
+                        <li>掌握 cat、less、head、tail 命令</li>
+                        <li>学会查看系统配置文件</li>
+                        <li>理解日志文件的重要性</li>
+                        <li>掌握 tail -f 实时监控技巧</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第39页：任务4 - 查看系统信息 -->
+        <div class="slide">
+            <h2>📄 查看系统信息</h2>
+            <div class="command-demo">
+                <div class="command-title">探索系统配置文件</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">cat /etc/os-release</div>
+                    <div class="output">NAME="Ubuntu"<br>
+VERSION="22.04.1 LTS (Jammy Jellyfish)"<br>
+ID=ubuntu<br>
+ID_LIKE=debian</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">cat /etc/hostname</div>
+                    <div class="output">ubuntu-lab</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">cat /etc/hosts</div>
+                    <div class="output">127.0.0.1   localhost<br>
+127.0.1.1   ubuntu-lab</div>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p>/etc 目录存放系统配置文件，是了解系统的窗口</p>
+            </div>
+        </div>
+
+        <!-- 第40页：任务4 - 分页查看 -->
+        <div class="slide">
+            <h2>📖 分页查看大文件</h2>
+            <div class="command-demo">
+                <div class="command-title">使用 less 分页阅读</div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">less /etc/services</div>
+                    <div class="output"># 进入分页模式，可以使用以下快捷键：<br>
+# 空格 - 下一页<br>
+# b - 上一页<br>
+# /关键词 - 搜索<br>
+# n - 下一个搜索结果<br>
+# q - 退出</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">head -n 20 /etc/services</div>
+                    <div class="output"># 查看前 20 行</div>
+                </div>
+                <div class="command-example">
+                    <div class="prompt">student@ubuntu:~$</div>
+                    <div class="command">tail -n 20 /etc/services</div>
+                    <div class="output"># 查看后 20 行</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第41页：任务4 - 实时监控日志 -->
+        <div class="slide">
+            <h2>📊 实时监控日志</h2>
+            <div class="step-container" style="max-width: 900px; margin: 0 auto;">
+                <div class="step-item">
+                    <h3>打开第一个终端</h3>
+                    <div class="code-block">
+                        <code>sudo tail -f /var/log/syslog<br>
+# 或者<br>
+sudo journalctl -f</code>
+                    </div>
+                    <p>这个终端会实时显示系统日志</p>
+                </div>
+                
+                <div class="step-item">
+                    <h3>打开第二个终端</h3>
+                    <p>在虚拟机中打开另一个终端窗口</p>
+                    <div class="code-block">
+                        <code># 执行一些操作，观察第一个终端的变化<br>
+sudo systemctl restart NetworkManager<br>
+ping -c 3 baidu.com<br>
+ls /nonexistent    # 故意触发错误</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>观察日志变化</h3>
+                    <p>回到第一个终端，你会看到实时滚动的日志</p>
+                    <p>按 Ctrl+C 停止监控</p>
+                </div>
+            </div>
+            <div class="tip-box" style="max-width: 800px; margin-top: 20px;">
+                <div class="emoji">💡</div>
+                <p>tail -f 是运维工程师最常用的命令之一，用于实时监控日志</p>
+            </div>
+        </div>
+
+        <!-- 第42页：文件查看命令对比 -->
+        <div class="slide">
+            <h2>📚 文件查看命令对比</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>cat</h3>
+                    <p>一次性显示全部内容</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">✅ 适合小文件</p>
+                    <div class="code-block" style="margin-top: 10px;">
+                        <code>cat file.txt<br>
+cat -n file.txt  # 显示行号</code>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>less</h3>
+                    <p>分页显示，可前后翻页</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">✅ 适合大文件</p>
+                    <div class="code-block" style="margin-top: 10px;">
+                        <code>less file.txt<br>
+# 空格翻页，q退出</code>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>head</h3>
+                    <p>查看文件开头</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">✅ 快速预览</p>
+                    <div class="code-block" style="margin-top: 10px;">
+                        <code>head -n 10 file.txt<br>
+# 查看前10行</code>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>tail</h3>
+                    <p>查看文件结尾</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">✅ 查看日志</p>
+                    <div class="code-block" style="margin-top: 10px;">
+                        <code>tail -n 10 file.txt<br>
+tail -f log.txt  # 实时监控</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第43页：任务5 - 毁灭与求生 -->
+        <div class="slide">
+            <h2>💣 任务 5：毁灭与求生</h2>
+            <div class="lab-card">
+                <div class="lab-header">
+                    <div class="lab-number">5</div>
+                    <div class="lab-title">
+                        <h3>危险的 rm 命令</h3>
+                        <div class="lab-meta">
+                            <span>⏱️ 15 分钟</span>
+                            <span class="difficulty-badge difficulty-hard">高级</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 20px;">理解 rm 的危险性，学会安全删除文件</p>
+                
+                <div class="warning-box">
+                    <div class="emoji">⚠️</div>
+                    <h3 style="color: white;">重要警告</h3>
+                    <p style="color: white;">Linux 没有回收站！rm 删除的文件无法恢复！</p>
+                    <p style="color: white;">在执行此任务前，请确保已创建虚拟机快照！</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 第44页：任务5 - 安全删除练习 -->
+        <div class="slide">
+            <h2>🛡️ 安全删除练习</h2>
+            <div class="step-container" style="max-width: 900px; margin: 0 auto;">
+                <div class="step-item">
+                    <h3>创建测试文件</h3>
+                    <div class="code-block">
+                        <code>cd ~<br>
+mkdir test_delete<br>
+cd test_delete<br>
+touch file{1..5}.txt<br>
+ls</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>使用 -i 参数安全删除</h3>
+                    <div class="code-block">
+                        <code>rm -i file1.txt<br>
+rm: remove regular empty file 'file1.txt'? y<br>
+# 输入 y 确认删除，n 取消</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>查看 man 手册</h3>
+                    <div class="code-block">
+                        <code>man rm<br>
+# 按 / 搜索 "interactive"<br>
+# 找到 -i 参数的详细说明<br>
+# 按 q 退出</code>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <h3>删除整个目录</h3>
+                    <div class="code-block">
+                        <code>cd ~<br>
+rm -ri test_delete<br>
+# -r 递归删除，-i 逐一确认</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第45页：rm 命令的危险等级 -->
+        <div class="slide">
+            <h2>⚠️ rm 命令危险等级</h2>
+            <div class="grid">
+                <div class="card" style="border: 2px solid #43e97b;">
+                    <h3 style="color: #43e97b;">✅ 安全</h3>
+                    <div class="code-block">
+                        <code>rm -i file.txt<br>
+rm -ri directory</code>
+                    </div>
+                    <p style="margin-top: 10px;">删除前逐一确认</p>
+                </div>
+                <div class="card" style="border: 2px solid #ffbd2e;">
+                    <h3 style="color: #ffbd2e;">⚠️ 小心</h3>
+                    <div class="code-block">
+                        <code>rm file.txt<br>
+rm -r directory</code>
+                    </div>
+                    <p style="margin-top: 10px;">直接删除，无法恢复</p>
+                </div>
+                <div class="card" style="border: 2px solid #ff5f56;">
+                    <h3 style="color: #ff5f56;">🚨 危险</h3>
+                    <div class="code-block">
+                        <code>rm -rf directory<br>
+rm -rf *</code>
+                    </div>
+                    <p style="margin-top: 10px;">强制递归删除，极度危险</p>
+                </div>
+                <div class="card" style="border: 2px solid #ff0000; background: rgba(255,0,0,0.1);">
+                    <h3 style="color: #ff0000;">☠️ 致命</h3>
+                    <div class="code-block">
+                        <code>rm -rf /<br>
+sudo rm -rf /*</code>
+                    </div>
+                    <p style="margin-top: 10px;">删除整个系统！永远不要执行！</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第46页：rm 最佳实践 -->
+        <div class="slide">
+            <h2>🛡️ rm 使用最佳实践</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">1️⃣</div>
+                    <h3>删除前先查看</h3>
+                    <div class="code-block">
+                        <code>ls directory<br>
+# 确认内容后再删除<br>
+rm -r directory</code>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="emoji">2️⃣</div>
+                    <h3>使用 -i 参数</h3>
+                    <div class="code-block">
+                        <code>rm -i file.txt<br>
+rm -ri directory</code>
+                    </div>
+                    <p style="margin-top: 10px;">养成确认的习惯</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">3️⃣</div>
+                    <h3>避免使用通配符</h3>
+                    <div class="code-block">
+                        <code># 危险！<br>
+rm -rf *<br>
+# 安全<br>
+rm -i file1 file2</code>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="emoji">4️⃣</div>
+                    <h3>重要文件先备份</h3>
+                    <div class="code-block">
+                        <code>cp important.txt backup/<br>
+# 确认备份后再删除<br>
+rm important.txt</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第47页：实验二 - 成果验收 -->
+        <div class="slide">
+            <h2>📦 实验二：成果验收</h2>
+            <div class="deliverable-box">
+                <h3 style="color: white; margin-bottom: 20px;">📸 提交要求</h3>
+                <p style="font-size: 1.1em; margin-bottom: 20px;">提交以下截图和文档：</p>
+                <ul style="text-align: left;">
+                    <li>执行 <code>tree ~/myproject</code> 或 <code>ls -R ~/myproject</code> 的结果</li>
+                    <li>执行 <code>ls -la ~</code> 显示隐藏文件的结果</li>
+                    <li>执行 <code>tail -f</code> 实时监控日志的截图</li>
+                    <li>简短的实验报告（300字），描述你的学习收获</li>
+                </ul>
+            </div>
+            
+            <div class="checklist" style="max-width: 800px; margin-top: 30px;">
+                <h3 style="text-align: left; margin-bottom: 15px;">✅ 自检清单</h3>
+                <li>理解绝对路径和相对路径的区别</li>
+                <li>能熟练使用 pwd、cd、ls 命令</li>
+                <li>能创建多层目录结构</li>
+                <li>能复制、移动、重命名文件</li>
+                <li>能查看和监控日志文件</li>
+                <li>理解 rm 的危险性，会使用 -i 参数</li>
+                <li>能使用 man 命令查看帮助</li>
+            </div>
+        </div>
+
+
+        <!-- 第48页：实验二 - 常见问题 -->
+        <div class="slide">
+            <h2>❓ 实验二：常见问题</h2>
+            <div class="resource-card">
+                <h3>Q1: mkdir -p 和 mkdir 有什么区别？</h3>
+                <p><span class="highlight">A:</span> mkdir -p 会自动创建父目录，而 mkdir 如果父目录不存在会报错。例如：<code>mkdir -p a/b/c</code> 会创建 a、b、c 三个目录。</p>
+            </div>
+            <div class="resource-card">
+                <h3>Q2: 为什么 tail -f 看不到日志更新？</h3>
+                <p><span class="highlight">A:</span> 可能是权限问题，尝试使用 <code>sudo tail -f /var/log/syslog</code>。或者日志文件路径不对，不同发行版日志位置可能不同。</p>
+            </div>
+            <div class="resource-card">
+                <h3>Q3: 误删了文件怎么办？</h3>
+                <p><span class="highlight">A:</span> 如果在虚拟机中，恢复快照。如果是真实系统，Linux 没有回收站，只能尝试数据恢复工具（成功率低）。所以删除前一定要确认！</p>
+            </div>
+            <div class="resource-card">
+                <h3>Q4: ls -la 中的 . 和 .. 是什么？</h3>
+                <p><span class="highlight">A:</span> <code>.</code> 代表当前目录，<code>..</code> 代表上级目录。它们是特殊的目录引用，存在于每个目录中。</p>
+            </div>
+        </div>
+
+        <!-- 第49页：进阶挑战 -->
+        <div class="slide">
+            <h2>🚀 进阶挑战任务</h2>
+            <p class="subtitle">完成基础实验后，挑战这些高级任务</p>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">🏆</div>
+                    <h3>挑战 1：脚本自动化</h3>
+                    <p>编写一个 Shell 脚本，自动创建项目目录结构</p>
+                    <span class="difficulty-badge difficulty-hard">高级</span>
+                </div>
+                <div class="card">
+                    <div class="emoji">🔍</div>
+                    <h3>挑战 2：日志分析</h3>
+                    <p>使用 grep 在日志中搜索特定错误信息</p>
+                    <span class="difficulty-badge difficulty-medium">进阶</span>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎨</div>
+                    <h3>挑战 3：定制环境</h3>
+                    <p>修改 .bashrc 文件，添加自定义别名</p>
+                    <span class="difficulty-badge difficulty-medium">进阶</span>
+                </div>
+                <div class="card">
+                    <div class="emoji">🌐</div>
+                    <h3>挑战 4：网络诊断</h3>
+                    <p>使用 netstat、ss 等命令查看网络连接</p>
+                    <span class="difficulty-badge difficulty-hard">高级</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第50页：学习资源推荐 -->
+        <div class="slide">
+            <h2>📚 学习资源推荐</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">📖</div>
+                    <h3>在线教程</h3>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>Linux Journey</li>
+                        <li>The Linux Command Line</li>
+                        <li>鸟哥的 Linux 私房菜</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎥</div>
+                    <h3>视频课程</h3>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>B站 Linux 入门教程</li>
+                        <li>慕课网 Linux 课程</li>
+                        <li>YouTube Linux 频道</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">💬</div>
+                    <h3>社区论坛</h3>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>Stack Overflow</li>
+                        <li>Linux 中国社区</li>
+                        <li>Reddit r/linux</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="emoji">🤖</div>
+                    <h3>AI 助手</h3>
+                    <ul style="text-align: left; font-size: 0.95em;">
+                        <li>ChatGPT</li>
+                        <li>Claude</li>
+                        <li>GitHub Copilot</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第51页：实验总结 -->
+        <div class="slide">
+            <h2>📌 实验课程总结</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>实验一收获</h3>
+                    <ul style="text-align: left;">
+                        <li>搭建了 Linux 运行环境</li>
+                        <li>理解了虚拟化技术</li>
+                        <li>掌握了快照功能</li>
+                        <li>学会了与 AI 协作</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>实验二收获</h3>
+                    <ul style="text-align: left;">
+                        <li>熟悉了目录结构</li>
+                        <li>掌握了基础命令</li>
+                        <li>学会了文件操作</li>
+                        <li>理解了 rm 的危险性</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="success-box" style="max-width: 800px; margin-top: 30px;">
+                <h3 style="color: white;">🎉 恭喜你完成了实验课程！</h3>
+                <p style="color: white; font-size: 1.1em;">你已经迈出了 Linux 学习的第一步，继续保持练习，你会成为 Linux 高手！</p>
+            </div>
+        </div>
+
+        <!-- 第52页：下一步学习计划 -->
+        <div class="slide">
+            <h2>🗺️ 下一步学习计划</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>第三周：文本处理与管道</h3>
+                    <p>grep、sed、awk、管道与重定向</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第四周：权限管理</h3>
+                    <p>chmod、chown、用户和组管理</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第五周：进程管理</h3>
+                    <p>ps、top、kill、后台任务</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第六周：Shell 脚本编程</h3>
+                    <p>变量、条件、循环、函数</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第七周：网络配置</h3>
+                    <p>网络命令、SSH、防火墙</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第八周：系统管理</h3>
+                    <p>软件包管理、服务管理、系统监控</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第53页：实践建议 -->
+        <div class="slide">
+            <h2>💡 持续学习建议</h2>
+            <ul style="max-width: 800px;">
+                <li><span class="highlight">每天练习 30 分钟</span>：坚持比突击更重要</li>
+                <li><span class="highlight">做笔记</span>：记录常用命令和技巧</li>
+                <li><span class="highlight">多问为什么</span>：不只记命令，更要理解原理</li>
+                <li><span class="highlight">参与开源项目</span>：在实践中学习</li>
+                <li><span class="highlight">加入技术社区</span>：与他人交流学习</li>
+                <li><span class="highlight">善用 AI</span>：但不要过度依赖</li>
+                <li><span class="highlight">定期复习</span>：温故而知新</li>
+            </ul>
+        </div>
+
+        <!-- 第54页：互动问答 -->
+        <div class="slide">
+            <h2>💬 互动时间</h2>
+            <p class="subtitle">有什么问题吗？</p>
+            <div style="margin-top: 50px;">
+                <p>🙋 实验中遇到了什么困难？</p>
+                <p>🤔 哪个命令最难理解？</p>
+                <p>💭 你觉得虚拟机和真实系统有什么区别？</p>
+                <p>🎯 你想用 Linux 做什么项目？</p>
+                <p>🚀 对下一步学习有什么期待？</p>
+            </div>
+        </div>
+
+        <!-- 第55页：结束页 -->
+        <div class="slide">
+            <h1>🎉 实验课程结束</h1>
+            <p class="subtitle">感谢你的参与和努力</p>
+            <p style="margin-top: 50px; font-size: 1.2em;">记住：实践是最好的老师</p>
+            <p style="margin-top: 30px;">📧 有问题随时交流</p>
+            <p style="margin-top: 20px; color: #ffd700;">💻 继续在虚拟机中探索，不要害怕犯错！</p>
+            <p style="margin-top: 30px; font-size: 1.1em;">下节课见！👋</p>
+        </div>
+    </div>
+
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">55</span>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← 上一页</button>
+        <button onclick="nextSlide()">下一页 →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+        
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousSlide();
+            }
+        }
+    </script>
+</body>
+</html>

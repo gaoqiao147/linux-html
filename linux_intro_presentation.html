@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux操作系统 - 第一节课</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h3 {
+            color: #fff;
+            font-size: 1.8em;
+            margin: 20px 0;
+        }
+        
+        p, li {
+            color: white;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+        
+        ul {
+            list-style: none;
+            text-align: left;
+            max-width: 800px;
+        }
+        
+        li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+        
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 20px;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+        
+        .comparison-item {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            flex: 1;
+            margin: 0 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 800px;
+            margin-top: 30px;
+        }
+        
+        .timeline-item {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffd700;
+            backdrop-filter: blur(10px);
+        }
+        
+        .clickable {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            border-bottom: 2px dotted rgba(255,215,0,0.5);
+            padding: 2px 4px;
+            display: inline-block;
+        }
+        
+        .clickable:hover {
+            background: rgba(255,215,0,0.2);
+            border-bottom-color: #ffd700;
+            transform: translateY(-2px);
+        }
+        
+        .clickable::after {
+            content: "ℹ️";
+            font-size: 0.8em;
+            margin-left: 4px;
+            opacity: 0.7;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        
+        .modal-content h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content p, .modal-content li {
+            color: white;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+        
+        .modal-content a {
+            color: #ffd700;
+            text-decoration: none;
+            border-bottom: 1px solid #ffd700;
+        }
+        
+        .modal-content a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+        
+        .close {
+            color: white;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close:hover {
+            color: #ffd700;
+            transform: rotate(90deg);
+        }
+        
+        .modal-content ul {
+            margin-left: 20px;
+        }
+        
+        .resource-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .ecosystem-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        #ecosystem-svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .eco-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .eco-node:hover .node-circle {
+            filter: brightness(1.3);
+            transform: scale(1.1);
+        }
+        
+        .eco-node:hover {
+            transform: translateY(-5px);
+        }
+        
+        .center-node {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .node-circle {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+        
+        .connection-line {
+            transition: all 0.3s ease;
+        }
+        
+        .eco-node:hover .connection-line {
+            stroke: rgba(255,215,0,0.8);
+            stroke-width: 3;
+        }
+        
+        .ecosystem-info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 100px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .ecosystem-info h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .ecosystem-info p {
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .ecosystem-info ul {
+            text-align: left;
+            max-width: 100%;
+            margin-top: 10px;
+        }
+        
+        .ecosystem-info li {
+            font-size: 0.95em;
+            padding: 5px 0;
+        }
+        
+        .terminal-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .terminal-header {
+            background: #323232;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-button.red {
+            background: #ff5f56;
+        }
+        
+        .terminal-button.yellow {
+            background: #ffbd2e;
+        }
+        
+        .terminal-button.green {
+            background: #27c93f;
+        }
+        
+        .terminal-title {
+            color: #999;
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .terminal-body {
+            padding: 20px;
+            min-height: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        .terminal-line {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .terminal-prompt {
+            color: #43e97b;
+            margin-right: 8px;
+        }
+        
+        .terminal-text {
+            color: #e0e0e0;
+        }
+        
+        .terminal-input-line {
+            padding: 15px 20px;
+            background: #252525;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            outline: none;
+        }
+        
+        .terminal-input::placeholder {
+            color: #666;
+        }
+        
+        .terminal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .terminal-body::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        
+        .terminal-body::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- 第1页：封面 -->
+        <div class="slide active">
+            <h1>🐧 Linux 操作系统</h1>
+            <p class="subtitle">第一节课：走进 Linux 的世界</p>
+            <p style="margin-top: 50px; font-size: 1.2em;">面向大一新生</p>
+            <p style="margin-top: 30px; font-size: 1em; color: #ffd700;">
+                💡 提示：点击带有 ℹ️ 图标的内容可查看详细解释
+            </p>
+        </div>
+
+        <!-- 第2页：课程导航 -->
+        <div class="slide">
+            <h2>今天我们将探索</h2>
+            <ul>
+                <li>Linux 是什么？</li>
+                <li>Linux 能做什么？</li>
+                <li>Linux 与 Windows 的关系</li>
+                <li>为什么要学习 Linux？</li>
+                <li>学习 Linux 需要什么基础？</li>
+                <li>学习路径规划</li>
+                <li>AI 如何赋能 Linux 学习</li>
+            </ul>
+        </div>
+
+        <!-- 第3页：什么是Linux - 引入 -->
+        <div class="slide">
+            <h2>🤔 Linux 是什么？</h2>
+            <p class="subtitle">让我们从一个简单的类比开始...</p>
+        </div>
+
+        <!-- 第4页：操作系统类比 -->
+        <div class="slide">
+            <h2>操作系统就像...</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">🏢</div>
+                    <h3>大楼管理员</h3>
+                    <p>协调各个部门（程序）的工作</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎭</div>
+                    <h3>翻译官</h3>
+                    <p>让你和计算机硬件能够对话</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🚦</div>
+                    <h3>交通指挥</h3>
+                    <p>管理 CPU、内存、硬盘等资源</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🛡️</div>
+                    <h3>安全卫士</h3>
+                    <p>保护你的数据和隐私</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第5页：Linux定义 -->
+        <div class="slide">
+            <h2>Linux 的正式定义</h2>
+            <ul>
+                <li><span class="highlight clickable" data-info="opensource">开源</span>的操作系统内核</li>
+                <li>由 <span class="clickable" data-info="linus">Linus Torvalds</span> 于 <span class="highlight">1991年</span> 创建</li>
+                <li>基于 <span class="highlight clickable" data-info="unix">Unix</span> 设计理念</li>
+                <li>全球数百万开发者共同维护</li>
+                <li>完全<span class="highlight">免费</span>使用和修改</li>
+            </ul>
+        </div>
+
+        <!-- 第6页：Linux发行版 -->
+        <div class="slide">
+            <h2>Linux "家族"</h2>
+            <p>Linux 有很多不同的"版本"（发行版）</p>
+            <div class="grid">
+                <div class="card clickable" data-info="ubuntu">
+                    <h3>🎩 Ubuntu</h3>
+                    <p>最适合新手，界面友好</p>
+                </div>
+                <div class="card clickable" data-info="centos">
+                    <h3>🎯 CentOS/RHEL</h3>
+                    <p>企业级服务器首选</p>
+                </div>
+                <div class="card clickable" data-info="debian">
+                    <h3>🔧 Debian</h3>
+                    <p>稳定可靠，历史悠久</p>
+                </div>
+                <div class="card clickable" data-info="arch">
+                    <h3>🚀 Arch Linux</h3>
+                    <p>极客最爱，高度定制</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第7页：Linux能做什么 - 引入 -->
+        <div class="slide">
+            <h2>💡 Linux 能做什么？</h2>
+            <p class="subtitle">答案是：几乎所有事情！</p>
+        </div>
+
+        <!-- 第8页：Linux应用场景1 -->
+        <div class="slide">
+            <h2>🌐 互联网的基石</h2>
+            <ul>
+                <li>全球 <span class="highlight">96.3%</span> 的顶级服务器运行 Linux</li>
+                <li><span class="clickable" data-info="google">Google</span>、<span class="clickable" data-info="facebook">Facebook</span>、<span class="clickable" data-info="amazon">Amazon</span> 都在用</li>
+                <li>你访问的大部分网站背后都是 Linux</li>
+                <li>云计算平台（<span class="clickable" data-info="aws">AWS</span>、<span class="clickable" data-info="aliyun">阿里云</span>）的核心</li>
+            </ul>
+        </div>
+
+        <!-- 第9页：Linux应用场景2 -->
+        <div class="slide">
+            <h2>📱 无处不在的 Linux</h2>
+            <div class="grid">
+                <div class="card clickable" data-info="android">
+                    <div class="emoji">📱</div>
+                    <h3>智能手机</h3>
+                    <p>Android 基于 Linux</p>
+                </div>
+                <div class="card clickable" data-info="tesla">
+                    <div class="emoji">🚗</div>
+                    <h3>智能汽车</h3>
+                    <p>特斯拉等车载系统</p>
+                </div>
+                <div class="card clickable" data-info="space">
+                    <div class="emoji">🛰️</div>
+                    <h3>航天航空</h3>
+                    <p>国际空间站使用 Linux</p>
+                </div>
+                <div class="card clickable" data-info="steamdeck">
+                    <div class="emoji">🎮</div>
+                    <h3>游戏主机</h3>
+                    <p>Steam Deck 运行 Linux</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第10页：Linux应用场景3 -->
+        <div class="slide">
+            <h2>🔬 专业领域</h2>
+            <ul>
+                <li><span class="highlight clickable" data-info="devops">软件开发</span>：编程、测试、部署</li>
+                <li><span class="highlight clickable" data-info="datascience">数据科学</span>：大数据分析、机器学习</li>
+                <li><span class="highlight clickable" data-info="security">网络安全</span>：渗透测试、安全审计</li>
+                <li><span class="highlight clickable" data-info="embedded">嵌入式系统</span>：物联网设备、路由器</li>
+                <li><span class="highlight clickable" data-info="supercomputer">超级计算机</span>：全球 TOP500 都用 Linux</li>
+            </ul>
+        </div>
+
+        <!-- 第11页：Linux与Windows - 引入 -->
+        <div class="slide">
+            <h2>🔄 Linux vs Windows</h2>
+            <p class="subtitle">它们是竞争对手，还是好伙伴？</p>
+        </div>
+
+        <!-- 第12页：历史渊源 -->
+        <div class="slide">
+            <h2>📜 历史渊源</h2>
+            <ul>
+                <li><span class="highlight">Windows</span>：1985年，微软开发，商业软件</li>
+                <li><span class="highlight">Linux</span>：1991年，Linus 开发，开源免费</li>
+                <li>都是为了让计算机更易用</li>
+                <li>都在不断进化和改进</li>
+                <li>现在可以<span class="highlight">共存</span>（双系统、虚拟机、WSL）</li>
+            </ul>
+        </div>
+
+        <!-- 第13页：相同点 -->
+        <div class="slide">
+            <h2>🤝 相同之处</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>核心功能</h3>
+                    <p>管理硬件、运行程序、文件管理</p>
+                </div>
+                <div class="card">
+                    <h3>多任务处理</h3>
+                    <p>同时运行多个程序</p>
+                </div>
+                <div class="card">
+                    <h3>网络功能</h3>
+                    <p>上网、文件共享、远程访问</p>
+                </div>
+                <div class="card">
+                    <h3>用户界面</h3>
+                    <p>都有图形界面和命令行</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第14页：不同点对比 -->
+        <div class="slide">
+            <h2>⚖️ 主要区别</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>🪟 Windows</h3>
+                    <ul style="text-align: left;">
+                        <li>闭源，需要付费</li>
+                        <li>图形界面为主</li>
+                        <li>游戏和办公软件丰富</li>
+                        <li>易用性高</li>
+                        <li>资源占用较多</li>
+                    </ul>
+                </div>
+                <div class="comparison-item">
+                    <h3>🐧 Linux</h3>
+                    <ul style="text-align: left;">
+                        <li>开源，完全免费</li>
+                        <li>命令行很强大</li>
+                        <li>开发工具丰富</li>
+                        <li>学习曲线陡峭</li>
+                        <li>轻量高效</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第15页：文件系统差异 -->
+        <div class="slide">
+            <h2>📁 文件系统的不同</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>Windows</h3>
+                    <p>C:\Users\用户名\Documents</p>
+                    <p>盘符：C:、D:、E:</p>
+                </div>
+                <div class="comparison-item">
+                    <h3>Linux</h3>
+                    <p>/home/用户名/Documents</p>
+                    <p>统一树状结构，从 / 开始</p>
+                </div>
+            </div>
+            <p style="margin-top: 30px;">Linux 一切皆文件！</p>
+        </div>
+
+        <!-- 第16页：为什么学Linux - 引入 -->
+        <div class="slide">
+            <h2>🎯 为什么要学 Linux？</h2>
+            <p class="subtitle">这是一项值得投资的技能</p>
+        </div>
+
+        <!-- 第17页：职业发展 -->
+        <div class="slide">
+            <h2>💼 职业发展必备</h2>
+            <ul>
+                <li><span class="highlight clickable" data-info="backend">后端开发</span>：服务器部署和运维</li>
+                <li><span class="highlight clickable" data-info="sre">运维工程师</span>：Linux 是核心技能</li>
+                <li><span class="highlight clickable" data-info="cloudcomputing">云计算</span>：AWS、Azure 都基于 Linux</li>
+                <li><span class="highlight">数据工程师</span>：大数据平台运行在 Linux</li>
+                <li><span class="highlight">安全专家</span>：渗透测试工具多在 Linux</li>
+                <li>薪资加成：掌握 Linux 的工程师<span class="highlight">薪资更高</span></li>
+            </ul>
+        </div>
+
+        <!-- 第18页：技术优势 -->
+        <div class="slide">
+            <h2>🚀 技术优势</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">⚡</div>
+                    <h3>性能强大</h3>
+                    <p>资源占用少，运行速度快</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🔒</div>
+                    <h3>安全稳定</h3>
+                    <p>病毒少，权限管理严格</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎨</div>
+                    <h3>高度定制</h3>
+                    <p>可以按需求自由配置</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🆓</div>
+                    <h3>完全免费</h3>
+                    <p>无需购买许可证</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第19页：思维方式 -->
+        <div class="slide">
+            <h2>🧠 培养工程师思维</h2>
+            <ul>
+                <li>理解计算机<span class="highlight">底层原理</span></li>
+                <li>学会<span class="highlight">命令行</span>操作（效率提升10倍）</li>
+                <li>掌握<span class="highlight">自动化</span>脚本编写</li>
+                <li>培养<span class="highlight">问题解决</span>能力</li>
+                <li>融入<span class="highlight">开源社区</span>，与全球开发者交流</li>
+            </ul>
+        </div>
+
+        <!-- 第20页：学习前置条件 -->
+        <div class="slide">
+            <h2>📋 学习 Linux 需要什么基础？</h2>
+            <p class="subtitle">好消息：门槛其实不高！</p>
+        </div>
+
+        <!-- 第21页：必备基础 -->
+        <div class="slide">
+            <h2>✅ 必备基础</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">💻</div>
+                    <h3>基本计算机知识</h3>
+                    <p>会用电脑、上网、安装软件</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🔤</div>
+                    <h3>英语基础</h3>
+                    <p>认识常见命令单词即可</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🤔</div>
+                    <h3>逻辑思维</h3>
+                    <p>能理解因果关系</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">💪</div>
+                    <h3>耐心和毅力</h3>
+                    <p>遇到问题不轻易放弃</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第22页：加分项 -->
+        <div class="slide">
+            <h2>⭐ 加分项（不是必须）</h2>
+            <ul>
+                <li>有编程基础（Python、C、Shell）</li>
+                <li>了解计算机组成原理</li>
+                <li>熟悉网络基础知识</li>
+                <li>但这些都可以<span class="highlight">边学边补</span>！</li>
+            </ul>
+        </div>
+
+        <!-- 第23页：学习路径 -->
+        <div class="slide">
+            <h2>🗺️ 学习 Linux 的大致过程</h2>
+            <p class="subtitle">循序渐进，稳扎稳打</p>
+        </div>
+
+        <!-- 第24页：学习阶段 -->
+        <div class="slide">
+            <h2>📈 四个学习阶段</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>第一阶段：入门（1-2个月）</h3>
+                    <p>安装系统、基本命令、文件操作、用户管理</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第二阶段：进阶（2-3个月）</h3>
+                    <p>Shell脚本、软件包管理、进程管理、网络配置</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第三阶段：深入（3-6个月）</h3>
+                    <p>系统服务、性能调优、安全加固、日志分析</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>第四阶段：专精（持续）</h3>
+                    <p>选择方向：运维、开发、安全、云计算等</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第25页：学习方法 -->
+        <div class="slide">
+            <h2>📚 推荐学习方法</h2>
+            <ul>
+                <li><span class="highlight">实践为主</span>：多动手，少看书</li>
+                <li><span class="highlight clickable" data-info="vm">搭建环境</span>：虚拟机或双系统</li>
+                <li><span class="highlight">每天练习</span>：坚持30分钟命令行操作</li>
+                <li><span class="highlight clickable" data-info="projects">做项目</span>：搭建网站、写脚本</li>
+                <li><span class="highlight clickable" data-info="manpage">查文档</span>：man 命令是最好的老师</li>
+                <li><span class="highlight clickable" data-info="community">加入社区</span>：论坛、GitHub、技术群</li>
+            </ul>
+        </div>
+
+        <!-- 第26页：AI赋能 - 引入 -->
+        <div class="slide">
+            <h2>🤖 AI 如何赋能 Linux 学习</h2>
+            <p class="subtitle">让学习更高效、更有趣</p>
+        </div>
+
+        <!-- 第27页：AI辅助学习 -->
+        <div class="slide">
+            <h2>💡 AI 学习助手</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">❓</div>
+                    <h3>即时答疑</h3>
+                    <p>ChatGPT、Claude 解答疑问</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">📝</div>
+                    <h3>命令解释</h3>
+                    <p>AI 解释复杂命令的含义</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🐛</div>
+                    <h3>错误诊断</h3>
+                    <p>粘贴错误信息，AI 给出解决方案</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">✍️</div>
+                    <h3>脚本生成</h3>
+                    <p>描述需求，AI 生成 Shell 脚本</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第28页：AI工具推荐 -->
+        <div class="slide">
+            <h2>🛠️ 实用 AI 工具</h2>
+            <ul>
+                <li><span class="highlight clickable" data-info="copilot">GitHub Copilot</span>：代码和脚本自动补全</li>
+                <li><span class="highlight clickable" data-info="chatgpt">ChatGPT/Claude</span>：学习伙伴，随时提问</li>
+                <li><span class="highlight clickable" data-info="explainshell">Explain Shell</span>：命令行解释器</li>
+                <li><span class="highlight clickable" data-info="warp">AI 终端助手</span>：Warp、Fig 等智能终端</li>
+                <li><span class="highlight">文档生成</span>：自动生成配置文件注释</li>
+            </ul>
+        </div>
+
+        <!-- 第29页：AI使用建议 -->
+        <div class="slide">
+            <h2>⚠️ AI 使用建议</h2>
+            <ul>
+                <li>AI 是<span class="highlight">辅助工具</span>，不是替代品</li>
+                <li>先<span class="highlight">自己思考</span>，再问 AI</li>
+                <li>验证 AI 给出的答案，<span class="highlight">不要盲目复制</span></li>
+                <li>用 AI 学习<span class="highlight">原理</span>，而不只是命令</li>
+                <li>结合传统学习方法，<span class="highlight">打好基础</span></li>
+            </ul>
+        </div>
+
+        <!-- 第30页：课程总结 -->
+        <div class="slide">
+            <h2>📌 今天我们学到了</h2>
+            <ul>
+                <li>Linux 是开源、免费、强大的操作系统</li>
+                <li>Linux 无处不在：服务器、手机、汽车...</li>
+                <li>Linux 和 Windows 各有特点，可以共存</li>
+                <li>学习 Linux 对职业发展很有帮助</li>
+                <li>门槛不高，关键是坚持实践</li>
+                <li>AI 可以让学习更高效</li>
+            </ul>
+        </div>
+
+        <!-- 第31页：下节课预告 -->
+        <div class="slide">
+            <h2>🔜 下节课预告</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>实践环节</h3>
+                    <p>安装 Linux 系统（虚拟机）</p>
+                </div>
+                <div class="card">
+                    <h3>基础命令</h3>
+                    <p>ls、cd、mkdir、rm 等</p>
+                </div>
+                <div class="card">
+                    <h3>文件系统</h3>
+                    <p>目录结构详解</p>
+                </div>
+                <div class="card">
+                    <h3>动手操作</h3>
+                    <p>第一个 Shell 脚本</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第32页：互动问答 -->
+        <div class="slide">
+            <h2>💬 互动时间</h2>
+            <p class="subtitle">有什么问题吗？</p>
+            <div style="margin-top: 50px;">
+                <p>🙋 你对 Linux 最感兴趣的是什么？</p>
+                <p>🤔 你觉得学习 Linux 最大的挑战是什么？</p>
+                <p>💭 你未来想从事什么方向的工作？</p>
+            </div>
+        </div>
+
+        <!-- 第33页：结束页 -->
+        <div class="slide">
+            <h1>🎉 感谢聆听</h1>
+            <p class="subtitle">欢迎来到 Linux 的世界</p>
+            <p style="margin-top: 50px; font-size: 1.2em;">让我们一起探索开源的力量！</p>
+            <p style="margin-top: 30px;">📧 有问题随时交流</p>
+        </div>
+
+        <!-- 第34页：互动探索 - Linux 生态系统 -->
+        <div class="slide">
+            <h2>🌟 探索 Linux 生态系统</h2>
+            <p class="subtitle" style="margin-bottom: 30px;">点击下方的圆圈，探索 Linux 的不同领域</p>
+            <div class="ecosystem-container">
+                <svg id="ecosystem-svg" width="900" height="500" viewBox="0 0 900 500">
+                    <!-- 中心 Linux 标志 -->
+                    <g id="center-linux" class="eco-node center-node">
+                        <circle cx="450" cy="250" r="60" fill="url(#gradient1)" stroke="#ffd700" stroke-width="3"/>
+                        <text x="450" y="250" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="40">🐧</text>
+                        <text x="450" y="285" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Linux</text>
+                    </g>
+                    
+                    <!-- 服务器领域 -->
+                    <g class="eco-node" data-category="server">
+                        <line x1="450" y1="250" x2="250" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="2" class="connection-line"/>
+                        <circle cx="250" cy="100" r="45" fill="url(#gradient2)" class="node-circle"/>
+                        <text x="250" y="95" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="30">🖥️</text>
+                        <text x="250" y="125" text-anchor="middle" fill="white" font-size="14">服务器</text>
+                    </g>
+                    
+                    <!-- 云计算 -->
+                    <g class="eco-node" data-category="cloud">
+                        <line x1="450" y1="250" x2="650" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="2" class="connection-line"/>
+                        <circle cx="650" cy="100" r="45" fill="url(#gradient3)" class="node-circle"/>
+                        <text x="650" y="95" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="30">☁️</text>
+                        <text x="650" y="125" text-anchor="middle" fill="white" font-size="14">云计算</text>
+                    </g>
+                    
+                    <!-- 开发 -->
+                    <g class="eco-node" data-category="development">
+                        <line x1="450" y1="250" x2="150" y2="250" stroke="rgba(255,255,255,0.3)" stroke-width="2" class="connection-line"/>
+                        <circle cx="150" cy="250" r="45" fill="url(#gradient4)" class="node-circle"/>
+                        <text x="150" y="245" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="30">💻</text>
+                        <text x="150" y="275" text-anchor="middle" fill="white" font-size="14">开发</text>
+                    </g>
+                    
+                    <!-- 安全 -->
+                    <g class="eco-node" data-category="security">
+                        <line x1="450" y1="250" x2="750" y2="250" stroke="rgba(255,255,255,0.3)" stroke-width="2" class="connection-line"/>
+                        <circle cx="750" cy="250" r="45" fill="url(#gradient5)" class="node-circle"/>
+                        <text x="750" y="245" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="30">🛡️</text>
+                        <text x="750" y="275" text-anchor="middle" fill="white" font-size="14">安全</text>
+                    </g>
+                    
+                    <!-- 嵌入式 -->
+                    <g class="eco-node" data-category="embedded">
+                        <line x1="450" y1="250" x2="250" y2="400" stroke="rgba(255,255,255,0.3)" stroke-width="2" class="connection-line"/>
+                        <circle cx="250" cy="400" r="45" fill="url(#gradient6)" class="node-circle"/>
+                        <text x="250" y="395" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="30">🔌</text>
+                        <text x="250" y="425" text-anchor="middle" fill="white" font-size="14">嵌入式</text>
+                    </g>
+                    
+                    <!-- 数据科学 -->
+                    <g class="eco-node" data-category="datascience">
+                        <line x1="450" y1="250" x2="650" y2="400" stroke="rgba(255,255,255,0.3)" stroke-width="2" class="connection-line"/>
+                        <circle cx="650" cy="400" r="45" fill="url(#gradient7)" class="node-circle"/>
+                        <text x="650" y="395" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="30">📊</text>
+                        <text x="650" y="425" text-anchor="middle" fill="white" font-size="14">数据科学</text>
+                    </g>
+                    
+                    <!-- 渐变定义 -->
+                    <defs>
+                        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#43e97b;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#38f9d7;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fa709a;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#fee140;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient6" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#30cfd0;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#330867;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient7" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#a8edea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#fed6e3;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            
+            <!-- 详细信息展示区 -->
+            <div id="ecosystem-info" class="ecosystem-info">
+                <p style="color: #ffd700;">👆 点击上方的圆圈探索不同领域</p>
+            </div>
+        </div>
+
+        <!-- 第35页：互动命令行体验 -->
+        <div class="slide">
+            <h2>💻 体验 Linux 命令行</h2>
+            <p class="subtitle" style="margin-bottom: 20px;">试试下面的命令，感受 Linux 的魅力</p>
+            
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <span class="terminal-button red"></span>
+                    <span class="terminal-button yellow"></span>
+                    <span class="terminal-button green"></span>
+                    <span class="terminal-title">student@linux:~$</span>
+                </div>
+                <div class="terminal-body" id="terminal-output">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">student@linux:~$</span>
+                        <span class="terminal-text">欢迎来到 Linux 命令行！</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text">试试输入以下命令：</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text" style="color: #43e97b;">• whoami</span>
+                        <span class="terminal-text"> - 查看当前用户</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text" style="color: #43e97b;">• date</span>
+                        <span class="terminal-text"> - 显示日期时间</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text" style="color: #43e97b;">• ls</span>
+                        <span class="terminal-text"> - 列出文件</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text" style="color: #43e97b;">• pwd</span>
+                        <span class="terminal-text"> - 显示当前目录</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text" style="color: #43e97b;">• help</span>
+                        <span class="terminal-text"> - 查看更多命令</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-text" style="color: #43e97b;">• clear</span>
+                        <span class="terminal-text"> - 清屏</span>
+                    </div>
+                </div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">student@linux:~$</span>
+                    <input type="text" id="terminal-input" class="terminal-input" placeholder="在这里输入命令..." autocomplete="off">
+                </div>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 0.9em; color: #e0e0e0;">
+                💡 这是一个模拟终端，按 Enter 执行命令
+            </p>
+        </div>
+    </div>
+
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">35</span>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← 上一页</button>
+        <button onclick="nextSlide()">下一页 →</button>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="info_database.js"></script>
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const modal = document.getElementById('infoModal');
+        const modalBody = document.getElementById('modalBody');
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        // 为所有可点击元素添加事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickables = document.querySelectorAll('.clickable');
+            clickables.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const infoKey = this.getAttribute('data-info');
+                    showInfo(infoKey);
+                });
+            });
+        });
+        
+        // 显示详细信息
+        function showInfo(key) {
+            if (infoDatabase[key]) {
+                const info = infoDatabase[key];
+                modalBody.innerHTML = `
+                    <h2>${info.title}</h2>
+                    ${info.content}
+                `;
+                modal.style.display = 'block';
+            }
+        }
+        
+        // 关闭模态框
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+        
+        // 生态系统交互
+        const ecosystemData = {
+            server: {
+                title: "🖥️ 服务器领域",
+                content: `
+                    <p>Linux 在服务器领域占据绝对主导地位</p>
+                    <ul>
+                        <li><strong>Web 服务器</strong>：Apache、Nginx 为全球网站提供服务</li>
+                        <li><strong>数据库服务器</strong>：MySQL、PostgreSQL、MongoDB</li>
+                        <li><strong>应用服务器</strong>：Tomcat、JBoss、WebLogic</li>
+                        <li><strong>邮件服务器</strong>：Postfix、Sendmail</li>
+                        <li><strong>文件服务器</strong>：Samba、NFS</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #ffd700;">💡 96.3% 的顶级服务器运行 Linux</p>
+                `
+            },
+            cloud: {
+                title: "☁️ 云计算",
+                content: `
+                    <p>云计算的基石，所有主流云平台都基于 Linux</p>
+                    <ul>
+                        <li><strong>AWS</strong>：Amazon Linux、EC2、Lambda</li>
+                        <li><strong>Azure</strong>：微软云，大量 Linux 虚拟机</li>
+                        <li><strong>Google Cloud</strong>：GCE、GKE 容器服务</li>
+                        <li><strong>阿里云</strong>：Alibaba Cloud Linux</li>
+                        <li><strong>容器技术</strong>：Docker、Kubernetes</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #ffd700;">💡 云原生时代，Linux 是必备技能</p>
+                `
+            },
+            development: {
+                title: "💻 软件开发",
+                content: `
+                    <p>开发者的首选平台，强大的开发工具链</p>
+                    <ul>
+                        <li><strong>编程语言</strong>：Python、Java、C/C++、Go、Rust</li>
+                        <li><strong>版本控制</strong>：Git、SVN</li>
+                        <li><strong>编辑器/IDE</strong>：Vim、Emacs、VS Code</li>
+                        <li><strong>构建工具</strong>：Make、CMake、Maven、Gradle</li>
+                        <li><strong>调试工具</strong>：GDB、Valgrind、strace</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #ffd700;">💡 命令行效率是图形界面的 10 倍</p>
+                `
+            },
+            security: {
+                title: "🛡️ 网络安全",
+                content: `
+                    <p>安全专家的武器库，丰富的安全工具</p>
+                    <ul>
+                        <li><strong>渗透测试</strong>：Kali Linux、Metasploit、Nmap</li>
+                        <li><strong>漏洞扫描</strong>：Nessus、OpenVAS</li>
+                        <li><strong>密码破解</strong>：John the Ripper、Hashcat</li>
+                        <li><strong>网络分析</strong>：Wireshark、tcpdump</li>
+                        <li><strong>防火墙</strong>：iptables、firewalld</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #ffd700;">💡 安全从业者必须精通 Linux</p>
+                `
+            },
+            embedded: {
+                title: "🔌 嵌入式系统",
+                content: `
+                    <p>从路由器到智能设备，Linux 无处不在</p>
+                    <ul>
+                        <li><strong>物联网</strong>：智能家居、可穿戴设备</li>
+                        <li><strong>网络设备</strong>：路由器、交换机、防火墙</li>
+                        <li><strong>工业控制</strong>：PLC、SCADA 系统</li>
+                        <li><strong>消费电子</strong>：智能电视、机顶盒</li>
+                        <li><strong>开发板</strong>：Raspberry Pi、Arduino</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #ffd700;">💡 轻量、可定制是嵌入式的关键</p>
+                `
+            },
+            datascience: {
+                title: "📊 数据科学",
+                content: `
+                    <p>大数据和 AI 的基础平台</p>
+                    <ul>
+                        <li><strong>大数据</strong>：Hadoop、Spark、Kafka、Flink</li>
+                        <li><strong>机器学习</strong>：TensorFlow、PyTorch、Scikit-learn</li>
+                        <li><strong>数据处理</strong>：Pandas、NumPy、Dask</li>
+                        <li><strong>可视化</strong>：Matplotlib、Plotly、Grafana</li>
+                        <li><strong>Jupyter</strong>：交互式数据分析环境</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #ffd700;">💡 GPU 服务器和集群都运行 Linux</p>
+                `
+            }
+        };
+        
+        // 为生态系统节点添加点击事件
+        document.addEventListener('DOMContentLoaded', function() {
+            const ecoNodes = document.querySelectorAll('.eco-node[data-category]');
+            const ecoInfo = document.getElementById('ecosystem-info');
+            
+            ecoNodes.forEach(node => {
+                node.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const category = this.getAttribute('data-category');
+                    const data = ecosystemData[category];
+                    
+                    if (data) {
+                        ecoInfo.innerHTML = `
+                            <h3>${data.title}</h3>
+                            ${data.content}
+                        `;
+                        
+                        // 添加动画效果
+                        ecoInfo.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            ecoInfo.style.transform = 'scale(1)';
+                        }, 100);
+                    }
+                });
+            });
+            
+            // 模拟终端功能
+            const terminalInput = document.getElementById('terminal-input');
+            const terminalOutput = document.getElementById('terminal-output');
+            
+            const fileSystem = {
+                '/home/student': ['Documents', 'Downloads', 'Pictures', 'Music', 'Videos', 'hello.txt', 'script.sh']
+            };
+            
+            let currentPath = '/home/student';
+            let commandHistory = [];
+            
+            const commands = {
+                whoami: () => 'student',
+                date: () => new Date().toLocaleString('zh-CN'),
+                pwd: () => currentPath,
+                ls: () => fileSystem[currentPath].join('  '),
+                clear: () => {
+                    terminalOutput.innerHTML = '';
+                    return '';
+                },
+                help: () => `可用命令：
+• whoami - 显示当前用户名
+• date - 显示当前日期和时间
+• pwd - 显示当前工作目录
+• ls - 列出当前目录的文件
+• echo [文本] - 输出文本
+• uname - 显示系统信息
+• fortune - 随机显示一句话
+• cowsay [文本] - 让牛说话
+• clear - 清空屏幕
+• help - 显示此帮助信息`,
+                uname: () => 'Linux student-pc 5.15.0-linux x86_64 GNU/Linux',
+                fortune: () => {
+                    const fortunes = [
+                        '学习 Linux，开启技术之门 🚪',
+                        '命令行是效率的源泉 ⚡',
+                        '开源改变世界 🌍',
+                        'Talk is cheap, show me the code. - Linus Torvalds',
+                        '今天学一个命令，明天就是专家 📚',
+                        'Linux 不是目的地，而是旅程 🛤️',
+                        '每个 bug 都是学习的机会 🐛',
+                        '坚持练习，你会成为 Linux 大师 🎓'
+                    ];
+                    return fortunes[Math.floor(Math.random() * fortunes.length)];
+                },
+                cowsay: (args) => {
+                    const text = args || 'Hello Linux!';
+                    return `
+ ${'_'.repeat(text.length + 2)}
+< ${text} >
+ ${'-'.repeat(text.length + 2)}
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+                },
+                echo: (args) => args || ''
+            };
+            
+            if (terminalInput) {
+                terminalInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        const command = this.value.trim();
+                        if (command) {
+                            executeCommand(command);
+                            commandHistory.push(command);
+                            this.value = '';
+                        }
+                    }
+                });
+            }
+            
+            function executeCommand(input) {
+                const parts = input.split(' ');
+                const cmd = parts[0].toLowerCase();
+                const args = parts.slice(1).join(' ');
+                
+                // 显示输入的命令
+                addTerminalLine(`<span class="terminal-prompt">student@linux:~$</span> <span style="color: white;">${input}</span>`);
+                
+                // 执行命令
+                if (commands[cmd]) {
+                    const output = commands[cmd](args);
+                    if (output) {
+                        addTerminalLine(`<span class="terminal-text">${output}</span>`);
+                    }
+                } else {
+                    addTerminalLine(`<span class="terminal-text" style="color: #ff5f56;">bash: ${cmd}: command not found</span>`);
+                    addTerminalLine(`<span class="terminal-text">输入 'help' 查看可用命令</span>`);
+                }
+                
+                // 滚动到底部
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+            
+            function addTerminalLine(html) {
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.innerHTML = html;
+                terminalOutput.appendChild(line);
+            }
+        });
+
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+        
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousSlide();
+            }
+        }
+    </script>
+</body>
+</html>
