@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux操作系统 - 第四节课</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h3 {
+            color: #fff;
+            font-size: 1.8em;
+            margin: 20px 0;
+        }
+        
+        p, li {
+            color: white;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+        
+        ul {
+            list-style: none;
+            text-align: left;
+            max-width: 900px;
+        }
+        
+        li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+        
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-top: 20px;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .clickable {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            border-bottom: 2px dotted rgba(255,215,0,0.5);
+            padding: 2px 4px;
+            display: inline-block;
+        }
+        
+        .clickable:hover {
+            background: rgba(255,215,0,0.2);
+            border-bottom-color: #ffd700;
+            transform: translateY(-2px);
+        }
+        
+        .clickable::after {
+            content: "ℹ️";
+            font-size: 0.8em;
+            margin-left: 4px;
+            opacity: 0.7;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        
+        .modal-content h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content p, .modal-content li {
+            color: white;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+        
+        .close {
+            color: white;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close:hover {
+            color: #ffd700;
+            transform: rotate(90deg);
+        }
+        
+        .modal-content ul {
+            margin-left: 20px;
+        }
+        
+        .resource-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .command-box {
+            background: #1e1e1e;
+            color: #43e97b;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: left;
+            margin: 20px auto;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .command-box .prompt {
+            color: #43e97b;
+        }
+        
+        .command-box .output {
+            color: #e0e0e0;
+            margin-top: 10px;
+        }
+        
+        .command-box .comment {
+            color: #888;
+            font-style: italic;
+        }
+        
+        .file-structure {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 700px;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .file-line {
+            padding: 5px 0;
+            color: #e0e0e0;
+        }
+        
+        .file-highlight {
+            background: rgba(255,215,0,0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+        
+        .comparison-item {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 15px;
+            flex: 1;
+            margin: 0 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .user-icon {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- 第1页：封面 -->
+        <div class="slide active">
+            <h1>🐧 Linux 操作系统</h1>
+            <p class="subtitle">第四节课：管理用户和组</p>
+            <p style="margin-top: 50px; font-size: 1.2em;">掌握 Linux 多用户系统的核心</p>
+            <p style="margin-top: 30px; font-size: 1em; color: #ffd700;">
+                💡 提示：点击带有 ℹ️ 图标的内容可查看详细解释
+            </p>
+        </div>
+
+        <!-- 第2页：课程回顾 -->
+        <div class="slide">
+            <h2>📚 上节课回顾</h2>
+            <ul>
+                <li>文本处理工具（grep, sed, awk）</li>
+                <li>管道与重定向（|, >, >>）</li>
+                <li>进程管理（ps, top, kill）</li>
+                <li>网络命令（ping, curl, wget）</li>
+            </ul>
+            <p style="margin-top: 40px; color: #ffd700;">今天学习用户和组管理！</p>
+        </div>
+
+        <!-- 第3页：为什么需要用户管理 -->
+        <div class="slide">
+            <h2>🤔 为什么需要用户管理？</h2>
+            <p style="font-size: 1.2em; color: #ffd700; margin-bottom: 30px;">
+                💡 Linux 是多用户多任务操作系统
+            </p>
+            <ul>
+                <li><span class="highlight">安全性</span> - 隔离不同用户的数据和权限</li>
+                <li><span class="highlight">隐私保护</span> - 每个用户有独立的工作空间</li>
+                <li><span class="highlight">资源管理</span> - 控制用户对系统资源的访问</li>
+                <li><span class="highlight">责任追踪</span> - 记录谁做了什么操作</li>
+            </ul>
+            <p style="margin-top: 40px; font-size: 1.1em;">
+                就像公司里每个员工有自己的工位和权限
+            </p>
+        </div>
+
+        <!-- 第4页：今天的学习目标 -->
+        <div class="slide">
+            <h2>🎯 今天的学习目标</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="emoji">👤</div>
+                    <h3>用户管理</h3>
+                    <p>创建、修改、删除用户</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">👥</div>
+                    <h3>组管理</h3>
+                    <p>创建和管理用户组</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">📁</div>
+                    <h3>配置文件</h3>
+                    <p>/etc/passwd, /etc/shadow</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🔐</div>
+                    <h3>权限控制</h3>
+                    <p>sudo, su 命令</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第5页：用户的概念 -->
+        <div class="slide">
+            <h2>👤 什么是用户？</h2>
+            <p><span class="highlight clickable" data-info="user-concept">用户</span>是系统访问控制的基本单位</p>
+            <div class="user-icon">👨‍💼 👩‍💻 🤖</div>
+            <ul>
+                <li><span class="highlight">root 用户</span> - 超级管理员（UID=0）<br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">拥有所有权限，可以做任何事</span></li>
+                <li><span class="highlight">系统用户</span> - 运行系统服务（UID 1-999）<br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">如 nginx、mysql 等服务的专用账户</span></li>
+                <li><span class="highlight">普通用户</span> - 日常使用（UID ≥1000）<br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">我们平时登录使用的账户</span></li>
+            </ul>
+            <p style="margin-top: 30px; font-size: 1.1em;">
+                每个用户有唯一的 <span class="highlight">用户名</span> 和 <span class="highlight">UID</span>（用户ID）
+            </p>
+        </div>
+
+        <!-- 第6页：组的概念 -->
+        <div class="slide">
+            <h2>👥 什么是组？</h2>
+            <p><span class="highlight clickable" data-info="group-concept">组</span>是用户的集合，用于简化权限管理</p>
+            <p style="font-size: 1.2em; color: #ffd700; margin: 30px 0;">
+                💡 类比：组就像公司的部门
+            </p>
+            <ul>
+                <li><span class="highlight">主组（Primary Group）</span><br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">用户创建文件时的默认组</span></li>
+                <li><span class="highlight">附加组（Secondary Group）</span><br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">用户可以加入的其他组</span></li>
+            </ul>
+            <div class="command-box" style="margin-top: 30px;">
+                <div class="comment"># 例如：创建 developers 组</div>
+                <div class="comment"># 将 alice、bob、charlie 加入该组</div>
+                <div class="comment"># 给 developers 组分配项目目录权限</div>
+                <div class="comment"># 这样三个人都能访问项目文件</div>
+            </div>
+        </div>
+
+        <!-- 第7页：用户和组的关系 -->
+        <div class="slide">
+            <h2>用户和组的关系</h2>
+            <p style="font-size: 1.1em; margin-bottom: 30px;">一个用户可以属于多个组</p>
+            <div class="file-structure">
+                <div class="file-line">👤 用户 john</div>
+                <div class="file-line">  ├─ 主组: john (GID 1000)</div>
+                <div class="file-line">  └─ 附加组:</div>
+                <div class="file-line">      ├─ developers (GID 1001)</div>
+                <div class="file-line">      ├─ docker (GID 999)</div>
+                <div class="file-line">      └─ sudo (GID 27)</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1.1em;">
+                john 创建的文件默认属于 john 组<br>
+                但他可以访问 developers、docker、sudo 组的资源
+            </p>
+        </div>
+
+        <!-- 第8页：配置文件 - 引入 -->
+        <div class="slide">
+            <h2>📁 用户和组配置文件</h2>
+            <p class="subtitle">了解系统如何存储用户信息</p>
+            <ul style="margin-top: 40px;">
+                <li><span class="highlight">/etc/passwd</span> - 用户账户信息</li>
+                <li><span class="highlight">/etc/shadow</span> - 用户密码信息（加密）</li>
+                <li><span class="highlight">/etc/group</span> - 组信息</li>
+                <li><span class="highlight">/etc/gshadow</span> - 组密码信息</li>
+            </ul>
+            <p style="margin-top: 40px; color: #ffd700;">
+                这些文件是 Linux 用户管理的核心
+            </p>
+        </div>
+
+        <!-- 第9页：/etc/passwd 文件 -->
+        <div class="slide">
+            <h2>/etc/passwd 文件</h2>
+            <p><span class="highlight clickable" data-info="passwd-file">/etc/passwd</span> 存储所有用户账户信息</p>
+            <p style="font-size: 1.1em; color: #ffd700; margin: 20px 0;">
+                所有用户可读，只有 root 可以修改
+            </p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> cat /etc/passwd</div>
+                <div class="output">root:x:0:0:root:/root:/bin/bash</div>
+                <div class="output">john:x:1000:1000:John Smith:/home/john:/bin/bash</div>
+                <div class="output">nginx:x:33:33:Nginx:/var/www:/usr/sbin/nologin</div>
+            </div>
+            <p style="margin-top: 20px; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <span class="highlight">格式：</span> 用户名:密码:UID:GID:描述:家目录:Shell
+            </p>
+            <ul style="margin-top: 20px; font-size: 1em;">
+                <li>x 表示密码存储在 /etc/shadow</li>
+                <li>UID 0 是 root，≥1000 是普通用户</li>
+                <li>/usr/sbin/nologin 表示不能登录</li>
+            </ul>
+        </div>
+
+        <!-- 第10页：/etc/shadow 文件 -->
+        <div class="slide">
+            <h2>/etc/shadow 文件</h2>
+            <p><span class="highlight clickable" data-info="shadow-file">/etc/shadow</span> 存储加密的密码信息</p>
+            <p style="font-size: 1.1em; color: #ff6b6b; margin: 20px 0;">
+                🔒 只有 root 可以读取，安全性更高
+            </p>
+            <div class="command-box">
+                <div><span class="prompt">#</span> sudo cat /etc/shadow</div>
+                <div class="output">john:$6$xyz...:18500:0:99999:7:::</div>
+                <div class="comment"># $6$ 表示使用 SHA-512 加密</div>
+            </div>
+            <p style="margin-top: 20px; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <span class="highlight">格式：</span> 用户名:加密密码:最后修改:最小间隔:最大间隔:警告期:...
+            </p>
+            <ul style="margin-top: 20px; font-size: 1em;">
+                <li>密码使用强加密算法</li>
+                <li>包含密码过期策略</li>
+                <li>提高系统安全性</li>
+            </ul>
+        </div>
+
+        <!-- 第11页：/etc/group 文件 -->
+        <div class="slide">
+            <h2>/etc/group 文件</h2>
+            <p><span class="highlight clickable" data-info="group-file">/etc/group</span> 存储所有组信息</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> cat /etc/group</div>
+                <div class="output">root:x:0:</div>
+                <div class="output">developers:x:1001:alice,bob,charlie</div>
+                <div class="output">docker:x:999:john,alice</div>
+            </div>
+            <p style="margin-top: 20px; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <span class="highlight">格式：</span> 组名:密码:GID:组成员列表
+            </p>
+            <ul style="margin-top: 20px; font-size: 1em;">
+                <li>组成员用逗号分隔</li>
+                <li>用户的主组不会显示在成员列表中</li>
+            </ul>
+        </div>
+
+        <!-- 第12页：用户管理命令 - 引入 -->
+        <div class="slide">
+            <h2>🔧 用户管理命令</h2>
+            <p class="subtitle">创建、修改、删除用户</p>
+            <div class="grid" style="margin-top: 40px;">
+                <div class="card">
+                    <h3>useradd</h3>
+                    <p>创建新用户</p>
+                </div>
+                <div class="card">
+                    <h3>usermod</h3>
+                    <p>修改用户属性</p>
+                </div>
+                <div class="card">
+                    <h3>userdel</h3>
+                    <p>删除用户</p>
+                </div>
+                <div class="card">
+                    <h3>passwd</h3>
+                    <p>设置密码</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第13页：useradd 命令 -->
+        <div class="slide">
+            <h2>useradd - 创建用户</h2>
+            <p><span class="highlight clickable" data-info="useradd-command">useradd</span> 创建新用户账户</p>
+            <div class="command-box">
+                <div><span class="prompt">#</span> useradd john</div>
+                <div class="comment"># 创建用户 john（最简单）</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> useradd -m alice</div>
+                <div class="comment"># 创建用户并创建家目录（推荐）</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> useradd -m -s /bin/bash bob</div>
+                <div class="comment"># 创建用户并指定 Shell</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> useradd -m -G developers,docker charlie</div>
+                <div class="comment"># 创建用户并加入多个组</div>
+            </div>
+            <ul style="margin-top: 30px; font-size: 1em;">
+                <li><span class="highlight">-m</span> 创建家目录</li>
+                <li><span class="highlight">-s</span> 指定登录 Shell</li>
+                <li><span class="highlight">-G</span> 指定附加组</li>
+            </ul>
+        </div>
+
+        <!-- 第14页：passwd 命令 -->
+        <div class="slide">
+            <h2>passwd - 设置密码</h2>
+            <p><span class="highlight clickable" data-info="passwd-command">passwd</span> 设置或修改用户密码</p>
+            <p style="font-size: 1.1em; color: #ffd700; margin: 20px 0;">
+                创建用户后必须设置密码才能登录
+            </p>
+            <div class="command-box">
+                <div><span class="prompt">#</span> passwd john</div>
+                <div class="output">New password: <span class="comment">[输入密码]</span></div>
+                <div class="output">Retype new password: <span class="comment">[再次输入]</span></div>
+                <div class="output">passwd: password updated successfully</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> passwd</div>
+                <div class="comment"># 普通用户修改自己的密码</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1em; color: #43e97b;">
+                🔒 密码建议：至少8位，包含大小写字母、数字和特殊字符
+            </p>
+        </div>
+
+        <!-- 第15页：usermod 命令 -->
+        <div class="slide">
+            <h2>usermod - 修改用户</h2>
+            <p><span class="highlight clickable" data-info="usermod-command">usermod</span> 修改现有用户的属性</p>
+            <div class="command-box">
+                <div><span class="prompt">#</span> usermod -aG docker john</div>
+                <div class="comment"># 将 john 添加到 docker 组（最常用！）</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> usermod -l newname oldname</div>
+                <div class="comment"># 修改用户名</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> usermod -s /bin/zsh alice</div>
+                <div class="comment"># 修改用户的 Shell</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> usermod -L bob</div>
+                <div class="comment"># 锁定用户账户</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> usermod -U bob</div>
+                <div class="comment"># 解锁用户账户</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1em; color: #ff6b6b;">
+                ⚠️ 注意：-aG 是添加组，-G 会覆盖所有附加组
+            </p>
+        </div>
+
+        <!-- 第16页：userdel 命令 -->
+        <div class="slide">
+            <h2>userdel - 删除用户</h2>
+            <p><span class="highlight clickable" data-info="userdel-command">userdel</span> 删除用户账户</p>
+            <div class="command-box">
+                <div><span class="prompt">#</span> userdel john</div>
+                <div class="comment"># 删除用户（保留家目录）</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> userdel -r alice</div>
+                <div class="comment"># 删除用户及其家目录（常用）</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> userdel -rf bob</div>
+                <div class="comment"># 强制删除（即使用户已登录）</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1em; color: #ff6b6b;">
+                ⚠️ 警告：删除前请备份重要数据，-r 会永久删除家目录
+            </p>
+            <div class="command-box" style="margin-top: 20px;">
+                <div class="comment"># 删除前检查</div>
+                <div><span class="prompt">#</span> who | grep john</div>
+                <div class="comment"># 查看用户是否登录</div>
+                <div><span class="prompt">#</span> ps -u john</div>
+                <div class="comment"># 查看用户的进程</div>
+            </div>
+        </div>
+
+        <!-- 第17页：组管理命令 -->
+        <div class="slide">
+            <h2>👥 组管理命令</h2>
+            <p class="subtitle">创建、修改、删除组</p>
+            <div class="grid" style="margin-top: 40px;">
+                <div class="card">
+                    <h3>groupadd</h3>
+                    <p>创建新组</p>
+                </div>
+                <div class="card">
+                    <h3>groupmod</h3>
+                    <p>修改组属性</p>
+                </div>
+                <div class="card">
+                    <h3>groupdel</h3>
+                    <p>删除组</p>
+                </div>
+                <div class="card">
+                    <h3>gpasswd</h3>
+                    <p>管理组成员</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第18页：groupadd 命令 -->
+        <div class="slide">
+            <h2>groupadd - 创建组</h2>
+            <p><span class="highlight clickable" data-info="groupadd-command">groupadd</span> 创建新的用户组</p>
+            <div class="command-box">
+                <div><span class="prompt">#</span> groupadd developers</div>
+                <div class="comment"># 创建组（系统自动分配 GID）</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> groupadd -g 2000 testers</div>
+                <div class="comment"># 创建组并指定 GID</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> grep developers /etc/group</div>
+                <div class="output">developers:x:1001:</div>
+                <div class="comment"># 验证组创建成功</div>
+            </div>
+        </div>
+
+        <!-- 第19页：groupmod 和 groupdel -->
+        <div class="slide">
+            <h2>groupmod / groupdel</h2>
+            <p><span class="highlight clickable" data-info="groupmod-command">groupmod</span> 修改组，<span class="highlight clickable" data-info="groupdel-command">groupdel</span> 删除组</p>
+            <div class="command-box">
+                <div class="comment"># 修改组名</div>
+                <div><span class="prompt">#</span> groupmod -n newgroup oldgroup</div>
+                <div style="margin-top: 15px;" class="comment"># 修改 GID</div>
+                <div><span class="prompt">#</span> groupmod -g 3000 developers</div>
+                <div style="margin-top: 15px;" class="comment"># 删除组</div>
+                <div><span class="prompt">#</span> groupdel developers</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1em; color: #ff6b6b;">
+                ⚠️ 不能删除用户的主组，必须先删除或修改用户
+            </p>
+        </div>
+
+        <!-- 第20页：查看用户信息 -->
+        <div class="slide">
+            <h2>🔍 查看用户信息</h2>
+            <p><span class="highlight clickable" data-info="id-command">id</span> 命令显示用户和组信息</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> id</div>
+                <div class="output">uid=1000(john) gid=1000(john) groups=1000(john),27(sudo),999(docker)</div>
+                <div class="comment"># 显示当前用户的 UID、GID 和所有组</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> id alice</div>
+                <div class="output">uid=1001(alice) gid=1001(alice) groups=1001(alice),1002(developers)</div>
+                <div class="comment"># 查看指定用户</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> id -u</div>
+                <div class="output">1000</div>
+                <div class="comment"># 只显示 UID</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1em;">
+                💡 用途：快速查看用户所属的所有组，排查权限问题
+            </p>
+        </div>
+
+        <!-- 第21页：切换用户 - su -->
+        <div class="slide">
+            <h2>su - 切换用户</h2>
+            <p><span class="highlight clickable" data-info="su-command">su</span>（Switch User）切换到其他用户</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> su -</div>
+                <div class="output">Password: <span class="comment">[输入 root 密码]</span></div>
+                <div><span class="prompt">#</span> <span class="comment">[现在是 root 用户]</span></div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> su - alice</div>
+                <div class="comment"># 切换到 alice 用户</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> exit</div>
+                <div class="comment"># 退出当前用户，返回之前的用户</div>
+            </div>
+            <ul style="margin-top: 30px; font-size: 1em;">
+                <li><span class="highlight">su</span> - 切换但不改变环境变量</li>
+                <li><span class="highlight">su -</span> - 完整切换（推荐）</li>
+                <li>需要目标用户的密码</li>
+            </ul>
+        </div>
+
+        <!-- 第22页：sudo 命令 -->
+        <div class="slide">
+            <h2>sudo - 临时提权</h2>
+            <p><span class="highlight clickable" data-info="sudo-command">sudo</span>（SuperUser DO）以 root 权限执行命令</p>
+            <p style="font-size: 1.1em; color: #ffd700; margin: 20px 0;">
+                💡 更安全的方式，不需要知道 root 密码
+            </p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> sudo apt install nginx</div>
+                <div class="output">[sudo] password for john: <span class="comment">[输入自己的密码]</span></div>
+                <div class="comment"># 以 root 权限安装软件</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> sudo systemctl restart nginx</div>
+                <div class="comment"># 重启服务</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> sudo -i</div>
+                <div class="comment"># 切换到 root Shell</div>
+            </div>
+            <ul style="margin-top: 30px; font-size: 1em;">
+                <li>只需要输入自己的密码</li>
+                <li>有操作日志记录</li>
+                <li>可以精细控制权限</li>
+            </ul>
+        </div>
+
+        <!-- 第23页：sudo vs su -->
+        <div class="slide">
+            <h2>sudo vs su</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3 style="color: #43e97b;">sudo</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li>执行单个命令</li>
+                        <li>输入自己的密码</li>
+                        <li>有操作日志</li>
+                        <li>可以精细控制权限</li>
+                        <li>更安全（推荐）</li>
+                    </ul>
+                </div>
+                <div class="comparison-item">
+                    <h3 style="color: #ffd700;">su</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li>完全切换用户</li>
+                        <li>需要目标用户密码</li>
+                        <li>无详细日志</li>
+                        <li>获得完整权限</li>
+                        <li>适合长时间管理</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top: 40px; font-size: 1.1em; color: #43e97b;">
+                🔒 建议：日常使用 sudo，避免直接使用 root 账户
+            </p>
+        </div>
+
+        <!-- 第24页：查看登录用户 -->
+        <div class="slide">
+            <h2>查看登录用户</h2>
+            <p><span class="highlight clickable" data-info="who-command">who</span> 和 <span class="highlight">w</span> 命令</p>
+            <div class="command-box">
+                <div><span class="prompt">$</span> who</div>
+                <div class="output">john  pts/0  2024-03-30 10:30 (192.168.1.100)</div>
+                <div class="output">alice pts/1  2024-03-30 11:00 (192.168.1.101)</div>
+                <div class="comment"># 显示当前登录的用户</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> w</div>
+                <div class="comment"># 显示更详细的信息（用户在做什么）</div>
+                <div style="margin-top: 15px;"><span class="prompt">$</span> whoami</div>
+                <div class="output">john</div>
+                <div class="comment"># 显示当前用户名</div>
+            </div>
+        </div>
+
+        <!-- 第25页：实战演练 -->
+        <div class="slide">
+            <h2>🎯 实战演练</h2>
+            <p class="subtitle">创建一个开发团队的用户环境</p>
+            <div class="command-box" style="max-width: 800px;">
+                <div class="comment"># 1. 创建 developers 组</div>
+                <div><span class="prompt">#</span> groupadd developers</div>
+                <div style="margin-top: 10px;" class="comment"># 2. 创建三个开发者账户</div>
+                <div><span class="prompt">#</span> useradd -m -G developers -s /bin/bash alice</div>
+                <div><span class="prompt">#</span> useradd -m -G developers -s /bin/bash bob</div>
+                <div><span class="prompt">#</span> useradd -m -G developers -s /bin/bash charlie</div>
+                <div style="margin-top: 10px;" class="comment"># 3. 设置密码</div>
+                <div><span class="prompt">#</span> passwd alice</div>
+                <div><span class="prompt">#</span> passwd bob</div>
+                <div><span class="prompt">#</span> passwd charlie</div>
+                <div style="margin-top: 10px;" class="comment"># 4. 创建共享项目目录</div>
+                <div><span class="prompt">#</span> mkdir /home/projects</div>
+                <div><span class="prompt">#</span> chgrp developers /home/projects</div>
+                <div><span class="prompt">#</span> chmod 770 /home/projects</div>
+                <div class="comment"># 现在 developers 组的成员都能访问项目目录</div>
+            </div>
+        </div>
+
+        <!-- 第26页：密码策略管理 -->
+        <div class="slide">
+            <h2>🔐 密码策略管理</h2>
+            <p><span class="highlight clickable" data-info="chage-command">chage</span> 命令管理密码过期信息</p>
+            <div class="command-box">
+                <div><span class="prompt">#</span> chage -l john</div>
+                <div class="comment"># 查看用户的密码过期信息</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> chage -M 90 john</div>
+                <div class="comment"># 设置密码90天后过期</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> chage -d 0 john</div>
+                <div class="comment"># 强制用户下次登录时修改密码</div>
+                <div style="margin-top: 15px;"><span class="prompt">#</span> chage -E 2024-12-31 john</div>
+                <div class="comment"># 设置账户过期日期</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1em;">
+                💡 用于增强系统安全性，定期更换密码
+            </p>
+        </div>
+
+        <!-- 第27页：常见场景 -->
+        <div class="slide">
+            <h2>💼 常见应用场景</h2>
+            <ul style="font-size: 1.1em;">
+                <li><span class="highlight">Web 服务器</span><br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">创建 www-data 用户运行 nginx/apache</span></li>
+                <li><span class="highlight">数据库服务器</span><br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">创建 mysql 用户运行数据库服务</span></li>
+                <li><span class="highlight">开发团队</span><br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">创建 developers 组，共享项目目录</span></li>
+                <li><span class="highlight">容器环境</span><br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">将用户加入 docker 组，无需 sudo 运行容器</span></li>
+                <li><span class="highlight">系统管理</span><br>
+                    <span style="font-size: 0.9em; color: #e0e0e0;">将用户加入 sudo 组，授予管理权限</span></li>
+            </ul>
+        </div>
+
+        <!-- 第28页：安全最佳实践 -->
+        <div class="slide">
+            <h2>🔒 安全最佳实践</h2>
+            <ul style="font-size: 1.1em;">
+                <li>不要直接使用 root 账户登录</li>
+                <li>使用 sudo 而不是 su</li>
+                <li>设置强密码策略（长度、复杂度）</li>
+                <li>定期更换密码</li>
+                <li>及时删除不用的账户</li>
+                <li>使用 SSH 密钥认证代替密码</li>
+                <li>限制 sudo 权限，只授予必要的命令</li>
+                <li>定期审查用户和组</li>
+            </ul>
+            <p style="margin-top: 30px; font-size: 1em; color: #43e97b;">
+                🛡️ 安全是系统管理的首要任务
+            </p>
+        </div>
+
+        <!-- 第29页：常用命令总结 -->
+        <div class="slide">
+            <h2>📝 命令速查表</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>用户管理</h3>
+                    <p style="font-size: 0.9em; text-align: left;">
+                        useradd -m 用户名<br>
+                        passwd 用户名<br>
+                        usermod -aG 组 用户<br>
+                        userdel -r 用户名
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>组管理</h3>
+                    <p style="font-size: 0.9em; text-align: left;">
+                        groupadd 组名<br>
+                        groupmod -n 新名 旧名<br>
+                        groupdel 组名<br>
+                        gpasswd -a 用户 组
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>查看信息</h3>
+                    <p style="font-size: 0.9em; text-align: left;">
+                        id [用户名]<br>
+                        who / w<br>
+                        whoami<br>
+                        last
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>权限切换</h3>
+                    <p style="font-size: 0.9em; text-align: left;">
+                        su - [用户名]<br>
+                        sudo 命令<br>
+                        sudo -i<br>
+                        exit
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第30页：课程总结 -->
+        <div class="slide">
+            <h2>📚 课程总结</h2>
+            <ul style="font-size: 1.2em;">
+                <li>理解 Linux 多用户系统的概念</li>
+                <li>掌握用户和组的创建与管理</li>
+                <li>了解配置文件（/etc/passwd, /etc/shadow, /etc/group）</li>
+                <li>熟练使用 useradd、usermod、userdel 命令</li>
+                <li>掌握 sudo 和 su 的使用</li>
+                <li>了解安全最佳实践</li>
+            </ul>
+            <p style="margin-top: 50px; font-size: 1.3em; color: #ffd700;">
+                🎉 恭喜！你已经掌握了 Linux 用户管理的核心知识
+            </p>
+        </div>
+
+        <!-- 第31页：练习题 -->
+        <div class="slide">
+            <h2>🎯 练习题</h2>
+            <ul style="font-size: 1.1em; text-align: left;">
+                <li>创建一个名为 testuser 的用户，并设置密码</li>
+                <li>创建一个名为 project 的组</li>
+                <li>将 testuser 添加到 project 组</li>
+                <li>查看 testuser 的所有组信息</li>
+                <li>修改 testuser 的登录 Shell 为 /bin/zsh</li>
+                <li>锁定 testuser 账户</li>
+                <li>解锁 testuser 账户</li>
+                <li>删除 testuser 用户及其家目录</li>
+            </ul>
+            <p style="margin-top: 30px; font-size: 1em; color: #ffd700;">
+                💡 提示：在虚拟机或测试环境中练习
+            </p>
+        </div>
+
+        <!-- 第32页：下节课预告 -->
+        <div class="slide">
+            <h2>🔮 下节课预告</h2>
+            <p class="subtitle">更多精彩内容</p>
+            <div class="grid" style="margin-top: 40px;">
+                <div class="card">
+                    <div class="emoji">📦</div>
+                    <h3>软件包管理</h3>
+                    <p>apt, yum, dnf</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">⚙️</div>
+                    <h3>系统服务</h3>
+                    <p>systemd, systemctl</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">📊</div>
+                    <h3>系统监控</h3>
+                    <p>资源使用和性能分析</p>
+                </div>
+                <div class="card">
+                    <div class="emoji">🔧</div>
+                    <h3>Shell 脚本</h3>
+                    <p>自动化任务</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第33页：结束页 -->
+        <div class="slide">
+            <h1>谢谢！</h1>
+            <p class="subtitle">Linux 用户和组管理</p>
+            <p style="margin-top: 50px; font-size: 1.3em;">继续探索 Linux 的强大功能</p>
+            <p style="margin-top: 30px; font-size: 1.1em; color: #ffd700;">
+                💪 实践是最好的老师
+            </p>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← 上一页</button>
+        <button onclick="nextSlide()">下一页 →</button>
+    </div>
+
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">33</span>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="info_database_lesson4.js"></script>
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // 键盘导航
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // 点击事件处理
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('clickable')) {
+                const infoKey = e.target.getAttribute('data-info');
+                showInfo(infoKey);
+            }
+        });
+        
+        function showInfo(key) {
+            const info = infoDatabase[key];
+            if (info) {
+                document.getElementById('modal-body').innerHTML = `
+                    <h2>${info.title}</h2>
+                    ${info.content}
+                `;
+                document.getElementById('modal').style.display = 'block';
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
